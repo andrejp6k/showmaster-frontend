@@ -12,6 +12,7 @@ import path from 'path';
 import { app, BrowserWindow, shell, ipcMain } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
+import { machineId } from 'node-machine-id';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 
@@ -56,7 +57,7 @@ const installExtensions = async () => {
     .catch(console.log);
 };
 
-const createWindow = async () => {
+const createWindow = async (deviceId: string) => {
   if (isDebug) {
     await installExtensions();
   }
@@ -81,7 +82,7 @@ const createWindow = async () => {
     },
   });
 
-  mainWindow.loadURL(resolveHtmlPath('index.html'));
+  mainWindow.loadURL(resolveHtmlPath('index.html', deviceId));
 
   mainWindow.on('ready-to-show', () => {
     if (!mainWindow) {
@@ -127,11 +128,17 @@ app.on('window-all-closed', () => {
 app
   .whenReady()
   .then(() => {
-    createWindow();
-    app.on('activate', () => {
-      // On macOS it's common to re-create a window in the app when the
-      // dock icon is clicked and there are no other windows open.
-      if (mainWindow === null) createWindow();
-    });
+    machineId()
+      .then((deviceId) => {
+        createWindow(deviceId);
+        app.on('activate', () => {
+          // On macOS it's common to re-create a window in the app when the
+          // dock icon is clicked and there are no other windows open.
+          if (mainWindow === null) createWindow(deviceId);
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   })
   .catch(console.log);

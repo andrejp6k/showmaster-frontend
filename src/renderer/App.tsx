@@ -8,6 +8,10 @@ import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
 import icon from '../../assets/icon.svg';
 import './App.scss';
 import Test from './Components/Test';
+import AssignStudioToUser from './components/AssignUserToStudio';
+import WelcomeTeam from './components/WelcomeTeam';
+import SelectGameMode from './components/SelectGameMode';
+import SelectGame from './components/SelectGame';
 
 function Hello() {
   const [connection, setConnection] = useState<HubConnection | null>(null);
@@ -53,7 +57,10 @@ export default function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Hello />} />
+        <Route path="/" element={<AssignStudioToUser />} />
+        <Route path="/select-game-mode" element={<SelectGameMode />} />
+        <Route path="/welcome-team" element={<WelcomeTeam />} />
+        <Route path="/select-game" element={<SelectGame />} />
       </Routes>
     </Router>
   );
