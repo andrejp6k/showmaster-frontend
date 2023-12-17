@@ -6,7 +6,7 @@ interface TestProps {
 
 export default function Test({ onConnectClickAsync }: TestProps) {
   const [inputText, setInputText] = useState('');
-  const onInputChange = (e) => {
+  const onInputChange = (e: any) => {
     setInputText(e?.target?.value?.trim() || '');
   };
   return (
