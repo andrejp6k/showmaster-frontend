@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // Use useNavigate instead of useHistory
-import axios from 'axios';
+import { services } from '../../services';
 
 const Roles = {
   Host: 'Host',
@@ -17,7 +17,7 @@ function AssignStudioToUser() {
   useEffect(() => {
     const fetchStudios = async () => {
       try {
-        const response = await axios.get('https://localhost:44357/studios');
+        const response = await services.studios.list();
         setStudios(response.data);
       } catch (error) {
         console.error('Error fetching studios:', error);
@@ -43,19 +43,11 @@ function AssignStudioToUser() {
   const handleConfirmClick = async () => {
     if (selectedStudio && selectedRole) {
       try {
-        await axios.post(
-          'https://localhost:44357/users',
-          {
-            studioId: selectedStudio.id,
-            role: selectedRole.toString(),
-            deviceId,
-          },
-          {
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          },
-        );
+        await services.users.create({
+          studioId: selectedStudio.id,
+          role: selectedRole.toString(),
+          deviceId,
+        });
 
         switch (selectedRole) {
           case Roles.Host:

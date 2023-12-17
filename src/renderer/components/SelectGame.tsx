@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import { useEffect, useState } from 'react';
+import { services } from '../../services';
 
 function SelectGame() {
   const [games, setGames] = useState([]);
@@ -7,7 +7,7 @@ function SelectGame() {
   useEffect(() => {
     const fetchGames = async () => {
       try {
-        const response = await axios.get('https://localhost:44357/games');
+        const response = await services.games.list();
         setGames(response.data);
       } catch (error) {
         console.error('Error fetching studios:', error);
@@ -51,6 +51,7 @@ function SelectGame() {
         <div>
           {games.map((game) => (
             <button
+              type="button"
               key={game.id}
               onClick={() => handleGameClick(game.id)}
               style={{

@@ -11,6 +11,7 @@ function SelectGameMode() {
   return (
     <div>
       <button
+        type="button"
         onClick={handlePlayGame}
         style={{
           backgroundColor: 'rgb(239, 158, 86)',

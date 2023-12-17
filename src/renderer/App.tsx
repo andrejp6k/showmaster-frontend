@@ -7,7 +7,7 @@ import { useState } from 'react';
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
 import icon from '../../assets/icon.svg';
 import './App.scss';
-import Test from './Components/Test';
+import Test from './components/Test';
 import AssignStudioToUser from './components/AssignUserToStudio';
 import WelcomeTeam from './components/WelcomeTeam';
 import SelectGameMode from './components/SelectGameMode';
