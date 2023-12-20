@@ -16,12 +16,14 @@ export default function App() {
   return (
     <Router>
       <MainAppBar />
-      <Routes>
-        <Route path="/" element={<AssignStudioToUser />} />
-        <Route path="/select-game-mode" element={<SelectGameMode />} />
-        <Route path="/welcome-team" element={<WelcomeTeam />} />
-        <Route path="/select-game" element={<SelectGame />} />
-      </Routes>
+      <div className="content">
+        <Routes>
+          <Route path="/" element={<AssignStudioToUser />} />
+          <Route path="/select-game-mode" element={<SelectGameMode />} />
+          <Route path="/welcome-team" element={<WelcomeTeam />} />
+          <Route path="/select-game" element={<SelectGame />} />
+        </Routes>
+      </div>
     </Router>
   );
 }

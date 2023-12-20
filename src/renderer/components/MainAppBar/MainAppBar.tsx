@@ -1,22 +1,27 @@
 import { AppBar, IconButton, Toolbar, Typography } from '@mui/material';
-import { Menu } from '@mui/icons-material';
+import { Home } from '@mui/icons-material';
 import './MainAppBar.scss';
+import { useNavigate } from 'react-router-dom';
 
 function MainAppBar() {
+  const navigate = useNavigate();
+
+  const handleNavigateHome = () => {
+    navigate('/');
+  };
+
   return (
-    <AppBar position="static" className="appBar">
+    <AppBar position="static" color="transparent" elevation={0}>
       <Toolbar variant="dense">
         <IconButton
+          onClick={handleNavigateHome}
           edge="start"
           color="inherit"
           aria-label="menu"
           sx={{ mr: 2 }}
         >
-          <Menu />
+          <Home />
         </IconButton>
-        <Typography variant="h6" color="inherit" component="div">
-          Photos
-        </Typography>
       </Toolbar>
     </AppBar>
   );
