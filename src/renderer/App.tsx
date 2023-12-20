@@ -3,7 +3,7 @@ import { connectToHub } from '../redux/websocketSlice';
 import './App.scss';
 import AssignStudioToUser from './components/AssignUserToStudio';
 import SelectGame from './components/SelectGame';
-import SelectGameMode from './components/SelectGameMode';
+import SelectGameMode from './components/SelectGameMode/SelectGameMode';
 import WelcomeTeam from './components/WelcomeTeam';
 import { useAppDispatch } from './hooks/appStore';
 import MainAppBar from './components/MainAppBar/MainAppBar';
