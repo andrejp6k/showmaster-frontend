@@ -2,16 +2,13 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // Use useNavigate instead of useHistory
 import { services } from '../../services';
 import useSignalRHub from '../hooks/useSignaRHub';
-
-const Roles = {
-  Host: 'Host',
-  Team: 'Team',
-};
+import { Role, Studio } from '../../types';
+import { enumNumericValues } from '../../utils/utils';
 
 function AssignStudioToUser() {
-  const [studios, setStudios] = useState([]);
-  const [selectedStudio, setSelectedStudio] = useState(null);
-  const [selectedRole, setSelectedRole] = useState(null);
+  const [studios, setStudios] = useState<Studio[]>([]);
+  const [selectedStudio, setSelectedStudio] = useState<Studio | null>(null);
+  const [selectedRole, setSelectedRole] = useState<Role | null>(null);
   const [deviceId, setDeviceId] = useState('');
   const navigate = useNavigate();
 
@@ -33,28 +30,28 @@ function AssignStudioToUser() {
     setDeviceId(deviceIdFromParams || '');
   }, []);
 
-  const handleStudioClick = (studio: any) => {
+  const handleStudioClick = (studio: Studio) => {
     setSelectedStudio(studio);
   };
 
-  const handleRoleClick = (role: any) => {
+  const handleRoleClick = (role: Role) => {
     setSelectedRole(role);
   };
 
   const handleConfirmClick = async () => {
-    if (selectedStudio && selectedRole) {
+    if (selectedStudio && selectedRole != null) {
       try {
         await services.users.create({
           studioId: selectedStudio.id,
-          role: selectedRole.toString(),
+          role: selectedRole,
           deviceId,
         });
 
         switch (selectedRole) {
-          case Roles.Host:
+          case Role.Host:
             navigate('/select-game-mode');
             break;
-          case Roles.Team:
+          case Role.Team:
             navigate('/welcome-team');
             break;
           default:
@@ -114,21 +111,22 @@ function AssignStudioToUser() {
           <div style={{ fontSize: '24px', marginBottom: '40px' }}>
             Select role
           </div>
-          {Object.values(Roles).map((role) => (
+          {enumNumericValues(Role).map((roleIdx: number) => (
             <button
               type="button"
-              key={role}
-              onClick={() => handleRoleClick(role)}
+              key={roleIdx}
+              onClick={() => handleRoleClick(roleIdx as Role)}
               style={{
                 margin: '5px',
                 padding: '10px',
                 display: 'block',
-                backgroundColor: selectedRole === role ? 'lightblue' : 'white',
+                backgroundColor:
+                  selectedRole === roleIdx ? 'lightblue' : 'white',
                 minWidth: '150px',
                 marginBottom: '20px',
               }}
             >
-              {role}
+              {Role[roleIdx]}
             </button>
           ))}
         </div>

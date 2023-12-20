@@ -9,3 +9,20 @@ export interface SignaRHubOptions {
   enabled?: boolean;
   logging?: LogLevel | string | ILogger;
 }
+
+export enum Role {
+  Team = 0,
+  Host = 1,
+}
+export interface User {
+  id: string;
+  name: string;
+  role: Role;
+  studioId: string;
+  deviceId: string;
+}
+export interface Studio {
+  id: string;
+  name: string;
+  location: string;
+}

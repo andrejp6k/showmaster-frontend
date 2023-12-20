@@ -1,5 +1,5 @@
 import { Route, MemoryRouter as Router, Routes } from 'react-router-dom';
-import { connectToHub, saveConnection } from '../redux/websocketSlice';
+import { connectToHub } from '../redux/websocketSlice';
 import './App.scss';
 import AssignStudioToUser from './components/AssignUserToStudio';
 import SelectGame from './components/SelectGame';
