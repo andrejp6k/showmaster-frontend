@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // Use useNavigate instead of useHistory
 import { services } from '../../services';
+import useSignalRHub from '../hooks/useSignaRHub';
 
 const Roles = {
   Host: 'Host',
@@ -29,14 +30,14 @@ function AssignStudioToUser() {
     const queryString = global.location.search;
     const urlParams = new URLSearchParams(queryString);
     const deviceIdFromParams = urlParams.get('deviceId');
-    setDeviceId(deviceIdFromParams);
+    setDeviceId(deviceIdFromParams || '');
   }, []);
 
-  const handleStudioClick = (studio) => {
+  const handleStudioClick = (studio: any) => {
     setSelectedStudio(studio);
   };
 
-  const handleRoleClick = (role) => {
+  const handleRoleClick = (role: any) => {
     setSelectedRole(role);
   };
 
@@ -91,6 +92,7 @@ function AssignStudioToUser() {
           </div>
           {studios.map((studio, index) => (
             <button
+              type="button"
               key={`${studio.id} + ${index}`}
               onClick={() => handleStudioClick(studio)}
               style={{
@@ -114,6 +116,7 @@ function AssignStudioToUser() {
           </div>
           {Object.values(Roles).map((role) => (
             <button
+              type="button"
               key={role}
               onClick={() => handleRoleClick(role)}
               style={{
@@ -140,6 +143,7 @@ function AssignStudioToUser() {
         }}
       >
         <button
+          type="button"
           onClick={handleConfirmClick}
           style={{
             backgroundColor: 'rgb(239, 158, 86)',
