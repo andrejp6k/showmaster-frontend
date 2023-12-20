@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { services } from '../../services';
+import { sendMessage } from '../../redux/websocketSlice';
 
 function SelectGame() {
   const [games, setGames] = useState([]);
@@ -19,6 +20,8 @@ function SelectGame() {
 
   const handleGameClick = (gameId: string) => {
     console.log(gameId);
+
+    sendMessage('RegisterTeam', 'gopnik team');
     // Send API request with game id and device id to start the show session.
     // Logic for getting deviceId is implemented in AssignStudioToUser. We should put device id to global store.
     // and get it here from store

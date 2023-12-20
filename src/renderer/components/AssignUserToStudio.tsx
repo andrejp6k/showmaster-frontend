@@ -66,14 +66,6 @@ function AssignStudioToUser() {
     }
   };
 
-  const gameHub = useSignalRHub('http://localhost:5173/gamehub', {
-    enabled: true,
-  });
-
-  gameHub?.on('ReceiveMessage', (user, message) => {
-    console.log('Received: ', user, message);
-  });
-
   return (
     <div>
       <div
