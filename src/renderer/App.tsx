@@ -6,6 +6,7 @@ import SelectGame from './components/SelectGame';
 import SelectGameMode from './components/SelectGameMode';
 import WelcomeTeam from './components/WelcomeTeam';
 import { useAppDispatch } from './hooks/appStore';
+import MainAppBar from './components/MainAppBar/MainAppBar';
 
 export default function App() {
   const dispatch = useAppDispatch();
@@ -14,6 +15,7 @@ export default function App() {
 
   return (
     <Router>
+      <MainAppBar />
       <Routes>
         <Route path="/" element={<AssignStudioToUser />} />
         <Route path="/select-game-mode" element={<SelectGameMode />} />
