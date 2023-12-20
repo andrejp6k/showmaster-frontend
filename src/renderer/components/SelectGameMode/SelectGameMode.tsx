@@ -15,12 +15,23 @@ function SelectGameMode() {
       <div className="content">
         <button
           type="button"
-          onClick={handlePlayGame}
-          style={{
-            backgroundColor: 'rgb(239, 158, 86)',
-            width: '250px',
+          onClick={() => {
+            /* TODO */
           }}
+          className="button"
         >
+          Create show
+        </button>
+        <button
+          type="button"
+          onClick={() => {
+            /* TODO */
+          }}
+          className="button"
+        >
+          Load show
+        </button>
+        <button type="button" onClick={handlePlayGame} className="button">
           Play game
         </button>
       </div>
