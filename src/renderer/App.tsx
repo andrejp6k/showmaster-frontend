@@ -1,6 +1,6 @@
 import { Route, MemoryRouter as Router, Routes } from 'react-router-dom';
 import { connectToHub } from '../redux/websocketSlice';
-import './App.scss';
+import styles from './App.scss';
 import AssignStudioToUser from './components/AssignUserToStudio';
 import SelectGame from './components/SelectGame';
 import SelectGameMode from './components/SelectGameMode/SelectGameMode';
@@ -16,7 +16,7 @@ export default function App() {
   return (
     <Router>
       <MainAppBar />
-      <div className="content">
+      <div className={styles.content}>
         <Routes>
           <Route path="/" element={<AssignStudioToUser />} />
           <Route path="/select-game-mode" element={<SelectGameMode />} />

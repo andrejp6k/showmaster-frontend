@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import './SelectGameMode.scss';
+import styles from './SelectGameMode.scss';
 
 function SelectGameMode() {
   const navigate = useNavigate();
@@ -10,15 +10,15 @@ function SelectGameMode() {
   };
 
   return (
-    <div className="container">
-      <div className="title">Welcome Host</div>
-      <div className="content">
+    <div className={styles.container}>
+      <div className={styles.title}>Welcome Host</div>
+      <div className={styles.content}>
         <button
           type="button"
           onClick={() => {
             /* TODO */
           }}
-          className="button"
+          className={styles.button}
         >
           Create show
         </button>
@@ -27,11 +27,15 @@ function SelectGameMode() {
           onClick={() => {
             /* TODO */
           }}
-          className="button"
+          className={styles.button}
         >
           Load show
         </button>
-        <button type="button" onClick={handlePlayGame} className="button">
+        <button
+          type="button"
+          onClick={handlePlayGame}
+          className={styles.button}
+        >
           Play game
         </button>
       </div>

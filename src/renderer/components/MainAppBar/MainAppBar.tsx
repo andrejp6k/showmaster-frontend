@@ -1,6 +1,6 @@
 import { AppBar, IconButton, Toolbar, Typography } from '@mui/material';
 import { Home, ArrowBack } from '@mui/icons-material';
-import './MainAppBar.scss';
+import styles from './MainAppBar.scss';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 function MainAppBar() {
@@ -20,7 +20,7 @@ function MainAppBar() {
   return (
     <AppBar position="static" color="transparent" elevation={0}>
       <Toolbar variant="dense">
-        <div className="container">
+        <div className={styles.container}>
           <IconButton
             onClick={handleNavigateBack}
             edge="start"
