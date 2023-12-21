@@ -18,6 +18,17 @@ import deleteSourceMaps from '../scripts/delete-source-maps';
 checkNodeEnv('production');
 deleteSourceMaps();
 
+const cssLoaderConfig = {
+  loader: 'css-loader',
+  options: {
+    modules: {
+      localIdentName: '[hash:base64]',
+    },
+    sourceMap: true,
+    importLoaders: 1,
+  },
+};
+
 const configuration: webpack.Configuration = {
   devtool: 'source-map',
 
@@ -40,23 +51,12 @@ const configuration: webpack.Configuration = {
     rules: [
       {
         test: /\.s?(a|c)ss$/,
-        use: [
-          MiniCssExtractPlugin.loader,
-          {
-            loader: 'css-loader',
-            options: {
-              modules: true,
-              sourceMap: true,
-              importLoaders: 1,
-            },
-          },
-          'sass-loader',
-        ],
+        use: [MiniCssExtractPlugin.loader, cssLoaderConfig, 'sass-loader'],
         include: /\.module\.s?(c|a)ss$/,
       },
       {
         test: /\.s?(a|c)ss$/,
-        use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],
+        use: [MiniCssExtractPlugin.loader, cssLoaderConfig, 'sass-loader'],
         exclude: /\.module\.s?(c|a)ss$/,
       },
       // Fonts

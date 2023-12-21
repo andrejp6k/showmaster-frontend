@@ -1,11 +1,12 @@
 import { Route, MemoryRouter as Router, Routes } from 'react-router-dom';
-import { connectToHub, saveConnection } from '../redux/websocketSlice';
-import './App.scss';
+import { connectToHub } from '../redux/websocketSlice';
+import styles from './App.scss';
 import AssignStudioToUser from './components/AssignUserToStudio';
 import SelectGame from './components/SelectGame';
-import SelectGameMode from './components/SelectGameMode';
+import SelectGameMode from './components/SelectGameMode/SelectGameMode';
 import WelcomeTeam from './components/WelcomeTeam';
 import { useAppDispatch } from './hooks/appStore';
+import MainAppBar from './components/MainAppBar/MainAppBar';
 
 export default function App() {
   const dispatch = useAppDispatch();
@@ -14,12 +15,15 @@ export default function App() {
 
   return (
     <Router>
-      <Routes>
-        <Route path="/" element={<AssignStudioToUser />} />
-        <Route path="/select-game-mode" element={<SelectGameMode />} />
-        <Route path="/welcome-team" element={<WelcomeTeam />} />
-        <Route path="/select-game" element={<SelectGame />} />
-      </Routes>
+      <MainAppBar />
+      <div className={styles.content}>
+        <Routes>
+          <Route path="/" element={<AssignStudioToUser />} />
+          <Route path="/select-game-mode" element={<SelectGameMode />} />
+          <Route path="/welcome-team" element={<WelcomeTeam />} />
+          <Route path="/select-game" element={<SelectGame />} />
+        </Routes>
+      </div>
     </Router>
   );
 }

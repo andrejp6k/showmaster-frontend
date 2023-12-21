@@ -38,6 +38,17 @@ if (
   execSync('npm run postinstall');
 }
 
+const cssLoaderConfig = {
+  loader: 'css-loader',
+  options: {
+    modules: {
+      localIdentName: '[path][name]__[local]',
+    },
+    sourceMap: true,
+    importLoaders: 1,
+  },
+};
+
 const configuration: webpack.Configuration = {
   devtool: 'inline-source-map',
 
@@ -64,23 +75,12 @@ const configuration: webpack.Configuration = {
     rules: [
       {
         test: /\.s?(c|a)ss$/,
-        use: [
-          'style-loader',
-          {
-            loader: 'css-loader',
-            options: {
-              modules: true,
-              sourceMap: true,
-              importLoaders: 1,
-            },
-          },
-          'sass-loader',
-        ],
+        use: ['style-loader', cssLoaderConfig, 'sass-loader'],
         include: /\.module\.s?(c|a)ss$/,
       },
       {
         test: /\.s?css$/,
-        use: ['style-loader', 'css-loader', 'sass-loader'],
+        use: ['style-loader', cssLoaderConfig, 'sass-loader'],
         exclude: /\.module\.s?(c|a)ss$/,
       },
       // Fonts
