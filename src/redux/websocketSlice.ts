@@ -37,6 +37,11 @@ export const connectToHub = (hubUrl: string) => (dispatch: any) => {
         dispatch(receiveMessage(data));
       });
 
+      hubConnection?.on('StartShow', (data) => {
+        // TODO: dispatch action to other stores with games etc, based on that change do other stuff
+        console.log(data);
+      });
+
       return null;
     })
     .catch((error: any) => {

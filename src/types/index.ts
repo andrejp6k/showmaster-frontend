@@ -26,3 +26,9 @@ export interface Studio {
   name: string;
   location: string;
 }
+
+export interface CreateShowRequest {
+  title: string;
+  gameIds: string[];
+  userId: string;
+}
