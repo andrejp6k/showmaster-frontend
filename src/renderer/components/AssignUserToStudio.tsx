@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // Use useNavigate instead of useHistory
 import { services } from '../../services';
-import useSignalRHub from '../hooks/useSignaRHub';
 import { Role, Studio } from '../../types';
 import { enumNumericValues } from '../../utils/utils';
+import { useAppDispatch } from '../hooks/appStore';
+import { connectToHub } from '../../redux/websocketSlice';
 
 function AssignStudioToUser() {
   const [studios, setStudios] = useState<Studio[]>([]);
@@ -11,6 +12,8 @@ function AssignStudioToUser() {
   const [selectedRole, setSelectedRole] = useState<Role | null>(null);
   const [deviceId, setDeviceId] = useState('');
   const navigate = useNavigate();
+
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     const fetchStudios = async () => {
@@ -49,9 +52,20 @@ function AssignStudioToUser() {
 
         switch (selectedRole) {
           case Role.Host:
+            // TODO: move connection to hub to proper place, where user ID is assigned
+            dispatch(
+              connectToHub(
+                'http://localhost:5173/hub?userId=658583795260451d1dfb41b0',
+              ),
+            );
             navigate('/select-game-mode');
             break;
           case Role.Team:
+            dispatch(
+              connectToHub(
+                'http://localhost:5173/hub?userId=658583795260451d1dfb41b1',
+              ),
+            );
             navigate('/welcome-team');
             break;
           default:

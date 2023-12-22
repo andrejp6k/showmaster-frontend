@@ -1,18 +1,12 @@
 import { Route, MemoryRouter as Router, Routes } from 'react-router-dom';
-import { connectToHub } from '../redux/websocketSlice';
 import styles from './App.scss';
 import AssignStudioToUser from './components/AssignUserToStudio';
+import MainAppBar from './components/MainAppBar/MainAppBar';
 import SelectGame from './components/SelectGame';
 import SelectGameMode from './components/SelectGameMode/SelectGameMode';
 import WelcomeTeam from './components/WelcomeTeam';
-import { useAppDispatch } from './hooks/appStore';
-import MainAppBar from './components/MainAppBar/MainAppBar';
 
 export default function App() {
-  const dispatch = useAppDispatch();
-
-  dispatch(connectToHub('http://localhost:5173/gamehub'));
-
   return (
     <Router>
       <MainAppBar />

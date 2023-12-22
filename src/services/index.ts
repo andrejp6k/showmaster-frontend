@@ -1,15 +1,11 @@
 import GamesService from './games-service';
+import ShowsService from './shows-service';
 import StudiosService from './studios-service';
 import UsersService from './users-service';
 
-export interface Services {
-  studios: StudiosService;
-  users: UsersService;
-  games: GamesService;
-}
-
-export const services: Services = {
+export const services = {
   studios: new StudiosService(),
   users: new UsersService(),
   games: new GamesService(),
+  shows: new ShowsService(),
 };

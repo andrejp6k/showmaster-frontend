@@ -18,17 +18,15 @@ function SelectGame() {
     fetchGames();
   }, []);
 
-  const handleGameClick = (gameId: string) => {
+  const handleGameClick = async (gameId: string) => {
     console.log(gameId);
 
-    sendMessage('RegisterTeam', 'gopnik team');
-    // Send API request with game id and device id to start the show session.
-    // Logic for getting deviceId is implemented in AssignStudioToUser. We should put device id to global store.
-    // and get it here from store
-    // await axios.post('show', {
-    //   gameId: gameId,
-    //   deviceId: deviceId,
-    // });
+    // TODO: get userId from store
+    await services.shows.create({
+      title: 'Test Show',
+      gameIds: [gameId],
+      userId: '658583795260451d1dfb41b0',
+    });
   };
 
   return (
