@@ -10,6 +10,7 @@ import {
   getQueryParamValue,
   navigateToRoleStartPage,
 } from '../../../utils/utils';
+import { connectToHub } from '../../../redux/websocketSlice';
 
 function AppStarter() {
   const dispatch = useAppDispatch();
@@ -24,6 +25,9 @@ function AppStarter() {
         const user = response.data as User;
         dispatch(setUser(user));
         navigateToRoleStartPage(user.role, navigate);
+        dispatch(
+          connectToHub(`http://localhost:5173/hub?userId=${currentUser?.id}`),
+        );
       } else {
         navigate('/settings');
       }
