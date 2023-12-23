@@ -13,4 +13,12 @@ export default class UsersService {
   public getByDeviceId(deviceId: string) {
     return client.get('users/deviceId?deviceId=' + deviceId);
   }
+
+  public update(data: any) {
+    return client.patch('users', data, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+  }
 }
