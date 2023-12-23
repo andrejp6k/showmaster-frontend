@@ -1,24 +1,31 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // Use useNavigate instead of useHistory
-import {
-  changeUser,
-  changeUsersRoleAndStudio,
-  selectUser,
-} from '../../redux/userSlice';
+import { changeUser, updateUser, selectUser } from '../../redux/userSlice';
 import { services } from '../../services';
 import { Role, Studio, User } from '../../types';
 import { enumNumericValues } from '../../utils/utils';
 import { useAppDispatch } from '../hooks/appStore';
 import { useSelector } from 'react-redux';
 
+interface RoleOptions {
+  name: string;
+  role: Role;
+}
+
 function Settings() {
   const [studios, setStudios] = useState<Studio[]>([]);
   const [selectedStudio, setSelectedStudio] = useState<Studio | null>(null);
-  const [selectedRole, setSelectedRole] = useState<Role | null>(null);
+  const [selectedRole, setSelectedRole] = useState<RoleOptions | null>(null);
   const [deviceId, setDeviceId] = useState('');
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const currentUser = useSelector(selectUser);
+
+  const rolesOptions = [
+    { name: 'Host', role: Role.Host },
+    { name: 'Team1', role: Role.Team },
+    { name: 'Team2', role: Role.Team },
+  ] as RoleOptions[];
 
   useEffect(() => {
     const fetchStudios = async () => {
@@ -42,7 +49,7 @@ function Settings() {
     setSelectedStudio(studio);
   };
 
-  const handleRoleClick = (role: Role) => {
+  const handleRoleClick = (role: RoleOptions) => {
     setSelectedRole(role);
   };
 
@@ -53,13 +60,15 @@ function Settings() {
           const userToUpdate = {
             id: currentUser.id,
             studioId: selectedStudio.id,
-            role: selectedRole,
+            role: selectedRole.role,
+            name: selectedRole.name,
           };
 
           await services.users.update(userToUpdate);
           dispatch(
-            changeUsersRoleAndStudio({
-              role: selectedRole,
+            updateUser({
+              name: selectedRole.name,
+              role: selectedRole.role,
               studioId: selectedStudio.id,
             }),
           );
@@ -76,7 +85,7 @@ function Settings() {
           }
         }
 
-        switch (selectedRole) {
+        switch (selectedRole.role) {
           case Role.Host:
             navigate('/select-game-mode');
             break;
@@ -140,22 +149,22 @@ function Settings() {
           <div style={{ fontSize: '24px', marginBottom: '40px' }}>
             Select role
           </div>
-          {enumNumericValues(Role).map((roleIdx: number) => (
+          {rolesOptions.map((role) => (
             <button
               type="button"
-              key={roleIdx}
-              onClick={() => handleRoleClick(roleIdx as Role)}
+              key={role.name}
+              onClick={() => handleRoleClick(role)}
               style={{
                 margin: '5px',
                 padding: '10px',
                 display: 'block',
                 backgroundColor:
-                  selectedRole === roleIdx ? 'lightblue' : 'white',
+                  selectedRole?.name === role.name ? 'lightblue' : 'white',
                 minWidth: '150px',
                 marginBottom: '20px',
               }}
             >
-              {Role[roleIdx]}
+              {role.name}
             </button>
           ))}
         </div>

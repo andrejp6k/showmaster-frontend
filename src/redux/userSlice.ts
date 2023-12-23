@@ -10,9 +10,9 @@ export const userSlice = createSlice({
     changeUser: (state, action: PayloadAction<User>) => {
       state.user = action.payload;
     },
-    changeUsersRoleAndStudio: (
+    updateUser: (
       state,
-      action: PayloadAction<{ role: Role; studioId: string }>,
+      action: PayloadAction<{ role: Role; studioId: string; name: string }>,
     ) => {
       if (!state.user)
         throw new Error(
@@ -21,6 +21,7 @@ export const userSlice = createSlice({
 
       state.user.role = action.payload.role;
       state.user.studioId = action.payload.studioId;
+      state.user.name = action.payload.name;
     },
   },
   selectors: {
@@ -28,7 +29,7 @@ export const userSlice = createSlice({
   },
 });
 
-export const { changeUser, changeUsersRoleAndStudio } = userSlice.actions;
+export const { changeUser, updateUser } = userSlice.actions;
 export const { selectUser } = userSlice.selectors;
 
 export default userSlice.reducer;
