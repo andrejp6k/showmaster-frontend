@@ -1,10 +1,15 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // Use useNavigate instead of useHistory
-import { changeUser } from '../../redux/userSlice';
+import {
+  changeUser,
+  changeUsersRoleAndStudio,
+  selectUser,
+} from '../../redux/userSlice';
 import { services } from '../../services';
 import { Role, Studio, User } from '../../types';
 import { enumNumericValues } from '../../utils/utils';
 import { useAppDispatch } from '../hooks/appStore';
+import { useSelector } from 'react-redux';
 
 function Settings() {
   const [studios, setStudios] = useState<Studio[]>([]);
@@ -13,6 +18,7 @@ function Settings() {
   const [deviceId, setDeviceId] = useState('');
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const currentUser = useSelector(selectUser);
 
   useEffect(() => {
     const fetchStudios = async () => {
@@ -43,15 +49,31 @@ function Settings() {
   const handleConfirmClick = async () => {
     if (selectedStudio && selectedRole != null) {
       try {
-        const userToCreate = {
-          studioId: selectedStudio.id,
-          role: selectedRole,
-          deviceId,
-        };
+        if (currentUser) {
+          const userToUpdate = {
+            id: currentUser.id,
+            studioId: selectedStudio.id,
+            role: selectedRole,
+          };
 
-        const response = await services.users.create(userToCreate);
-        if (response.data) {
-          dispatch(changeUser(response.data as User));
+          await services.users.update(userToUpdate);
+          dispatch(
+            changeUsersRoleAndStudio({
+              role: selectedRole,
+              studioId: selectedStudio.id,
+            }),
+          );
+        } else {
+          const userToCreate = {
+            studioId: selectedStudio.id,
+            role: selectedRole,
+            deviceId,
+          };
+
+          const response = await services.users.create(userToCreate);
+          if (response.data) {
+            dispatch(changeUser(response.data as User));
+          }
         }
 
         switch (selectedRole) {
