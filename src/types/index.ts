@@ -11,8 +11,8 @@ export interface SignaRHubOptions {
 }
 
 export enum Role {
-  Team = 0,
-  Host = 1,
+  Host,
+  Team,
 }
 export interface User {
   id: string;
