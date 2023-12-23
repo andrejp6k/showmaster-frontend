@@ -10,6 +10,7 @@ import {
 } from '../../utils/utils';
 import { useAppDispatch } from '../hooks/appStore';
 import { useSelector } from 'react-redux';
+import { connectToHub } from '../../redux/websocketSlice';
 
 function Settings() {
   const [studios, setStudios] = useState<Studio[]>([]);
@@ -79,6 +80,9 @@ function Settings() {
       try {
         await handleUpsertUser(selectedStudio, selectedRole);
         navigateToRoleStartPage(selectedRole, navigate);
+        dispatch(
+          connectToHub(`http://localhost:5173/hub?userId=${currentUser?.id}`),
+        );
       } catch (error) {
         console.error('Error confirming:', error);
       }
