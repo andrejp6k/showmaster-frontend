@@ -2,17 +2,37 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // Use useNavigate instead of useHistory
 import { services } from '../../services';
 import useSignalRHub from '../hooks/useSignaRHub';
-import { Role, Studio } from '../../types';
+import { Role, Studio, User } from '../../types';
 import { enumNumericValues } from '../../utils/utils';
+import { useAppDispatch } from '../hooks/appStore';
+import { changeUser, selectUser } from '../../redux/userSlice';
+import { useSelector } from 'react-redux';
 
 function AssignStudioToUser() {
   const [studios, setStudios] = useState<Studio[]>([]);
+  const [user, setUser] = useState<User | null>(null);
   const [selectedStudio, setSelectedStudio] = useState<Studio | null>(null);
   const [selectedRole, setSelectedRole] = useState<Role | null>(null);
   const [deviceId, setDeviceId] = useState('');
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const currentUser = useSelector(selectUser);
+
+  const fetchAndAssignUser = async (deviceId: string) => {
+    try {
+      const response = await services.users.getByDeviceId(deviceId);
+      setUser(response.data);
+
+      if (response.data) {
+        dispatch(changeUser(response.data));
+      }
+    } catch (error) {
+      console.error('Error fetching user:', error);
+    }
+  };
 
   useEffect(() => {
+    // navigate('/welcome-team');
     const fetchStudios = async () => {
       try {
         const response = await services.studios.list();
@@ -28,6 +48,9 @@ function AssignStudioToUser() {
     const urlParams = new URLSearchParams(queryString);
     const deviceIdFromParams = urlParams.get('deviceId');
     setDeviceId(deviceIdFromParams || '');
+
+    console.log('starting fetching data for user', deviceIdFromParams);
+    fetchAndAssignUser(deviceIdFromParams!);
   }, []);
 
   const handleStudioClick = (studio: Studio) => {

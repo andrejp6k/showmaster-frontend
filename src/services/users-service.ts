@@ -9,4 +9,8 @@ export default class UsersService {
       },
     });
   }
+
+  public getByDeviceId(deviceId: string) {
+    return client.get('users/deviceId?deviceId=' + deviceId);
+  }
 }
