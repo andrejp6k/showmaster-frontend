@@ -1,19 +1,25 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // Use useNavigate instead of useHistory
+import { setUser, selectUser } from '../../redux/userSlice';
 import { services } from '../../services';
-import { Role, Studio } from '../../types';
-import { enumNumericValues } from '../../utils/utils';
+import { Role, Studio, User } from '../../types';
+import {
+  enumNumericValues,
+  getQueryParamValue,
+  navigateToRoleStartPage,
+} from '../../utils/utils';
 import { useAppDispatch } from '../hooks/appStore';
+import { useSelector } from 'react-redux';
 import { connectToHub } from '../../redux/websocketSlice';
 
-function AssignStudioToUser() {
+function Settings() {
   const [studios, setStudios] = useState<Studio[]>([]);
   const [selectedStudio, setSelectedStudio] = useState<Studio | null>(null);
   const [selectedRole, setSelectedRole] = useState<Role | null>(null);
   const [deviceId, setDeviceId] = useState('');
   const navigate = useNavigate();
-
   const dispatch = useAppDispatch();
+  const currentUser = useSelector(selectUser);
 
   useEffect(() => {
     const fetchStudios = async () => {
@@ -27,10 +33,12 @@ function AssignStudioToUser() {
 
     fetchStudios();
 
-    const queryString = global.location.search;
-    const urlParams = new URLSearchParams(queryString);
-    const deviceIdFromParams = urlParams.get('deviceId');
-    setDeviceId(deviceIdFromParams || '');
+    const deviceIdFromParams = getQueryParamValue('deviceId');
+
+    if (!deviceIdFromParams)
+      throw new Error('DeviceId from query params was null!');
+
+    setDeviceId(deviceIdFromParams);
   }, []);
 
   const handleStudioClick = (studio: Studio) => {
@@ -41,36 +49,40 @@ function AssignStudioToUser() {
     setSelectedRole(role);
   };
 
+  const handleUpsertUser = async (studio: Studio, role: Role) => {
+    if (currentUser) {
+      const userToUpdate = {
+        id: currentUser.id,
+        studioId: studio.id,
+        role: role,
+      };
+
+      const response = await services.users.update(userToUpdate);
+      if (response.data) {
+        dispatch(setUser(response.data as User));
+      }
+    } else {
+      const userToCreate = {
+        studioId: studio.id,
+        role: role,
+        deviceId,
+      };
+
+      const response = await services.users.create(userToCreate);
+      if (response.data) {
+        dispatch(setUser(response.data as User));
+      }
+    }
+  };
+
   const handleConfirmClick = async () => {
     if (selectedStudio && selectedRole != null) {
       try {
-        await services.users.create({
-          studioId: selectedStudio.id,
-          role: selectedRole,
-          deviceId,
-        });
-
-        switch (selectedRole) {
-          case Role.Host:
-            // TODO: move connection to hub to proper place, where user ID is assigned
-            dispatch(
-              connectToHub(
-                'http://localhost:5173/hub?userId=658583795260451d1dfb41b0',
-              ),
-            );
-            navigate('/select-game-mode');
-            break;
-          case Role.Team:
-            dispatch(
-              connectToHub(
-                'http://localhost:5173/hub?userId=658583795260451d1dfb41b1',
-              ),
-            );
-            navigate('/welcome-team');
-            break;
-          default:
-            break;
-        }
+        await handleUpsertUser(selectedStudio, selectedRole);
+        navigateToRoleStartPage(selectedRole, navigate);
+        dispatch(
+          connectToHub(`http://localhost:5173/hub?userId=${currentUser?.id}`),
+        );
       } catch (error) {
         console.error('Error confirming:', error);
       }
@@ -125,22 +137,22 @@ function AssignStudioToUser() {
           <div style={{ fontSize: '24px', marginBottom: '40px' }}>
             Select role
           </div>
-          {enumNumericValues(Role).map((roleIdx: number) => (
+          {enumNumericValues(Role).map((roleAsNumber: number) => (
             <button
               type="button"
-              key={roleIdx}
-              onClick={() => handleRoleClick(roleIdx as Role)}
+              key={roleAsNumber}
+              onClick={() => handleRoleClick(roleAsNumber)}
               style={{
                 margin: '5px',
                 padding: '10px',
                 display: 'block',
                 backgroundColor:
-                  selectedRole === roleIdx ? 'lightblue' : 'white',
+                  selectedRole === roleAsNumber ? 'lightblue' : 'white',
                 minWidth: '150px',
                 marginBottom: '20px',
               }}
             >
-              {Role[roleIdx]}
+              {Role[roleAsNumber]}
             </button>
           ))}
         </div>
@@ -169,4 +181,4 @@ function AssignStudioToUser() {
   );
 }
 
-export default AssignStudioToUser;
+export default Settings;

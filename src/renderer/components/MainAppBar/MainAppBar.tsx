@@ -1,5 +1,5 @@
 import { AppBar, IconButton, Toolbar, Typography } from '@mui/material';
-import { Home, ArrowBack } from '@mui/icons-material';
+import { Home, ArrowBack, Settings } from '@mui/icons-material';
 import styles from './MainAppBar.scss';
 import { useLocation, useNavigate } from 'react-router-dom';
 
@@ -9,6 +9,10 @@ function MainAppBar() {
 
   const handleNavigateHome = () => {
     navigate('/');
+  };
+
+  const handleNavigateToSettings = () => {
+    navigate('/settings');
   };
 
   const handleNavigateBack = () => {
@@ -30,15 +34,25 @@ function MainAppBar() {
           >
             <ArrowBack />
           </IconButton>
-          <IconButton
-            onClick={handleNavigateHome}
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            sx={{ mr: 2 }}
-          >
-            <Home />
-          </IconButton>
+          <div>
+            <IconButton
+              onClick={handleNavigateHome}
+              edge="start"
+              color="inherit"
+              aria-label="menu"
+              sx={{ mr: 4 }}
+            >
+              <Home />
+            </IconButton>
+            <IconButton
+              onClick={handleNavigateToSettings}
+              edge="start"
+              color="inherit"
+              aria-label="menu"
+            >
+              <Settings />
+            </IconButton>
+          </div>
         </div>
       </Toolbar>
     </AppBar>
