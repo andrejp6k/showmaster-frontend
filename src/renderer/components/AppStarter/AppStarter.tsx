@@ -1,25 +1,29 @@
 import { useEffect, useState } from 'react';
-import { changeUser, selectUser } from '../../../redux/userSlice';
+import { setUser, selectUser } from '../../../redux/userSlice';
 import { services } from '../../../services';
 import { useAppDispatch } from '../../hooks/appStore';
 import { Box, CircularProgress } from '@mui/material';
 import { Role, User } from '../../../types';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import {
+  getQueryParamValue,
+  navigateToRoleStartPage,
+} from '../../../utils/utils';
 
 function AppStarter() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const currentUser = useSelector(selectUser);
 
-  const fetchAndAssignUser = async (deviceId: string) => {
+  const fetchAndStoreUser = async (deviceId: string) => {
     try {
       const response = await services.users.getByDeviceId(deviceId);
 
       if (response.data) {
-        dispatch(changeUser(response.data));
         const user = response.data as User;
-        navigateAccordingToUser(user);
+        dispatch(setUser(user));
+        navigateToRoleStartPage(user.role, navigate);
       } else {
         navigate('/settings');
       }
@@ -28,26 +32,17 @@ function AppStarter() {
     }
   };
 
-  const navigateAccordingToUser = (user: User) => {
-    if (user.role == Role.Host) {
-      navigate('/select-game-mode');
-    } else {
-      navigate('/welcome-team');
-    }
-  };
-
   useEffect(() => {
     if (currentUser) {
-      navigateAccordingToUser(currentUser);
+      navigateToRoleStartPage(currentUser.role, navigate);
       return;
     }
 
-    const queryString = global.location.search;
-    const urlParams = new URLSearchParams(queryString);
-    const deviceIdFromParams = urlParams.get('deviceId');
+    const deviceId = getQueryParamValue('deviceId');
 
-    console.log('starting fetching data for user', deviceIdFromParams);
-    fetchAndAssignUser(deviceIdFromParams!);
+    if (!deviceId) throw new Error('DeviceId from query params was null!');
+
+    fetchAndStoreUser(deviceId);
   }, []);
 
   return (

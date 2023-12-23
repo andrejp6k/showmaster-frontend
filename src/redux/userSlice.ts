@@ -7,21 +7,8 @@ export const userSlice = createSlice({
     user: null as User | null,
   },
   reducers: {
-    changeUser: (state, action: PayloadAction<User>) => {
+    setUser: (state, action: PayloadAction<User>) => {
       state.user = action.payload;
-    },
-    updateUser: (
-      state,
-      action: PayloadAction<{ role: Role; studioId: string; name: string }>,
-    ) => {
-      if (!state.user)
-        throw new Error(
-          'Cannot update users role and studioId, because user does not exists!',
-        );
-
-      state.user.role = action.payload.role;
-      state.user.studioId = action.payload.studioId;
-      state.user.name = action.payload.name;
     },
   },
   selectors: {
@@ -29,7 +16,7 @@ export const userSlice = createSlice({
   },
 });
 
-export const { changeUser, updateUser } = userSlice.actions;
+export const { setUser } = userSlice.actions;
 export const { selectUser } = userSlice.selectors;
 
 export default userSlice.reducer;
