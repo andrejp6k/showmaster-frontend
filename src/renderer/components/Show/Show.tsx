@@ -6,6 +6,7 @@ import styles from './Show.scss';
 import { sendMessage } from '../../../redux/websocketSlice';
 import { useNavigate } from 'react-router-dom';
 import { selectUser } from '../../../redux/userSlice';
+import { setNavigate } from '../../../services/navigation-service';
 
 function Show() {
   const navigate = useNavigate();
@@ -13,10 +14,8 @@ function Show() {
   const user = useSelector(selectUser);
 
   function handlePlayClick(gameId: string) {
+    setNavigate(navigate);
     sendMessage('loadGame', gameId, user.id);
-    // TODO: remove navigate from here to websocketSlice.ts on hubConnection?.on('PlayGameHost'...) event
-    // create navigation slice for that
-    setTimeout(() => navigate('/game-host'), 3000);
   }
 
   return (
@@ -32,7 +31,7 @@ function Show() {
       </thead>
       <tbody>
       {show.games.map((game: ShowGame) => (
-        <tr>
+        <tr key={game.gameId}>
           <td>{game.name}</td>
           <td>{game.gameType}</td>
           <td>{game.score}</td>
@@ -40,7 +39,6 @@ function Show() {
           <td>
             <button
               type="button"
-              key={game.gameId}
               onClick={() => handlePlayClick(game.gameId)}
             >
               Play

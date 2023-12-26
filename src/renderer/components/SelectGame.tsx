@@ -36,6 +36,7 @@ function SelectGame() {
 
     if (response.data) {
       const show = response.data as Show;
+      console.log('Received show', show);
       dispatch(setShow(show));
     }
 
