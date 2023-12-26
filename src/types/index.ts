@@ -32,3 +32,46 @@ export interface CreateShowRequest {
   gameIds: string[];
   userId: string;
 }
+
+export interface Show {
+  id: string;
+  title: string;
+  teamScores: Score[];
+  games: ShowGame[];
+}
+
+export interface ShowGame {
+  gameId: string;
+  name: string;
+  gameType: string;
+  score: string;
+  winner: string;
+  finished: boolean;
+  teamScores: Score[];
+}
+
+export interface Score {
+  userId: string;
+  value: number;
+}
+
+export interface Game {
+  id: string;
+  name: string;
+  questions: Question[];
+}
+
+export interface Question {
+  id: string;
+  type: QuestionType;
+  questionText: string;
+  answer: string;
+  hint?: string | null;
+  finished: boolean;
+}
+
+export enum QuestionType {
+  Text,
+  Picture,
+  Year
+}

@@ -1,5 +1,7 @@
 import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { setGame } from './gameSlice';
+import { useNavigate } from 'react-router-dom';
 
 let hubConnection: HubConnection | null;
 
@@ -19,10 +21,14 @@ export const websocketSlice = createSlice({
 export const { receiveMessage } = websocketSlice.actions;
 
 export const sendMessage = (methodName: string, ...args: any[]) => {
-  hubConnection?.send(methodName, ...args);
+  hubConnection?.invoke(methodName, ...args).catch((error) => {
+    console.error(error);
+  });
 };
 
 export const connectToHub = (hubUrl: string) => (dispatch: any) => {
+  // const navigate = useNavigate();
+
   const hubConnectionSetup = new HubConnectionBuilder();
 
   hubConnectionSetup.withUrl(hubUrl);
@@ -40,6 +46,18 @@ export const connectToHub = (hubUrl: string) => (dispatch: any) => {
       hubConnection?.on('StartShow', (data) => {
         // TODO: dispatch action to other stores with games etc, based on that change do other stuff
         console.log(data);
+      });
+
+      hubConnection?.on('PlayGameHost', (data) => {
+        dispatch(setGame(data));
+        // TODO: useNavigate hook can be used only inside functional components, find other way to navigate
+        // navigate('/game-host');
+      });
+
+      hubConnection?.on('PlayGameTeam', (data) => {
+        dispatch(setGame(data));
+        // TODO: useNavigate hook can be used only inside functional components, find other way to navigate
+        // navigate('/game-team');
       });
 
       return null;

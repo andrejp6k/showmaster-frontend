@@ -6,6 +6,9 @@ import SelectGameMode from './components/SelectGameMode/SelectGameMode';
 import WelcomeTeam from './components/WelcomeTeam';
 import MainAppBar from './components/MainAppBar/MainAppBar';
 import AppStarter from './components/AppStarter/AppStarter';
+import Show from './components/Show/Show';
+import GameHost from './components/GameHost/GameHost';
+import GameTeam from './components/GameTeam/GameTeam';
 
 export default function App() {
   return (
@@ -18,6 +21,9 @@ export default function App() {
           <Route path="/select-game-mode" element={<SelectGameMode />} />
           <Route path="/welcome-team" element={<WelcomeTeam />} />
           <Route path="/select-game" element={<SelectGame />} />
+          <Route path="/show" element={<Show />} />
+          <Route path="/game-host" element={<GameHost />} />
+          <Route path="/game-team" element={<GameTeam />} />
         </Routes>
       </div>
     </Router>

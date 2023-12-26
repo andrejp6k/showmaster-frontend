@@ -1,10 +1,16 @@
 import { useEffect, useState } from 'react';
 import { services } from '../../services';
 import { useSelector } from 'react-redux';
-import { selectUser } from '../../redux/userSlice';
+import { selectUser, setUser } from '../../redux/userSlice';
+import { Show } from '../../types';
+import { useAppDispatch } from '../hooks/appStore';
+import { setShow } from '../../redux/showSlice';
+import { useNavigate } from 'react-router-dom';
 
 function SelectGame() {
   const currentUser = useSelector(selectUser);
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const [games, setGames] = useState([]);
 
@@ -22,11 +28,18 @@ function SelectGame() {
   }, []);
 
   const handleGameClick = async (gameId: string) => {
-    await services.shows.create({
+    const response = await services.shows.create({
       title: 'Show with single game',
       gameIds: [gameId],
       userId: currentUser.id,
     });
+
+    if (response.data) {
+      const show = response.data as Show;
+      dispatch(setShow(show));
+    }
+
+    navigate('/show');
   };
 
   return (
