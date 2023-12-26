@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { setUser, selectUser } from '../../../redux/userSlice';
 import { services } from '../../../services';
 import { useAppDispatch } from '../../hooks/appStore';
@@ -8,9 +8,10 @@ import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import {
   getQueryParamValue,
-  navigateToRoleStartPage,
+  navigateToStartPage,
 } from '../../../utils/utils';
 import { connectToHub } from '../../../redux/websocketSlice';
+import config from '../../../config';
 
 function AppStarter() {
   const dispatch = useAppDispatch();
@@ -24,10 +25,12 @@ function AppStarter() {
       if (response.data) {
         const user = response.data as User;
         dispatch(setUser(user));
-        navigateToRoleStartPage(user.role, navigate);
-        dispatch(
-          connectToHub(`http://localhost:5173/hub?userId=${currentUser?.id}`),
-        );
+        if (user?.id) {
+          dispatch(
+            connectToHub(`${config.apiUrl}/hub?userId=${user?.id}`),
+          );
+        }
+        navigateToStartPage(user.role, navigate);
       } else {
         navigate('/settings');
       }
@@ -38,7 +41,7 @@ function AppStarter() {
 
   useEffect(() => {
     if (currentUser) {
-      navigateToRoleStartPage(currentUser.role, navigate);
+      navigateToStartPage(currentUser.role, navigate);
       return;
     }
 

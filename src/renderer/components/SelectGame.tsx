@@ -1,8 +1,11 @@
 import { useEffect, useState } from 'react';
 import { services } from '../../services';
-import { sendMessage } from '../../redux/websocketSlice';
+import { useSelector } from 'react-redux';
+import { selectUser } from '../../redux/userSlice';
 
 function SelectGame() {
+  const currentUser = useSelector(selectUser);
+
   const [games, setGames] = useState([]);
 
   useEffect(() => {
@@ -19,13 +22,10 @@ function SelectGame() {
   }, []);
 
   const handleGameClick = async (gameId: string) => {
-    console.log(gameId);
-
-    // TODO: get userId from store
     await services.shows.create({
-      title: 'Test Show',
+      title: 'Show with single game',
       gameIds: [gameId],
-      userId: '658583795260451d1dfb41b0',
+      userId: currentUser.id,
     });
   };
 

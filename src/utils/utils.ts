@@ -13,7 +13,7 @@ export function getQueryParamValue(paramName: string) {
   return urlParams.get(paramName);
 }
 
-export function navigateToRoleStartPage(
+export function navigateToStartPage(
   role: Role,
   navigate: NavigateFunction,
 ) {
