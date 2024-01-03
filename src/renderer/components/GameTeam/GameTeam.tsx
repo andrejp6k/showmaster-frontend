@@ -1,7 +1,7 @@
-function GameHost(){
+function GameTeam(){
   return (
     <div>Team</div>
   );
 }
 
-export default GameHost;
+export default GameTeam;
