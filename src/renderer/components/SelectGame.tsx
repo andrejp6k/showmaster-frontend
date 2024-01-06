@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { setShow } from '../../redux/showSlice';
 import { selectUser } from '../../redux/userSlice';
 import { services } from '../../services';
-import { Show } from '../../types';
+import { GameHeader, Show } from '../../types';
 import { useAppDispatch } from '../hooks/appStore';
 
 function SelectGame() {
@@ -12,13 +12,13 @@ function SelectGame() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const [games, setGames] = useState([]);
+  const [games, setGames] = useState<GameHeader[]>([]);
 
   useEffect(() => {
     const fetchGames = async () => {
       try {
         const response = await services.games.list();
-        setGames(response.data);
+        setGames(response.data as GameHeader[]);
       } catch (error) {
         console.error('Error fetching studios:', error);
       }

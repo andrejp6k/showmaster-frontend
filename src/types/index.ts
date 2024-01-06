@@ -33,6 +33,11 @@ export interface CreateShowRequest {
   userId: string;
 }
 
+export interface GameHeader {
+  id: string;
+  name: string;
+}
+
 export interface Show {
   id: string;
   title: string;
@@ -73,5 +78,5 @@ export interface Question {
 export enum QuestionType {
   Text,
   Picture,
-  Year
+  Year,
 }
