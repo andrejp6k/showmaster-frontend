@@ -53,7 +53,9 @@ function Settings() {
   const handleConfirmClick = async () => {
     if (selectedStudio && selectedRole != null) {
       try {
-        let user = currentUser ? await updateUser() : await createUser();
+        let user = currentUser
+          ? await updateUser(currentUser.id)
+          : await createUser();
         if (user?.id) {
           dispatch(connectToHub(`${config.apiUrl}/hub?userId=${user?.id}`));
         }
@@ -80,9 +82,9 @@ function Settings() {
     return user;
   };
 
-  const updateUser = async () => {
+  const updateUser = async (userId: string) => {
     const userToUpdate = {
-      id: currentUser.id,
+      id: userId,
       studioId: selectedStudio?.id,
       role: selectedRole,
     };
