@@ -6,7 +6,7 @@ import { Role, Studio, User } from '../../types';
 import {
   enumNumericValues,
   getQueryParamValue,
-  navigateToStartPage
+  navigateToStartPage,
 } from '../../utils/utils';
 import { useAppDispatch } from '../hooks/appStore';
 import { useSelector } from 'react-redux';
@@ -24,7 +24,7 @@ function Settings() {
 
   useEffect(() => {
     const deviceIdFromParams = getQueryParamValue('deviceId');
-    if (!deviceIdFromParams){
+    if (!deviceIdFromParams) {
       throw new Error('DeviceId from query params was null!');
     }
 
@@ -55,9 +55,7 @@ function Settings() {
       try {
         let user = currentUser ? await updateUser() : await createUser();
         if (user?.id) {
-          dispatch(
-            connectToHub(`${config.apiUrl}/hub?userId=${user?.id}`),
-          );
+          dispatch(connectToHub(`${config.apiUrl}/hub?userId=${user?.id}`));
         }
         navigateToStartPage(selectedRole, navigate);
       } catch (error) {
@@ -66,7 +64,7 @@ function Settings() {
     }
   };
 
-  const createUser = async() => {
+  const createUser = async () => {
     const userToCreate = {
       studioId: selectedStudio?.id,
       role: selectedRole,
@@ -80,9 +78,9 @@ function Settings() {
     }
 
     return user;
-  }
+  };
 
-  const updateUser = async() => {
+  const updateUser = async () => {
     const userToUpdate = {
       id: currentUser.id,
       studioId: selectedStudio?.id,
@@ -96,7 +94,7 @@ function Settings() {
     }
 
     return user;
-  }
+  };
 
   return (
     <div>

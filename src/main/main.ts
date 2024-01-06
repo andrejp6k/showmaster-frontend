@@ -130,11 +130,12 @@ app
   .then(() => {
     machineId()
       .then((deviceId) => {
-        createWindow(deviceId);
+        createWindow(process.env.DEVICE_ID || deviceId);
         app.on('activate', () => {
           // On macOS it's common to re-create a window in the app when the
           // dock icon is clicked and there are no other windows open.
-          if (mainWindow === null) createWindow(deviceId);
+          if (mainWindow === null)
+            createWindow(process.env.DEVICE_ID || deviceId);
         });
       })
       .catch((error) => {

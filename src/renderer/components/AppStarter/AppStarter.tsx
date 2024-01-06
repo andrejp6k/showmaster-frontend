@@ -6,12 +6,10 @@ import { Box, CircularProgress } from '@mui/material';
 import { Role, User } from '../../../types';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import {
-  getQueryParamValue,
-  navigateToStartPage,
-} from '../../../utils/utils';
+import { getQueryParamValue, navigateToStartPage } from '../../../utils/utils';
 import { connectToHub } from '../../../redux/websocketSlice';
 import config from '../../../config';
+import { setNavigate } from '../../../services/navigation-service';
 
 function AppStarter() {
   const dispatch = useAppDispatch();
@@ -26,9 +24,7 @@ function AppStarter() {
         const user = response.data as User;
         dispatch(setUser(user));
         if (user?.id) {
-          dispatch(
-            connectToHub(`${config.apiUrl}/hub?userId=${user?.id}`),
-          );
+          dispatch(connectToHub(`${config.apiUrl}/hub?userId=${user?.id}`));
         }
         navigateToStartPage(user.role, navigate);
       } else {
@@ -40,6 +36,8 @@ function AppStarter() {
   };
 
   useEffect(() => {
+    setNavigate(navigate);
+
     if (currentUser) {
       navigateToStartPage(currentUser.role, navigate);
       return;

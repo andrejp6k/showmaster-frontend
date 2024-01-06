@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
-import { services } from '../../services';
 import { useSelector } from 'react-redux';
-import { selectUser, setUser } from '../../redux/userSlice';
+import { useNavigate } from 'react-router-dom';
+import { setShow } from '../../redux/showSlice';
+import { selectUser } from '../../redux/userSlice';
+import { services } from '../../services';
 import { Show } from '../../types';
 import { useAppDispatch } from '../hooks/appStore';
-import { setShow } from '../../redux/showSlice';
-import { useNavigate } from 'react-router-dom';
 
 function SelectGame() {
   const currentUser = useSelector(selectUser);
@@ -28,6 +28,10 @@ function SelectGame() {
   }, []);
 
   const handleGameClick = async (gameId: string) => {
+    if (!currentUser) {
+      throw new Error('User cannot be null!');
+    }
+
     const response = await services.shows.create({
       title: 'Show with single game',
       gameIds: [gameId],
@@ -67,7 +71,7 @@ function SelectGame() {
           {games.map((game) => (
             <button
               type="button"
-              key={game.id}
+              key={game?.id}
               onClick={() => handleGameClick(game.id)}
               style={{
                 margin: '5px',

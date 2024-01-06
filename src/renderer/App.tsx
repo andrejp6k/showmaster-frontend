@@ -3,7 +3,7 @@ import styles from './App.scss';
 import Settings from './components/Settings';
 import SelectGame from './components/SelectGame';
 import SelectGameMode from './components/SelectGameMode/SelectGameMode';
-import WelcomeTeam from './components/WelcomeTeam';
+import WelcomeTeam from './components/WelcomeTeam/WelcomeTeam';
 import MainAppBar from './components/MainAppBar/MainAppBar';
 import AppStarter from './components/AppStarter/AppStarter';
 import Show from './components/Show/Show';
