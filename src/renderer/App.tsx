@@ -1,7 +1,7 @@
 import { Route, MemoryRouter as Router, Routes } from 'react-router-dom';
 import styles from './App.scss';
 import Settings from './components/Settings';
-import SelectGame from './components/SelectGame';
+import SelectGame from './components/SelectGame/SelectGame';
 import SelectGameMode from './components/SelectGameMode/SelectGameMode';
 import WelcomeTeam from './components/WelcomeTeam/WelcomeTeam';
 import MainAppBar from './components/MainAppBar/MainAppBar';

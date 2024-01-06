@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { setShow } from '../../redux/showSlice';
-import { selectUser } from '../../redux/userSlice';
-import { services } from '../../services';
-import { GameHeader, Show } from '../../types';
-import { useAppDispatch } from '../hooks/appStore';
+import { setShow } from '../../../redux/showSlice';
+import { selectUser } from '../../../redux/userSlice';
+import { services } from '../../../services';
+import { GameHeader, Show } from '../../../types';
+import { useAppDispatch } from '../../hooks/appStore';
+import styles from './SelectGame.scss';
 
 function SelectGame() {
   const currentUser = useSelector(selectUser);
@@ -49,38 +50,15 @@ function SelectGame() {
 
   return (
     <div>
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          paddingBottom: '100px',
-          fontSize: '35px',
-        }}
-      >
-        Play game
-      </div>
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-      >
+      <div className={styles.title}>Play game</div>
+      <div className={styles.games}>
         <div>
           {games.map((game) => (
             <button
+              className={styles.gameButton}
               type="button"
               key={game?.id}
               onClick={() => handleGameClick(game.id)}
-              style={{
-                margin: '5px',
-                padding: '10px',
-                display: 'block',
-                backgroundColor: 'rgb(239, 158, 86)',
-                minWidth: '250px',
-                marginBottom: '20px',
-              }}
             >
               {game.name}
             </button>
