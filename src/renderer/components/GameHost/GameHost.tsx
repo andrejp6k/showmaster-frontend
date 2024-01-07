@@ -1,21 +1,21 @@
+import classNames from 'classnames';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { selectGame } from '../../../redux/gameSlice';
+import { useNavigate, useParams } from 'react-router-dom';
+import { selectGame, selectQuestionsCount } from '../../../redux/gameSlice';
 import { selectUser } from '../../../redux/userSlice';
 import { sendMessage } from '../../../redux/websocketSlice';
-import { Question } from '../../../types';
 import styles from './GameHost.scss';
 
 function GameHost() {
   const game = useSelector(selectGame);
   const currentUser = useSelector(selectUser);
+  const params = useParams();
+  const questionIndex = parseInt(params.questionIndex || '0');
+  const questionsCount = useSelector(selectQuestionsCount);
+  const question = game?.questions[questionIndex];
+  const navigate = useNavigate();
 
-  const activeQuestion = game?.questions.find(
-    (question: Question) => question.finished === false,
-  );
-  const [question, setQuestion] = useState<Question | undefined>(
-    activeQuestion,
-  );
   const [isQuestionActive, setIsQuestionActive] = useState(false);
 
   function activate() {
@@ -35,6 +35,14 @@ function GameHost() {
     // send event to server with: showId, gameId, teamId, correct -> update score
     // mutate game state, find question by questionId and mark it as finished,
     //    rerender of next question should happens automatically because of state 'question'
+  }
+
+  function handleNavigate(index: number) {
+    if (index >= 0 && index < questionsCount) {
+      navigate(`/game-host/${index}`);
+      setIsQuestionActive(false);
+      deactivate();
+    }
   }
 
   return (
@@ -65,17 +73,34 @@ function GameHost() {
         </button>
       </div>
       <div className={styles.questionSection}>
+        <span>{question?.questionTitle}</span>
         <div className={styles.question}>Q: {question?.questionText}</div>
-        <div className={styles.answer}>
+        <span>
           <b>A:</b> {question?.answer}
-        </div>
-        <div className={styles.hint}>
+        </span>
+        <span>
           <b>Hint:</b> {question?.hint}
-        </div>
+        </span>
       </div>
       <footer className={styles.navigation}>
-        <button className={styles.navButton}>Previous question</button>
-        <button className={styles.navButton}>Next question</button>
+        <button
+          onClick={() => handleNavigate(questionIndex - 1)}
+          className={classNames(styles.navButton, {
+            [styles.hidden]: questionIndex === 0,
+          })}
+        >
+          Previous question
+        </button>
+        {questionIndex < questionsCount - 1 ? (
+          <button
+            className={styles.navButton}
+            onClick={() => handleNavigate(questionIndex + 1)}
+          >
+            Next question
+          </button>
+        ) : (
+          <button className={styles.navButton}>Finish game</button>
+        )}
       </footer>
     </div>
   );

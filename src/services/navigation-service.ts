@@ -1,13 +1,17 @@
-let navigate: ((path: string) => void) | undefined;
+import { NavigateFunction } from 'react-router-dom';
 
-export const setNavigate = (nav: (path: string) => void) => {
+let navigate: NavigateFunction | undefined;
+
+export const setNavigate = (nav: NavigateFunction) => {
   navigate = nav;
 };
 
-export const navigateTo = (path: string) => {
+export const navigateTo = (path: string, params?: any) => {
   if (navigate) {
-    navigate(path);
+    navigate(path, params);
   } else {
-    console.error('Navigate function not set. Make sure to call setNavigate first.');
+    console.error(
+      'Navigate function not set. Make sure to call setNavigate first.',
+    );
   }
 };

@@ -22,7 +22,7 @@ export default function App() {
           <Route path="/welcome-team" element={<WelcomeTeam />} />
           <Route path="/select-game" element={<SelectGame />} />
           <Route path="/show" element={<Show />} />
-          <Route path="/game-host" element={<GameHost />} />
+          <Route path="/game-host/:questionIndex" element={<GameHost />} />
           <Route path="/game-team" element={<GameTeam />} />
         </Routes>
       </div>

@@ -1,6 +1,10 @@
 import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { setCurrentActiveQuestionId, setGame } from './gameSlice';
+import {
+  setCurrentActiveQuestionId,
+  setGame,
+  setIsAnswering,
+} from './gameSlice';
 import { navigateTo } from '../services/navigation-service';
 
 let hubConnection: HubConnection | null;
@@ -44,11 +48,13 @@ export const connectToHub = (hubUrl: string) => (dispatch: any) => {
       hubConnection?.on('PlayGameHost', (data) => {
         console.log('Received game with all questions', data);
         dispatch(setGame(data));
-        navigateTo('/game-host');
+        navigateTo('/game-host/' + 0);
       });
 
       hubConnection?.on('PlayGameTeam', (data) => {
         dispatch(setGame(data));
+        dispatch(setCurrentActiveQuestionId(null));
+        dispatch(setIsAnswering(false));
         navigateTo('/game-team');
       });
 

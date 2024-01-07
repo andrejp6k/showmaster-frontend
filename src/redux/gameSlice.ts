@@ -33,12 +33,17 @@ export const gameSlice = createSlice({
       }
       return null;
     },
+    selectQuestionsCount: (state) => state.game?.questions?.length || 0,
   },
 });
 
 export const { setGame, setCurrentActiveQuestionId, setIsAnswering } =
   gameSlice.actions;
-export const { selectGame, selectIsAnswering, selectCurrentActiveQuestion } =
-  gameSlice.selectors;
+export const {
+  selectGame,
+  selectIsAnswering,
+  selectCurrentActiveQuestion,
+  selectQuestionsCount,
+} = gameSlice.selectors;
 
 export default gameSlice.reducer;

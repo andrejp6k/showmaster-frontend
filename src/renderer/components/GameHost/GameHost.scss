@@ -32,17 +32,12 @@
   .questionSection {
     padding: 15px;
     margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 
     .question {
       font-weight: bold;
-    }
-
-    .answer {
-      margin-top: 10px;
-    }
-
-    .hint {
-      margin-top: 10px;
     }
   }
 
@@ -57,7 +52,11 @@
       border: none;
       border-radius: 3px;
       display: block;
-      minWidth: 200px;
+      minwidth: 200px;
+
+      &.hidden {
+        visibility: hidden;
+      }
     }
   }
 }
