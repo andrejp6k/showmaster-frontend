@@ -1,6 +1,6 @@
 import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { setGame } from './gameSlice';
+import { setCurrentActiveQuestionId, setGame } from './gameSlice';
 import { navigateTo } from '../services/navigation-service';
 
 let hubConnection: HubConnection | null;
@@ -50,6 +50,10 @@ export const connectToHub = (hubUrl: string) => (dispatch: any) => {
       hubConnection?.on('PlayGameTeam', (data) => {
         dispatch(setGame(data));
         navigateTo('/game-team');
+      });
+
+      hubConnection?.on('ActiveQuestionForTeam', (data) => {
+        dispatch(setCurrentActiveQuestionId(data));
       });
 
       return null;

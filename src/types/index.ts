@@ -69,6 +69,7 @@ export interface Game {
 export interface Question {
   id: string;
   type: QuestionType;
+  questionTitle: string;
   questionText: string;
   answer: string;
   hint?: string | null;

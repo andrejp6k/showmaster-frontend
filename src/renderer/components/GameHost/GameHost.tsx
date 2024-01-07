@@ -1,23 +1,34 @@
-import styles from './GameHost.scss';
+import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectGame } from '../../../redux/gameSlice';
-import { Game, Question, Studio } from '../../../types';
-import { useState } from 'react';
+import { selectUser } from '../../../redux/userSlice';
+import { sendMessage } from '../../../redux/websocketSlice';
+import { Question } from '../../../types';
+import styles from './GameHost.scss';
 
 function GameHost() {
-  const game: Game = useSelector(selectGame);
+  const game = useSelector(selectGame);
+  const currentUser = useSelector(selectUser);
 
-  const activeQuestion = game.questions.find((question: Question) => question.finished === false);
-  const [question, setQuestion] = useState<Question | undefined>(activeQuestion);
+  const activeQuestion = game?.questions.find(
+    (question: Question) => question.finished === false,
+  );
+  const [question, setQuestion] = useState<Question | undefined>(
+    activeQuestion,
+  );
+  const [isQuestionActive, setIsQuestionActive] = useState(false);
 
   function activate() {
     // send event to server to activate buzzers for teams.
     //    Use selectUser to get id and send it to server to all teams by same studio
-    console.log("send event to server to activate team buzzers")
+    sendMessage('activateQuestion', question?.id, currentUser?.id);
+    setIsQuestionActive(true);
   }
 
-  function deactivate(id: string) {
+  function deactivate() {
     // send event to server to deactivate buzzers for teams
+    sendMessage('deactivateQuestion', currentUser?.id);
+    setIsQuestionActive(false);
   }
 
   function answer(correct: boolean, questionId: string) {
@@ -42,21 +53,19 @@ function GameHost() {
         style={{
           display: 'flex',
           alignItems: 'flex',
-          justifyContent: 'center'
+          justifyContent: 'center',
         }}
       >
         <button
           className={styles.activateButton}
           type="button"
-          onClick={() => activate()}
+          onClick={() => (isQuestionActive ? deactivate() : activate())}
         >
-          Activate
+          {isQuestionActive ? 'Deactivate' : 'Activate'}
         </button>
       </div>
       <div className={styles.questionSection}>
-        <div className={styles.question}>
-          Q:  {question?.questionText}
-        </div>
+        <div className={styles.question}>Q: {question?.questionText}</div>
         <div className={styles.answer}>
           <b>A:</b> {question?.answer}
         </div>

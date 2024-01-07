@@ -103,6 +103,7 @@
     "@mui/material": "^5.15.1",
     "@reduxjs/toolkit": "^2.0.1",
     "axios": "^1.6.2",
+    "classnames": "^2.5.1",
     "electron-debug": "^3.2.0",
     "electron-log": "^4.4.8",
     "electron-updater": "^6.1.4",
