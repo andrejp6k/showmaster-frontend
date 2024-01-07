@@ -24,7 +24,11 @@ function AppStarter() {
         const user = response.data as User;
         dispatch(setUser(user));
         if (user?.id) {
-          dispatch(connectToHub(`${config.apiUrl}/hub?userId=${user?.id}`));
+          dispatch(
+            connectToHub(
+              `${config.apiUrl}/hub?userId=${user?.id}&studioId=${user?.studioId}`,
+            ),
+          );
         }
         navigateToStartPage(user.role, navigate);
       } else {

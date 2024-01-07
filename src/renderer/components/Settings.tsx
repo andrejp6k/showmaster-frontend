@@ -57,7 +57,11 @@ function Settings() {
           ? await updateUser(currentUser.id)
           : await createUser();
         if (user?.id) {
-          dispatch(connectToHub(`${config.apiUrl}/hub?userId=${user?.id}`));
+          dispatch(
+            connectToHub(
+              `${config.apiUrl}/hub?userId=${user?.id}&studioId=${user?.studioId}`,
+            ),
+          );
         }
         navigateToStartPage(selectedRole, navigate);
       } catch (error) {

@@ -6,6 +6,7 @@ import {
   setIsAnswering,
 } from './gameSlice';
 import { navigateTo } from '../services/navigation-service';
+import { setConnectedTeams } from './userSlice';
 
 let hubConnection: HubConnection | null;
 
@@ -60,6 +61,10 @@ export const connectToHub = (hubUrl: string) => (dispatch: any) => {
 
       hubConnection?.on('ActiveQuestionForTeam', (data) => {
         dispatch(setCurrentActiveQuestionId(data));
+      });
+
+      hubConnection?.on('ConnectedTeamsUpdated', (data) => {
+        dispatch(setConnectedTeams(data));
       });
 
       return null;

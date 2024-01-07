@@ -7,6 +7,8 @@ function GameTeam() {
 
   return (
     <div className={styles.container}>
+      {/* TODO: we will display different UI based on question type property */}
+
       <div className={styles.header}>
         {currentActiveQuestion && (
           <span>{currentActiveQuestion.questionTitle}</span>

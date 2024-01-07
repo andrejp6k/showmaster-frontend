@@ -1,21 +1,26 @@
-.tableOfGames {
-  width: 700px;
-  border-collapse: collapse;
-  margin-top: 20px;
-}
+.container {
+  display: flex;
+  flex-direction: column;
+  .tableOfGames {
+    width: 700px;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
 
-.tableOfGames th, .tableOfGames td {
-  border: 1px solid #ddd;
-  padding: 8px;
-  text-align: left;
-}
+  .tableOfGames th,
+  .tableOfGames td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
 
-.tableOfGames button {
-  cursor: pointer;
-  background-color: rgb(239, 158, 86);
-  color: white;
-  border: none;
-  border-radius: 3px;
-  display: block;
-  minWidth: 100px;
+  .tableOfGames button {
+    cursor: pointer;
+    background-color: rgb(239, 158, 86);
+    color: white;
+    border: none;
+    border-radius: 3px;
+    display: block;
+    minwidth: 100px;
+  }
 }
