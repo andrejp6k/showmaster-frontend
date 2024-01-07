@@ -3,13 +3,17 @@ import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { selectGame, selectQuestionsCount } from '../../../redux/gameSlice';
-import { selectUser } from '../../../redux/userSlice';
+import { selectShowGame } from '../../../redux/showSlice';
+import { selectConnectedTeams, selectUser } from '../../../redux/userSlice';
 import { sendMessage } from '../../../redux/websocketSlice';
+import { useAppSelector } from '../../hooks/appStore';
 import styles from './GameHost.scss';
 
 function GameHost() {
   const game = useSelector(selectGame);
+  const showGame = useAppSelector((state) => selectShowGame(state, game?.id));
   const currentUser = useSelector(selectUser);
+  const connectedTeams = useSelector(selectConnectedTeams);
   const params = useParams();
   const questionIndex = parseInt(params.questionIndex || '0');
   const questionsCount = useSelector(selectQuestionsCount);
@@ -48,14 +52,15 @@ function GameHost() {
   return (
     <div className={styles.buzzQuiz}>
       <div className={styles.scoreBoard}>
-        <div className={styles.team}>
-          <h2>Test Team Blue</h2>
-          <div className={styles.score}>2</div>
-        </div>
-        <div className={styles.team}>
-          <h2>Test Team Red</h2>
-          <div className={styles.score}>1</div>
-        </div>
+        {connectedTeams?.map((team) => (
+          <div key={team.id.toString()} className={styles.team}>
+            <h2>{team.name}</h2>
+            <div className={styles.score}>
+              {showGame?.teamScores?.find((x) => x.userId === team.id)?.value ||
+                0}
+            </div>
+          </div>
+        ))}
       </div>
       <div
         style={{

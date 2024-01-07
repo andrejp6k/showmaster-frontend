@@ -1,5 +1,5 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Show } from '../types';
+import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { Show, ShowGame } from '../types';
 
 export const showSlice = createSlice({
   name: 'show',
@@ -13,10 +13,16 @@ export const showSlice = createSlice({
   },
   selectors: {
     selectShow: (state) => state.show,
+    selectShowGame: createSelector(
+      (state) => state.show?.games,
+      (_, gameId) => gameId,
+      (games: ShowGame[], gameId) =>
+        games.find((game) => game.gameId === gameId),
+    ),
   },
 });
 
 export const { setShow } = showSlice.actions;
-export const { selectShow } = showSlice.selectors;
+export const { selectShow, selectShowGame } = showSlice.selectors;
 
 export default showSlice.reducer;
