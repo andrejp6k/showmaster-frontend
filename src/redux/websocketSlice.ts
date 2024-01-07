@@ -1,12 +1,8 @@
 import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import {
-  setCurrentActiveQuestionId,
-  setGame,
-  setIsAnswering,
-} from './gameSlice';
+import { setCurrentActiveQuestionId, setGame } from './gameSlice';
 import { navigateTo } from '../services/navigation-service';
-import { setConnectedTeams } from './userSlice';
+import { setConnectedTeams, setCurrentAnsweringTeamId } from './userSlice';
 
 let hubConnection: HubConnection | null;
 
@@ -55,16 +51,21 @@ export const connectToHub = (hubUrl: string) => (dispatch: any) => {
       hubConnection?.on('PlayGameTeam', (data) => {
         dispatch(setGame(data));
         dispatch(setCurrentActiveQuestionId(null));
-        dispatch(setIsAnswering(false));
+        dispatch(setCurrentAnsweringTeamId(null));
         navigateTo('/game-team');
       });
 
       hubConnection?.on('ActiveQuestionForTeam', (data) => {
         dispatch(setCurrentActiveQuestionId(data));
+        dispatch(setCurrentAnsweringTeamId(null));
       });
 
       hubConnection?.on('ConnectedTeamsUpdated', (data) => {
         dispatch(setConnectedTeams(data));
+      });
+
+      hubConnection?.on('BuzzerClickedByTeam', (data) => {
+        dispatch(setCurrentAnsweringTeamId(data));
       });
 
       return null;

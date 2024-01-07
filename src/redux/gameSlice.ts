@@ -6,7 +6,6 @@ export const gameSlice = createSlice({
   initialState: {
     game: null as Game | null,
     currentActivateQuestionId: null as string | null,
-    isAnswering: false,
   },
   reducers: {
     setGame: (state, action: PayloadAction<any>) => {
@@ -18,13 +17,9 @@ export const gameSlice = createSlice({
     ) => {
       state.currentActivateQuestionId = action.payload;
     },
-    setIsAnswering: (state, action: PayloadAction<boolean>) => {
-      state.isAnswering = action.payload;
-    },
   },
   selectors: {
     selectGame: (state) => state.game,
-    selectIsAnswering: (state) => state.isAnswering,
     selectCurrentActiveQuestion: (state) => {
       if (state.currentActivateQuestionId) {
         return state.game?.questions.find(
@@ -37,13 +32,8 @@ export const gameSlice = createSlice({
   },
 });
 
-export const { setGame, setCurrentActiveQuestionId, setIsAnswering } =
-  gameSlice.actions;
-export const {
-  selectGame,
-  selectIsAnswering,
-  selectCurrentActiveQuestion,
-  selectQuestionsCount,
-} = gameSlice.selectors;
+export const { setGame, setCurrentActiveQuestionId } = gameSlice.actions;
+export const { selectGame, selectCurrentActiveQuestion, selectQuestionsCount } =
+  gameSlice.selectors;
 
 export default gameSlice.reducer;
