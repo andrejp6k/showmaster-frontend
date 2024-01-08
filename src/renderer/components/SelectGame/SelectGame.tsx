@@ -35,8 +35,8 @@ function SelectGame() {
 
     const response = await services.shows.create({
       title: 'Show with single game',
+      studioId: currentUser.studioId,
       gameIds: [gameId],
-      userId: currentUser.id,
     });
 
     if (response.data) {
