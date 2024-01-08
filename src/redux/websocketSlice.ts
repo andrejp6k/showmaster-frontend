@@ -1,5 +1,8 @@
 import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { setCurrentActiveQuestionId, setGame } from './gameSlice';
+import { navigateTo } from '../services/navigation-service';
+import { setConnectedTeams, setCurrentAnsweringTeamId } from './userSlice';
 
 let hubConnection: HubConnection | null;
 
@@ -19,7 +22,9 @@ export const websocketSlice = createSlice({
 export const { receiveMessage } = websocketSlice.actions;
 
 export const sendMessage = (methodName: string, ...args: any[]) => {
-  hubConnection?.send(methodName, ...args);
+  hubConnection?.invoke(methodName, ...args).catch((error) => {
+    console.error(error);
+  });
 };
 
 export const connectToHub = (hubUrl: string) => (dispatch: any) => {
@@ -37,9 +42,30 @@ export const connectToHub = (hubUrl: string) => (dispatch: any) => {
         dispatch(receiveMessage(data));
       });
 
-      hubConnection?.on('StartShow', (data) => {
-        // TODO: dispatch action to other stores with games etc, based on that change do other stuff
-        console.log(data);
+      hubConnection?.on('PlayGameHost', (data) => {
+        console.log('Received game with all questions', data);
+        dispatch(setGame(data));
+        navigateTo('/game-host/' + 0);
+      });
+
+      hubConnection?.on('PlayGameTeam', (data) => {
+        dispatch(setGame(data));
+        dispatch(setCurrentActiveQuestionId(null));
+        dispatch(setCurrentAnsweringTeamId(null));
+        navigateTo('/game-team');
+      });
+
+      hubConnection?.on('ActiveQuestionForTeam', (data) => {
+        dispatch(setCurrentActiveQuestionId(data));
+        dispatch(setCurrentAnsweringTeamId(null));
+      });
+
+      hubConnection?.on('ConnectedTeamsUpdated', (data) => {
+        dispatch(setConnectedTeams(data));
+      });
+
+      hubConnection?.on('BuzzerClickedByTeam', (data) => {
+        dispatch(setCurrentAnsweringTeamId(data));
       });
 
       return null;

@@ -6,11 +6,12 @@ import { Role, Studio, User } from '../../types';
 import {
   enumNumericValues,
   getQueryParamValue,
-  navigateToRoleStartPage,
+  navigateToStartPage,
 } from '../../utils/utils';
 import { useAppDispatch } from '../hooks/appStore';
 import { useSelector } from 'react-redux';
 import { connectToHub } from '../../redux/websocketSlice';
+import config from '../../config';
 
 function Settings() {
   const [studios, setStudios] = useState<Studio[]>([]);
@@ -22,6 +23,13 @@ function Settings() {
   const currentUser = useSelector(selectUser);
 
   useEffect(() => {
+    const deviceIdFromParams = getQueryParamValue('deviceId');
+    if (!deviceIdFromParams) {
+      throw new Error('DeviceId from query params was null!');
+    }
+
+    setDeviceId(deviceIdFromParams);
+
     const fetchStudios = async () => {
       try {
         const response = await services.studios.list();
@@ -32,13 +40,6 @@ function Settings() {
     };
 
     fetchStudios();
-
-    const deviceIdFromParams = getQueryParamValue('deviceId');
-
-    if (!deviceIdFromParams)
-      throw new Error('DeviceId from query params was null!');
-
-    setDeviceId(deviceIdFromParams);
   }, []);
 
   const handleStudioClick = (studio: Studio) => {
@@ -49,44 +50,56 @@ function Settings() {
     setSelectedRole(role);
   };
 
-  const handleUpsertUser = async (studio: Studio, role: Role) => {
-    if (currentUser) {
-      const userToUpdate = {
-        id: currentUser.id,
-        studioId: studio.id,
-        role: role,
-      };
-
-      const response = await services.users.update(userToUpdate);
-      if (response.data) {
-        dispatch(setUser(response.data as User));
-      }
-    } else {
-      const userToCreate = {
-        studioId: studio.id,
-        role: role,
-        deviceId,
-      };
-
-      const response = await services.users.create(userToCreate);
-      if (response.data) {
-        dispatch(setUser(response.data as User));
-      }
-    }
-  };
-
   const handleConfirmClick = async () => {
     if (selectedStudio && selectedRole != null) {
       try {
-        await handleUpsertUser(selectedStudio, selectedRole);
-        navigateToRoleStartPage(selectedRole, navigate);
-        dispatch(
-          connectToHub(`http://localhost:5173/hub?userId=${currentUser?.id}`),
-        );
+        let user = currentUser
+          ? await updateUser(currentUser.id)
+          : await createUser();
+        if (user?.id) {
+          dispatch(
+            connectToHub(
+              `${config.apiUrl}/hub?userId=${user?.id}&studioId=${user?.studioId}`,
+            ),
+          );
+        }
+        navigateToStartPage(selectedRole, navigate);
       } catch (error) {
         console.error('Error confirming:', error);
       }
     }
+  };
+
+  const createUser = async () => {
+    const userToCreate = {
+      studioId: selectedStudio?.id,
+      role: selectedRole,
+      deviceId,
+    };
+
+    const response = await services.users.create(userToCreate);
+    const user = response.data as User;
+    if (response.data) {
+      dispatch(setUser(user));
+    }
+
+    return user;
+  };
+
+  const updateUser = async (userId: string) => {
+    const userToUpdate = {
+      id: userId,
+      studioId: selectedStudio?.id,
+      role: selectedRole,
+    };
+
+    const response = await services.users.update(userToUpdate);
+    const user = response.data as User;
+    if (response.data) {
+      dispatch(setUser(user));
+    }
+
+    return user;
   };
 
   return (
