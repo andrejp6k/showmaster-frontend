@@ -3,13 +3,14 @@ import { setUser, selectUser } from '../../../redux/userSlice';
 import { services } from '../../../services';
 import { useAppDispatch } from '../../hooks/appStore';
 import { Box, CircularProgress } from '@mui/material';
-import { Role, User } from '../../../types';
+import { User } from '../../../types';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { getQueryParamValue, navigateToStartPage } from '../../../utils/utils';
 import { connectToHub } from '../../../redux/websocketSlice';
 import config from '../../../config';
 import { setNavigate } from '../../../services/navigation-service';
+import { setGameUser } from '../../../redux/gameSlice';
 
 function AppStarter() {
   const dispatch = useAppDispatch();
@@ -23,12 +24,9 @@ function AppStarter() {
       if (response.data) {
         const user = response.data as User;
         dispatch(setUser(user));
+        dispatch(setGameUser(user));
         if (user?.id) {
-          dispatch(
-            connectToHub(
-              `${config.apiUrl}/hub?userId=${user?.id}&studioId=${user?.studioId}`,
-            ),
-          );
+          dispatch(connectToHub(`${config.apiUrl}/hub?userId=${user?.id}&studioId=${user?.studioId}`));
         }
         navigateToStartPage(user.role, navigate);
       } else {
