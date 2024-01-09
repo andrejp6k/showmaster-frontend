@@ -1,8 +1,8 @@
 import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
-import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { setCurrentActiveQuestionId, setGame } from './gameSlice';
+import { createSlice } from '@reduxjs/toolkit';
 import { navigateTo } from '../services/navigation-service';
-import { setConnectedTeams, setCurrentAnsweringTeamId } from './userSlice';
+import { changeCurrentQuestion, pickQuestion, setGame } from './gameSlice';
+import { setConnectedTeams } from './userSlice';
 
 let hubConnection: HubConnection | null;
 
@@ -12,14 +12,10 @@ export const websocketSlice = createSlice({
   initialState: {
     connection: null as HubConnection | null,
   },
-  reducers: {
-    receiveMessage: (state, action: PayloadAction<string>) => {
-      console.log(action);
-    },
-  },
+  reducers: {},
 });
 
-export const { receiveMessage } = websocketSlice.actions;
+export const {} = websocketSlice.actions;
 
 export const sendMessage = (methodName: string, ...args: any[]) => {
   hubConnection?.invoke(methodName, ...args).catch((error) => {
@@ -38,10 +34,6 @@ export const connectToHub = (hubUrl: string) => (dispatch: any) => {
   hubConnection
     .start()
     .then(() => {
-      hubConnection?.on('ReceiveMessage', (data) => {
-        dispatch(receiveMessage(data));
-      });
-
       hubConnection?.on('PlayGameHost', (data) => {
         console.log('Received game with all questions', data);
         dispatch(setGame(data));
@@ -50,14 +42,12 @@ export const connectToHub = (hubUrl: string) => (dispatch: any) => {
 
       hubConnection?.on('PlayGameTeam', (data) => {
         dispatch(setGame(data));
-        dispatch(setCurrentActiveQuestionId(null));
-        dispatch(setCurrentAnsweringTeamId(null));
+        dispatch(changeCurrentQuestion(null));
         navigateTo('/game-team');
       });
 
       hubConnection?.on('ActiveQuestionForTeam', (data) => {
-        dispatch(setCurrentActiveQuestionId(data));
-        dispatch(setCurrentAnsweringTeamId(null));
+        dispatch(changeCurrentQuestion(data));
       });
 
       hubConnection?.on('ConnectedTeamsUpdated', (data) => {
@@ -65,7 +55,7 @@ export const connectToHub = (hubUrl: string) => (dispatch: any) => {
       });
 
       hubConnection?.on('BuzzerClickedByTeam', (data) => {
-        dispatch(setCurrentAnsweringTeamId(data));
+        dispatch(pickQuestion(data));
       });
 
       return null;
