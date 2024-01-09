@@ -30,7 +30,7 @@ export interface Studio {
 export interface CreateShowRequest {
   title: string;
   gameIds: string[];
-  userId: string;
+  studioId: string;
 }
 
 export interface GameHeader {
@@ -40,6 +40,7 @@ export interface GameHeader {
 
 export interface Show {
   id: string;
+  studioId: string;
   title: string;
   teamScores: Score[];
   games: ShowGame[];
@@ -48,9 +49,8 @@ export interface Show {
 export interface ShowGame {
   gameId: string;
   name: string;
-  gameType: string;
   score: string;
-  winner: string;
+  winnerTeamName: string;
   finished: boolean;
   teamScores: Score[];
 }
@@ -73,6 +73,7 @@ export interface Question {
   questionText: string;
   answer: string;
   hint?: string | null;
+  imageUrl?: string | null;
   finished: boolean;
 }
 
