@@ -1,23 +1,26 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // Use useNavigate instead of useHistory
-import { setUser, selectUser } from '../../redux/userSlice';
-import { services } from '../../services';
-import { Role, Studio, User } from '../../types';
+import { setUser, selectUser } from '../../../redux/userSlice';
+import { services } from '../../../services';
+import { Role, Studio, User } from '../../../types';
 import {
   enumNumericValues,
   getQueryParamValue,
   navigateToStartPage,
-} from '../../utils/utils';
-import { useAppDispatch } from '../hooks/appStore';
+} from '../../../utils/utils';
+import { useAppDispatch } from '../../hooks/appStore';
 import { useSelector } from 'react-redux';
-import { connectToHub } from '../../redux/websocketSlice';
-import config from '../../config';
+import { connectToHub } from '../../../redux/websocketSlice';
+import config from '../../../config';
+import styles from './Settings.scss';
+import classNames from 'classnames';
 
 function Settings() {
   const [studios, setStudios] = useState<Studio[]>([]);
   const [selectedStudio, setSelectedStudio] = useState<Studio | null>(null);
   const [selectedRole, setSelectedRole] = useState<Role | null>(null);
   const [deviceId, setDeviceId] = useState('');
+  const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const currentUser = useSelector(selectUser);
@@ -64,7 +67,8 @@ function Settings() {
           );
         }
         navigateToStartPage(selectedRole, navigate);
-      } catch (error) {
+      } catch (error: any) {
+        setError(error?.response?.data || 'There was an error');
         console.error('Error confirming:', error);
       }
     }
@@ -103,43 +107,20 @@ function Settings() {
   };
 
   return (
-    <div>
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          paddingBottom: '100px',
-          fontSize: '30px',
-        }}
-      >
-        Device settings
-      </div>
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-      >
-        <div style={{ marginRight: '150px' }}>
-          <div style={{ fontSize: '24px', marginBottom: '40px' }}>
-            Select studio
-          </div>
+    <div className={styles.container}>
+      <div className={styles.title}>Device settings</div>
+      {error && <div className={styles.error}>{error}</div>}
+      <div className={styles.content}>
+        <div>
+          <div className={styles.sectionTitle}>Select studio</div>
           {studios.map((studio, index) => (
             <button
               type="button"
               key={`${studio.id} + ${index}`}
               onClick={() => handleStudioClick(studio)}
-              style={{
-                margin: '5px',
-                padding: '10px',
-                display: 'block',
-                backgroundColor:
-                  selectedStudio === studio ? 'lightblue' : 'white',
-                minWidth: '150px',
-                marginBottom: '20px',
-              }}
+              className={classNames(styles.sectionButton, {
+                [styles.selected]: selectedStudio === studio,
+              })}
             >
               {studio.name}
             </button>
@@ -147,23 +128,15 @@ function Settings() {
         </div>
 
         <div>
-          <div style={{ fontSize: '24px', marginBottom: '40px' }}>
-            Select role
-          </div>
+          <div className={styles.sectionTitle}>Select role</div>
           {enumNumericValues(Role).map((roleAsNumber: number) => (
             <button
               type="button"
               key={roleAsNumber}
               onClick={() => handleRoleClick(roleAsNumber)}
-              style={{
-                margin: '5px',
-                padding: '10px',
-                display: 'block',
-                backgroundColor:
-                  selectedRole === roleAsNumber ? 'lightblue' : 'white',
-                minWidth: '150px',
-                marginBottom: '20px',
-              }}
+              className={classNames(styles.sectionButton, {
+                [styles.selected]: selectedRole === roleAsNumber,
+              })}
             >
               {Role[roleAsNumber]}
             </button>
@@ -171,21 +144,11 @@ function Settings() {
         </div>
       </div>
 
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          marginTop: '50px',
-        }}
-      >
+      <div className={styles.footer}>
         <button
           type="button"
           onClick={handleConfirmClick}
-          style={{
-            backgroundColor: 'rgb(239, 158, 86)',
-            width: '250px',
-          }}
+          className={styles.submitButton}
         >
           Assign device
         </button>
