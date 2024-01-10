@@ -20,7 +20,6 @@ function Settings() {
   const [studios, setStudios] = useState<Studio[]>([]);
   const [selectedStudio, setSelectedStudio] = useState<Studio | null>(null);
   const [selectedRole, setSelectedRole] = useState<Role | null>(null);
-  const [deviceId, setDeviceId] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [isAuthorized, setIsAuthorized] = useState(false);
   const [passwordInput, setPasswordInput] = useState('');
@@ -30,13 +29,6 @@ function Settings() {
 
   useEffect(() => {
     setIsAuthorized(!currentUser || currentUser?.role === Role.Host);
-
-    const deviceIdFromParams = getQueryParamValue('deviceId');
-    if (!deviceIdFromParams) {
-      throw new Error('DeviceId from query params was null!');
-    }
-
-    setDeviceId(deviceIdFromParams);
 
     const fetchStudios = async () => {
       try {
@@ -80,10 +72,15 @@ function Settings() {
   };
 
   const createUser = async () => {
+    const deviceIdFromParams = getQueryParamValue('deviceId');
+    if (!deviceIdFromParams) {
+      throw new Error('DeviceId from query params was null!');
+    }
+
     const userToCreate = {
       studioId: selectedStudio?.id,
       role: selectedRole,
-      deviceId,
+      deviceIdFromParams,
     };
 
     const response = await services.users.create(userToCreate);

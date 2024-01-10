@@ -13,13 +13,10 @@ export function getQueryParamValue(paramName: string) {
   return urlParams.get(paramName);
 }
 
-export function navigateToStartPage(
-  role: Role,
-  navigate: NavigateFunction,
-) {
+export function navigateToStartPage(role: Role, navigate: NavigateFunction) {
   if (role == Role.Host) {
-    navigate('/select-game-mode');
+    navigate('/select-game-mode', { replace: true });
   } else {
-    navigate('/welcome-team');
+    navigate('/welcome-team', { replace: true });
   }
 }

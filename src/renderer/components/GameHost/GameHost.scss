@@ -1,6 +1,5 @@
 .buzzQuiz {
   font-family: Arial, sans-serif;
-  color: #fff;
   width: 500px;
   margin: auto;
   padding: 10px;
@@ -21,7 +20,6 @@
   .activateButton {
     cursor: pointer;
     background-color: #ff5900;
-    color: white;
     border: none;
     border-radius: 3px;
     display: block;
@@ -48,7 +46,6 @@
     .navButton {
       cursor: pointer;
       background-color: rgb(239, 158, 86);
-      color: white;
       border: none;
       border-radius: 3px;
       display: block;

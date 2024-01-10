@@ -10,20 +10,37 @@ import Show from './components/Show/Show';
 import GameHost from './components/GameHost/GameHost';
 import GameTeam from './components/GameTeam/GameTeam';
 
+export const RouteDefinitions = {
+  AppStarter: '/',
+  Settings: '/settings',
+  SelectGameMode: '/select-game-mode',
+  WelcomeTeam: '/welcome-team',
+  SelectGame: '/select-game',
+  Show: '/show',
+  GameHost: '/game-host/:questionIndex',
+  GameTeam: '/game-team',
+};
+
 export default function App() {
   return (
     <Router>
       <MainAppBar />
       <div className={styles.content}>
         <Routes>
-          <Route path="/" element={<AppStarter />} />
-          <Route path="/settings" element={<Settings />} />
-          <Route path="/select-game-mode" element={<SelectGameMode />} />
-          <Route path="/welcome-team" element={<WelcomeTeam />} />
-          <Route path="/select-game" element={<SelectGame />} />
-          <Route path="/show" element={<Show />} />
-          <Route path="/game-host/:questionIndex" element={<GameHost />} />
-          <Route path="/game-team" element={<GameTeam />} />
+          <Route path={RouteDefinitions.AppStarter} element={<AppStarter />} />
+          <Route path={RouteDefinitions.Settings} element={<Settings />} />
+          <Route
+            path={RouteDefinitions.SelectGameMode}
+            element={<SelectGameMode />}
+          />
+          <Route
+            path={RouteDefinitions.WelcomeTeam}
+            element={<WelcomeTeam />}
+          />
+          <Route path={RouteDefinitions.SelectGame} element={<SelectGame />} />
+          <Route path={RouteDefinitions.Show} element={<Show />} />
+          <Route path={RouteDefinitions.GameHost} element={<GameHost />} />
+          <Route path={RouteDefinitions.GameTeam} element={<GameTeam />} />
         </Routes>
       </div>
     </Router>

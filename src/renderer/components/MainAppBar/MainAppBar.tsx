@@ -6,6 +6,7 @@ import { selectUser } from '../../../redux/userSlice';
 import { useSelector } from 'react-redux';
 import { Role } from '../../../types';
 import classNames from 'classnames';
+import { RouteDefinitions } from '../../App';
 
 function MainAppBar() {
   const navigate = useNavigate();
@@ -13,7 +14,7 @@ function MainAppBar() {
   const currentUser = useSelector(selectUser);
 
   const handleNavigateHome = () => {
-    navigate('/');
+    navigate('/', { replace: true });
   };
 
   const handleNavigateToSettings = () => {
@@ -43,8 +44,8 @@ function MainAppBar() {
             className={classNames({
               [styles.hidden]:
                 (currentUser?.role === Role.Team &&
-                  location.pathname != '/settings') ||
-                location.pathname === '/select-game-mode',
+                  location.pathname != RouteDefinitions.Settings) ||
+                location.pathname === RouteDefinitions.SelectGameMode,
             })}
             edge="start"
             color="inherit"
@@ -56,7 +57,7 @@ function MainAppBar() {
 
           <div>
             {currentUser?.role === Role.Host &&
-              location.pathname !== '/select-game-mode' && (
+              location.pathname !== RouteDefinitions.SelectGameMode && (
                 <IconButton
                   onClick={handleNavigateHome}
                   edge="start"
@@ -69,9 +70,9 @@ function MainAppBar() {
               )}
             {!(
               currentUser?.role === Role.Team &&
-              location.pathname != '/welcome-team'
+              location.pathname != RouteDefinitions.WelcomeTeam
             ) &&
-              location.pathname != '/settings' && (
+              location.pathname != RouteDefinitions.Settings && (
                 <IconButton
                   onClick={handleNavigateToSettings}
                   edge="start"
