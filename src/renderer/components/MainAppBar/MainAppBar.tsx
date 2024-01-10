@@ -14,11 +14,11 @@ function MainAppBar() {
   const currentUser = useSelector(selectUser);
 
   const handleNavigateHome = () => {
-    navigate('/', { replace: true });
+    navigate(RouteDefinitions.Root, { replace: true });
   };
 
   const handleNavigateToSettings = () => {
-    navigate('/settings');
+    navigate(RouteDefinitions.Settings);
   };
 
   const handleNavigateBack = () => {

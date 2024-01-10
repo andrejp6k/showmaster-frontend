@@ -1,5 +1,6 @@
 import { NavigateFunction } from 'react-router-dom';
 import { Role } from '../types';
+import { RouteDefinitions } from '../renderer/App';
 
 export function enumNumericValues<T extends { [s: string]: any }>(
   enumObject: T,
@@ -15,8 +16,8 @@ export function getQueryParamValue(paramName: string) {
 
 export function navigateToStartPage(role: Role, navigate: NavigateFunction) {
   if (role == Role.Host) {
-    navigate('/select-game-mode', { replace: true });
+    navigate(RouteDefinitions.SelectGameMode, { replace: true });
   } else {
-    navigate('/welcome-team', { replace: true });
+    navigate(RouteDefinitions.WelcomeTeam, { replace: true });
   }
 }

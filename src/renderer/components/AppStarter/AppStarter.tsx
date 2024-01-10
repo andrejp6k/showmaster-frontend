@@ -1,16 +1,16 @@
-import { useEffect } from 'react';
-import { setUser, selectUser } from '../../../redux/userSlice';
-import { services } from '../../../services';
-import { useAppDispatch } from '../../hooks/appStore';
 import { Box, CircularProgress } from '@mui/material';
 import { User } from '../../../types';
 import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { getQueryParamValue, navigateToStartPage } from '../../../utils/utils';
-import { connectToHub } from '../../../redux/websocketSlice';
 import config from '../../../config';
-import { setNavigate } from '../../../services/navigation-service';
 import { setGameUser } from '../../../redux/gameSlice';
+import { selectUser, setUser } from '../../../redux/userSlice';
+import { connectToHub } from '../../../redux/websocketSlice';
+import { services } from '../../../services';
+import { getQueryParamValue, navigateToStartPage } from '../../../utils/utils';
+import { useAppDispatch } from '../../hooks/appStore';
+import { RouteDefinitions } from '../../App';
 
 function AppStarter() {
   const dispatch = useAppDispatch();
@@ -30,7 +30,7 @@ function AppStarter() {
         }
         navigateToStartPage(user.role, navigate);
       } else {
-        navigate('/settings');
+        navigate(RouteDefinitions.Settings, { replace: true });
       }
     } catch (error) {
       console.error('Error fetching user:', error);
@@ -38,8 +38,6 @@ function AppStarter() {
   };
 
   useEffect(() => {
-    setNavigate(navigate);
-
     if (currentUser) {
       navigateToStartPage(currentUser.role, navigate);
       return;

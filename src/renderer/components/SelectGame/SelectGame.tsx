@@ -7,6 +7,7 @@ import { services } from '../../../services';
 import { GameHeader, Show } from '../../../types';
 import { useAppDispatch } from '../../hooks/appStore';
 import styles from './SelectGame.scss';
+import { RouteDefinitions } from '../../App';
 
 function SelectGame() {
   const currentUser = useSelector(selectUser);
@@ -45,7 +46,7 @@ function SelectGame() {
       dispatch(setShow(show));
     }
 
-    navigate('/show');
+    navigate(RouteDefinitions.Show);
   };
 
   return (
