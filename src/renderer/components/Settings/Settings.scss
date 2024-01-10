@@ -1,4 +1,12 @@
 .container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  .submitPasswordBtn {
+    background-color: #ef9e56;
+  }
+
   .title {
     display: flex;
     justify-content: center;

@@ -14,6 +14,7 @@ import { connectToHub } from '../../../redux/websocketSlice';
 import config from '../../../config';
 import styles from './Settings.scss';
 import classNames from 'classnames';
+import { TextField } from '@mui/material';
 
 function Settings() {
   const [studios, setStudios] = useState<Studio[]>([]);
@@ -21,11 +22,15 @@ function Settings() {
   const [selectedRole, setSelectedRole] = useState<Role | null>(null);
   const [deviceId, setDeviceId] = useState('');
   const [error, setError] = useState<string | null>(null);
+  const [isAuthorized, setIsAuthorized] = useState(false);
+  const [passwordInput, setPasswordInput] = useState('');
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const currentUser = useSelector(selectUser);
 
   useEffect(() => {
+    setIsAuthorized(!currentUser || currentUser?.role === Role.Host);
+
     const deviceIdFromParams = getQueryParamValue('deviceId');
     if (!deviceIdFromParams) {
       throw new Error('DeviceId from query params was null!');
@@ -106,53 +111,92 @@ function Settings() {
     return user;
   };
 
+  const handlePasswordSubmit = () => {
+    if (passwordInput === 'pa$$w0rd') {
+      setIsAuthorized(true);
+      setError(null);
+      return;
+    }
+    setError('Password incorrect');
+  };
+
+  const renderSettings = () => {
+    return (
+      <>
+        <div className={styles.title}>Device settings</div>
+        {error && <div className={styles.error}>{error}</div>}
+        <div className={styles.content}>
+          <div>
+            <div className={styles.sectionTitle}>Select studio</div>
+            {studios.map((studio, index) => (
+              <button
+                type="button"
+                key={`${studio.id} + ${index}`}
+                onClick={() => handleStudioClick(studio)}
+                className={classNames(styles.sectionButton, {
+                  [styles.selected]: selectedStudio === studio,
+                })}
+              >
+                {studio.name}
+              </button>
+            ))}
+          </div>
+
+          <div>
+            <div className={styles.sectionTitle}>Select role</div>
+            {enumNumericValues(Role).map((roleAsNumber: number) => (
+              <button
+                type="button"
+                key={roleAsNumber}
+                onClick={() => handleRoleClick(roleAsNumber)}
+                className={classNames(styles.sectionButton, {
+                  [styles.selected]: selectedRole === roleAsNumber,
+                })}
+              >
+                {Role[roleAsNumber]}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className={styles.footer}>
+          <button
+            type="button"
+            onClick={handleConfirmClick}
+            className={styles.submitButton}
+          >
+            Assign device
+          </button>
+        </div>
+      </>
+    );
+  };
+
+  const renderAuthorization = () => {
+    return (
+      <>
+        <TextField
+          id="outlined-basic"
+          label="Password"
+          variant="outlined"
+          type="password"
+          value={passwordInput}
+          onChange={(event) => setPasswordInput(event.target.value)}
+        />
+        {error && <span style={{ color: 'red' }}>{error}</span>}
+        <button
+          className={styles.submitPasswordBtn}
+          onClick={handlePasswordSubmit}
+        >
+          Submit
+        </button>
+      </>
+    );
+  };
+
   return (
     <div className={styles.container}>
-      <div className={styles.title}>Device settings</div>
-      {error && <div className={styles.error}>{error}</div>}
-      <div className={styles.content}>
-        <div>
-          <div className={styles.sectionTitle}>Select studio</div>
-          {studios.map((studio, index) => (
-            <button
-              type="button"
-              key={`${studio.id} + ${index}`}
-              onClick={() => handleStudioClick(studio)}
-              className={classNames(styles.sectionButton, {
-                [styles.selected]: selectedStudio === studio,
-              })}
-            >
-              {studio.name}
-            </button>
-          ))}
-        </div>
-
-        <div>
-          <div className={styles.sectionTitle}>Select role</div>
-          {enumNumericValues(Role).map((roleAsNumber: number) => (
-            <button
-              type="button"
-              key={roleAsNumber}
-              onClick={() => handleRoleClick(roleAsNumber)}
-              className={classNames(styles.sectionButton, {
-                [styles.selected]: selectedRole === roleAsNumber,
-              })}
-            >
-              {Role[roleAsNumber]}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      <div className={styles.footer}>
-        <button
-          type="button"
-          onClick={handleConfirmClick}
-          className={styles.submitButton}
-        >
-          Assign device
-        </button>
-      </div>
+      {isAuthorized ? renderSettings() : renderAuthorization()}
     </div>
   );
 }
