@@ -23,7 +23,6 @@ function Show() {
         <thead>
           <tr>
             <th>Game</th>
-            <th>Type</th>
             <th>Score</th>
             <th>Winner</th>
             <th>Actions</th>
@@ -33,9 +32,8 @@ function Show() {
           {show?.games.map((game: ShowGame) => (
             <tr key={game.gameId}>
               <td>{game.name}</td>
-              <td>{game.gameType}</td>
               <td>{game.score}</td>
-              <td>{game.winner}</td>
+              <td>{game.winnerTeamName}</td>
               <td>
                 <button
                   type="button"

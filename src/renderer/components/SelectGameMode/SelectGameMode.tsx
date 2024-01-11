@@ -1,12 +1,13 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './SelectGameMode.scss';
+import { RouteDefinitions } from '../../App';
 
 function SelectGameMode() {
   const navigate = useNavigate();
 
   const handlePlayGame = () => {
-    navigate('/select-game');
+    navigate(RouteDefinitions.SelectGame);
   };
 
   return (

@@ -43,7 +43,7 @@ function GameHost() {
 
   function handleNavigate(index: number) {
     if (index >= 0 && index < questionsCount) {
-      navigate(`/game-host/${index}`);
+      navigate(`/game-host/${index}`, { replace: true });
       setIsQuestionActive(false);
       deactivate();
     }
