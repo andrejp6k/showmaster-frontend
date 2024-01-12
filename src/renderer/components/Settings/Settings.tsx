@@ -80,7 +80,7 @@ function Settings() {
     const userToCreate = {
       studioId: selectedStudio?.id,
       role: selectedRole,
-      deviceIdFromParams,
+      deviceId: deviceIdFromParams,
     };
 
     const response = await services.users.create(userToCreate);
