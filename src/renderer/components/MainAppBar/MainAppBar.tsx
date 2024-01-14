@@ -28,7 +28,6 @@ function MainAppBar() {
   };
 
   const isButtonAllowed = () => {
-    console.log(location);
     if (currentUser?.role !== Role.Host) {
       return false;
     }
@@ -43,9 +42,7 @@ function MainAppBar() {
             onClick={handleNavigateBack}
             className={classNames({
               [styles.hidden]:
-                (currentUser?.role === Role.Team &&
-                  location.pathname != RouteDefinitions.Settings) ||
-                location.pathname === RouteDefinitions.SelectGameMode,
+                (currentUser?.role === Role.Team && location.pathname != RouteDefinitions.Settings) || location.pathname === RouteDefinitions.SelectGameMode,
             })}
             edge="start"
             color="inherit"
@@ -56,29 +53,14 @@ function MainAppBar() {
           </IconButton>
 
           <div>
-            {currentUser?.role === Role.Host &&
-              location.pathname !== RouteDefinitions.SelectGameMode && (
-                <IconButton
-                  onClick={handleNavigateHome}
-                  edge="start"
-                  color="inherit"
-                  aria-label="menu"
-                  sx={{ mr: 4 }}
-                >
-                  <Home />
-                </IconButton>
-              )}
-            {!(
-              currentUser?.role === Role.Team &&
-              location.pathname != RouteDefinitions.WelcomeTeam
-            ) &&
+            {currentUser?.role === Role.Host && location.pathname !== RouteDefinitions.SelectGameMode && (
+              <IconButton onClick={handleNavigateHome} edge="start" color="inherit" aria-label="menu">
+                <Home />
+              </IconButton>
+            )}
+            {!(location.pathname != RouteDefinitions.WelcomeTeam && location.pathname != RouteDefinitions.SelectGameMode) &&
               location.pathname != RouteDefinitions.Settings && (
-                <IconButton
-                  onClick={handleNavigateToSettings}
-                  edge="start"
-                  color="inherit"
-                  aria-label="menu"
-                >
+                <IconButton onClick={handleNavigateToSettings} edge="start" color="inherit" aria-label="menu">
                   <Settings />
                 </IconButton>
               )}
