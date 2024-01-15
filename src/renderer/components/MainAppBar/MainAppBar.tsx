@@ -27,7 +27,7 @@ function MainAppBar() {
   };
 
   const handleNavigateToSettings = () => {
-    navigate(RouteDefinitions.Settings);
+    navigate(RouteDefinitions.AppSettings);
   };
 
   const handleNavigateBack = () => {
@@ -50,7 +50,7 @@ function MainAppBar() {
             onClick={handleNavigateBack}
             className={classNames({
               [styles.hidden]:
-                (currentUser?.role === Role.Team && location.pathname != RouteDefinitions.Settings) || location.pathname === RouteDefinitions.SelectGameMode,
+                (currentUser?.role === Role.Team && location.pathname != RouteDefinitions.AppSettings) || location.pathname === RouteDefinitions.SelectGameMode,
             })}
             edge="start"
             color="inherit"
@@ -72,7 +72,7 @@ function MainAppBar() {
               </IconButton>
             )}
             {!(location.pathname != RouteDefinitions.WelcomeTeam && location.pathname != RouteDefinitions.SelectGameMode) &&
-              location.pathname != RouteDefinitions.Settings && (
+              location.pathname != RouteDefinitions.AppSettings && (
                 <IconButton onClick={handleNavigateToSettings} edge="start" color="inherit" aria-label="menu">
                   <Settings />
                 </IconButton>

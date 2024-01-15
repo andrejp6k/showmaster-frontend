@@ -17,7 +17,7 @@ import QuitGameDialog from './components/QuitGameDialog/QuitGameDialog';
 
 export const RouteDefinitions = {
   Root: '/',
-  Settings: '/settings',
+  AppSettings: '/settings',
   SelectGameMode: '/select-game-mode',
   WelcomeTeam: '/welcome-team',
   SelectGame: '/select-game',
@@ -59,7 +59,7 @@ export default function App() {
           element: <AppStarter />,
         },
         {
-          path: RouteDefinitions.Settings,
+          path: RouteDefinitions.AppSettings,
           element: <AppSettings />,
         },
         {

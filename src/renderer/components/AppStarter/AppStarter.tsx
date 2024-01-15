@@ -30,7 +30,7 @@ function AppStarter() {
         }
         navigateToStartPage(user.role, navigate);
       } else {
-        navigate(RouteDefinitions.Settings, { replace: true });
+        navigate(RouteDefinitions.AppSettings, { replace: true });
       }
     } catch (error) {
       console.error('Error fetching user:', error);
