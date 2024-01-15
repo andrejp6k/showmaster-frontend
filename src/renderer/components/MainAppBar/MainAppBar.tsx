@@ -1,23 +1,24 @@
-import { AppBar, IconButton, Toolbar, Typography } from '@mui/material';
-import { Home, ArrowBack, Settings } from '@mui/icons-material';
-import styles from './MainAppBar.scss';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { selectUser } from '../../../redux/userSlice';
-import { useSelector } from 'react-redux';
-import { Role } from '../../../types';
+import { ArrowBack, Home, Settings, Tune } from '@mui/icons-material';
+import { AppBar, IconButton, Toolbar } from '@mui/material';
 import classNames from 'classnames';
+import { useSelector } from 'react-redux';
+import { useLocation, useMatch, useNavigate } from 'react-router-dom';
+import { setIsQuitGameDialogOpen, setQuitGameActionType } from '../../../redux/uiSlice';
+import { selectUser } from '../../../redux/userSlice';
+import { Role } from '../../../types';
 import { RouteDefinitions } from '../../App';
 import { useAppDispatch } from '../../hooks/appStore';
-import { setIsQuitGameDialogOpen, setQuitGameActionType } from '../../../redux/uiSlice';
+import styles from './MainAppBar.scss';
 
 function MainAppBar() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const location = useLocation();
   const currentUser = useSelector(selectUser);
+  const gameHostMatch = useMatch(RouteDefinitions.GameHost.route);
 
   const handleNavigateHome = () => {
-    if (location.pathname.includes('/game-host/')) {
+    if (gameHostMatch) {
       dispatch(setIsQuitGameDialogOpen(true));
       dispatch(setQuitGameActionType('home'));
       return;
@@ -30,8 +31,8 @@ function MainAppBar() {
   };
 
   const handleNavigateBack = () => {
-    if (location.pathname !== '/') {
-      if (location.pathname.includes('/game-host/')) {
+    if (location.pathname !== RouteDefinitions.Root) {
+      if (gameHostMatch) {
         dispatch(setIsQuitGameDialogOpen(true));
         dispatch(setQuitGameActionType('back'));
 
@@ -39,13 +40,6 @@ function MainAppBar() {
       }
       navigate(-1);
     }
-  };
-
-  const isButtonAllowed = () => {
-    if (currentUser?.role !== Role.Host) {
-      return false;
-    }
-    return true;
   };
 
   return (
@@ -70,6 +64,11 @@ function MainAppBar() {
             {currentUser?.role === Role.Host && location.pathname !== RouteDefinitions.SelectGameMode && (
               <IconButton onClick={handleNavigateHome} edge="start" color="inherit" aria-label="menu">
                 <Home />
+              </IconButton>
+            )}
+            {currentUser?.role === Role.Host && gameHostMatch && (
+              <IconButton edge="start" color="inherit" aria-label="menu" sx={{ ml: 2 }}>
+                <Tune />
               </IconButton>
             )}
             {!(location.pathname != RouteDefinitions.WelcomeTeam && location.pathname != RouteDefinitions.SelectGameMode) &&

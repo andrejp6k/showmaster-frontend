@@ -9,7 +9,7 @@ import GameTeam from './components/GameTeam/GameTeam';
 import MainAppBar from './components/MainAppBar/MainAppBar';
 import SelectGame from './components/SelectGame/SelectGame';
 import SelectGameMode from './components/SelectGameMode/SelectGameMode';
-import Settings from './components/Settings/Settings';
+import AppSettings from './components/AppSettings/AppSettings';
 import Show from './components/Show/Show';
 import WelcomeTeam from './components/WelcomeTeam/WelcomeTeam';
 import { sendMessage } from '../redux/websocketSlice';
@@ -60,7 +60,7 @@ export default function App() {
         },
         {
           path: RouteDefinitions.Settings,
-          element: <Settings />,
+          element: <AppSettings />,
         },
         {
           path: RouteDefinitions.SelectGameMode,
