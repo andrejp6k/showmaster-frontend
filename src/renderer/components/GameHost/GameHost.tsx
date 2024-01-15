@@ -6,6 +6,7 @@ import { selectGame, selectQuestionsCount } from '../../../redux/gameSlice';
 import { selectShowGame } from '../../../redux/showSlice';
 import { selectConnectedTeams, selectUser } from '../../../redux/userSlice';
 import { sendMessage } from '../../../redux/websocketSlice';
+import { RouteDefinitions } from '../../App';
 import { useAppSelector } from '../../hooks/appStore';
 import styles from './GameHost.scss';
 
@@ -43,7 +44,7 @@ function GameHost() {
 
   function handleNavigate(index: number) {
     if (index >= 0 && index < questionsCount) {
-      navigate(`/game-host/${index}`, { replace: true });
+      navigate(RouteDefinitions.GameHost.enterParams(index), { replace: true });
       setIsQuestionActive(false);
       deactivate();
     }
@@ -55,10 +56,7 @@ function GameHost() {
         {connectedTeams?.map((team) => (
           <div key={team.id.toString()} className={styles.team}>
             <h2>{team.name}</h2>
-            <div className={styles.score}>
-              {showGame?.teamScores?.find((x) => x.userId === team.id)?.value ||
-                0}
-            </div>
+            <div className={styles.score}>{showGame?.teamScores?.find((x) => x.userId === team.id)?.value || 0}</div>
           </div>
         ))}
       </div>
@@ -69,11 +67,7 @@ function GameHost() {
           justifyContent: 'center',
         }}
       >
-        <button
-          className={styles.activateButton}
-          type="button"
-          onClick={() => (isQuestionActive ? deactivate() : activate())}
-        >
+        <button className={styles.activateButton} type="button" onClick={() => (isQuestionActive ? deactivate() : activate())}>
           {isQuestionActive ? 'Deactivate' : 'Activate'}
         </button>
       </div>
@@ -97,10 +91,7 @@ function GameHost() {
           Previous question
         </button>
         {questionIndex < questionsCount - 1 ? (
-          <button
-            className={styles.navButton}
-            onClick={() => handleNavigate(questionIndex + 1)}
-          >
+          <button className={styles.navButton} onClick={() => handleNavigate(questionIndex + 1)}>
             Next question
           </button>
         ) : (

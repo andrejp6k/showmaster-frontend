@@ -1,0 +1,20 @@
+.container {
+  margin: 20px;
+  min-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  .buttons {
+    display: flex;
+    justify-content: space-evenly;
+
+    .button {
+      min-width: 100px;
+
+      &.submit {
+        background-color: #ef9e56;
+      }
+    }
+  }
+}

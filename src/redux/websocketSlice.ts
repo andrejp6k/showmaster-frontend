@@ -1,5 +1,6 @@
 import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
 import { createSlice } from '@reduxjs/toolkit';
+import { RouteDefinitions } from '../renderer/App';
 import { navigateTo } from '../services/navigation-service';
 import { changeCurrentQuestion, pickQuestion, setGame } from './gameSlice';
 import { setConnectedTeams } from './userSlice';
@@ -37,13 +38,13 @@ export const connectToHub = (hubUrl: string) => (dispatch: any) => {
       hubConnection?.on('PlayGameHost', (data) => {
         console.log('Received game with all questions', data);
         dispatch(setGame(data));
-        navigateTo('/game-host/' + 0);
+        navigateTo(RouteDefinitions.GameHost.enterParams(0));
       });
 
       hubConnection?.on('PlayGameTeam', (data) => {
         dispatch(setGame(data));
         dispatch(changeCurrentQuestion(null));
-        navigateTo('/game-team');
+        navigateTo(RouteDefinitions.GameTeam);
       });
 
       hubConnection?.on('ActiveQuestionForTeam', (data) => {
@@ -56,6 +57,10 @@ export const connectToHub = (hubUrl: string) => (dispatch: any) => {
 
       hubConnection?.on('BuzzerClickedByTeam', (data) => {
         dispatch(pickQuestion(data));
+      });
+
+      hubConnection?.on('QuitGameForTeams', (data) => {
+        navigateTo(RouteDefinitions.WelcomeTeam);
       });
 
       return null;

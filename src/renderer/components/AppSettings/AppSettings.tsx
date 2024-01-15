@@ -3,20 +3,16 @@ import { useNavigate } from 'react-router-dom'; // Use useNavigate instead of us
 import { setUser, selectUser } from '../../../redux/userSlice';
 import { services } from '../../../services';
 import { Role, Studio, User } from '../../../types';
-import {
-  enumNumericValues,
-  getQueryParamValue,
-  navigateToStartPage,
-} from '../../../utils/utils';
+import { enumNumericValues, getQueryParamValue, navigateToStartPage } from '../../../utils/utils';
 import { useAppDispatch } from '../../hooks/appStore';
 import { useSelector } from 'react-redux';
 import { connectToHub } from '../../../redux/websocketSlice';
 import config from '../../../config';
-import styles from './Settings.scss';
+import styles from './AppSettings.scss';
 import classNames from 'classnames';
 import { TextField } from '@mui/material';
 
-function Settings() {
+function AppSettings() {
   const [studios, setStudios] = useState<Studio[]>([]);
   const [selectedStudio, setSelectedStudio] = useState<Studio | null>(null);
   const [selectedRole, setSelectedRole] = useState<Role | null>(null);
@@ -53,15 +49,9 @@ function Settings() {
   const handleConfirmClick = async () => {
     if (selectedStudio && selectedRole != null) {
       try {
-        let user = currentUser
-          ? await updateUser(currentUser.id)
-          : await createUser();
+        let user = currentUser ? await updateUser(currentUser.id) : await createUser();
         if (user?.id) {
-          dispatch(
-            connectToHub(
-              `${config.apiUrl}/hub?userId=${user?.id}&studioId=${user?.studioId}`,
-            ),
-          );
+          dispatch(connectToHub(`${config.apiUrl}/hub?userId=${user?.id}&studioId=${user?.studioId}`));
         }
         navigateToStartPage(selectedRole, navigate);
       } catch (error: any) {
@@ -157,11 +147,7 @@ function Settings() {
         </div>
 
         <div className={styles.footer}>
-          <button
-            type="button"
-            onClick={handleConfirmClick}
-            className={styles.submitButton}
-          >
+          <button type="button" onClick={handleConfirmClick} className={styles.submitButton}>
             Assign device
           </button>
         </div>
@@ -181,21 +167,14 @@ function Settings() {
           onChange={(event) => setPasswordInput(event.target.value)}
         />
         {error && <span style={{ color: 'red' }}>{error}</span>}
-        <button
-          className={styles.submitPasswordBtn}
-          onClick={handlePasswordSubmit}
-        >
+        <button className={styles.submitPasswordBtn} onClick={handlePasswordSubmit}>
           Submit
         </button>
       </>
     );
   };
 
-  return (
-    <div className={styles.container}>
-      {isAuthorized ? renderSettings() : renderAuthorization()}
-    </div>
-  );
+  return <div className={styles.container}>{isAuthorized ? renderSettings() : renderAuthorization()}</div>;
 }
 
-export default Settings;
+export default AppSettings;
