@@ -13,7 +13,7 @@ import Settings from './components/Settings/Settings';
 import Show from './components/Show/Show';
 import WelcomeTeam from './components/WelcomeTeam/WelcomeTeam';
 import { sendMessage } from '../redux/websocketSlice';
-import { useEffect } from 'react';
+import QuitGameDialog from './components/QuitGameDialog/QuitGameDialog';
 
 export const RouteDefinitions = {
   Root: '/',
@@ -50,6 +50,7 @@ export default function App() {
           <div className={styles.content}>
             <Outlet />
           </div>
+          <QuitGameDialog />
         </>
       ),
       children: [

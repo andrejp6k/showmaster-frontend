@@ -3,6 +3,7 @@ import websocketReducer from './websocketSlice';
 import userReducer from './userSlice';
 import showReducer from './showSlice';
 import gameReducer from './gameSlice';
+import uiReducer from './uiSlice';
 
 export const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ export const store = configureStore({
     user: userReducer,
     show: showReducer,
     game: gameReducer,
+    ui: uiReducer,
   },
 });
 

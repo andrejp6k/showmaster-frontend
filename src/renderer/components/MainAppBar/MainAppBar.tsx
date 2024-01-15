@@ -7,13 +7,21 @@ import { useSelector } from 'react-redux';
 import { Role } from '../../../types';
 import classNames from 'classnames';
 import { RouteDefinitions } from '../../App';
+import { useAppDispatch } from '../../hooks/appStore';
+import { setIsQuitGameDialogOpen, setQuitGameActionType } from '../../../redux/uiSlice';
 
 function MainAppBar() {
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const location = useLocation();
   const currentUser = useSelector(selectUser);
 
   const handleNavigateHome = () => {
+    if (location.pathname.includes('/game-host/')) {
+      dispatch(setIsQuitGameDialogOpen(true));
+      dispatch(setQuitGameActionType('home'));
+      return;
+    }
     navigate(RouteDefinitions.Root, { replace: true });
   };
 
@@ -23,6 +31,12 @@ function MainAppBar() {
 
   const handleNavigateBack = () => {
     if (location.pathname !== '/') {
+      if (location.pathname.includes('/game-host/')) {
+        dispatch(setIsQuitGameDialogOpen(true));
+        dispatch(setQuitGameActionType('back'));
+
+        return;
+      }
       navigate(-1);
     }
   };
