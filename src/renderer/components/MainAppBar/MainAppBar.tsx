@@ -26,8 +26,12 @@ function MainAppBar() {
     navigate(RouteDefinitions.Root, { replace: true });
   };
 
-  const handleNavigateToSettings = () => {
+  const handleNavigateToAppSettings = () => {
     navigate(RouteDefinitions.AppSettings);
+  };
+
+  const handleNavigateToGameSettings = () => {
+    navigate(RouteDefinitions.GameSettings);
   };
 
   const handleNavigateBack = () => {
@@ -61,19 +65,21 @@ function MainAppBar() {
           </IconButton>
 
           <div>
-            {currentUser?.role === Role.Host && location.pathname !== RouteDefinitions.SelectGameMode && (
-              <IconButton onClick={handleNavigateHome} edge="start" color="inherit" aria-label="menu">
-                <Home />
-              </IconButton>
-            )}
+            {currentUser?.role === Role.Host &&
+              location.pathname !== RouteDefinitions.SelectGameMode &&
+              location.pathname !== RouteDefinitions.GameSettings && (
+                <IconButton onClick={handleNavigateHome} edge="start" color="inherit" aria-label="menu">
+                  <Home />
+                </IconButton>
+              )}
             {currentUser?.role === Role.Host && gameHostMatch && (
-              <IconButton edge="start" color="inherit" aria-label="menu" sx={{ ml: 2 }}>
+              <IconButton onClick={handleNavigateToGameSettings} edge="start" color="inherit" aria-label="menu" sx={{ ml: 2 }}>
                 <Tune />
               </IconButton>
             )}
             {!(location.pathname != RouteDefinitions.WelcomeTeam && location.pathname != RouteDefinitions.SelectGameMode) &&
               location.pathname != RouteDefinitions.AppSettings && (
-                <IconButton onClick={handleNavigateToSettings} edge="start" color="inherit" aria-label="menu">
+                <IconButton onClick={handleNavigateToAppSettings} edge="start" color="inherit" aria-label="menu">
                   <Settings />
                 </IconButton>
               )}

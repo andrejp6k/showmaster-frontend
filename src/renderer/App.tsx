@@ -14,10 +14,11 @@ import Show from './components/Show/Show';
 import WelcomeTeam from './components/WelcomeTeam/WelcomeTeam';
 import { sendMessage } from '../redux/websocketSlice';
 import QuitGameDialog from './components/QuitGameDialog/QuitGameDialog';
+import GameSettings from './components/GameSettings/GameSettings';
 
 export const RouteDefinitions = {
   Root: '/',
-  AppSettings: '/settings',
+  AppSettings: '/app-settings',
   SelectGameMode: '/select-game-mode',
   WelcomeTeam: '/welcome-team',
   SelectGame: '/select-game',
@@ -27,6 +28,7 @@ export const RouteDefinitions = {
     enterParams: (number: number) => getRouteWithParam(RouteDefinitions.GameHost.route, 'questionIndex', number.toString()),
   },
   GameTeam: '/game-team',
+  GameSettings: '/game-settings',
 };
 
 function getRouteWithParam(route: string, paramName: string, value: string): string {
@@ -85,6 +87,10 @@ export default function App() {
         {
           path: RouteDefinitions.GameTeam,
           element: <GameTeam />,
+        },
+        {
+          path: RouteDefinitions.GameSettings,
+          element: <GameSettings />,
         },
       ],
     },
