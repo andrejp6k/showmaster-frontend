@@ -99,15 +99,16 @@ export default function App() {
   setNavigate(router.navigate);
 
   // This callback is used to track previous location route of host app flow. When user is on game-host pages, and decides to go outside of
-  // game (back button or home button), team users should be navigated to their home screen too. The 'closeGame' message is send to them for
+  // game (back button or home button), team users should be navigated to their home screen too. The 'quitGame' message is send to them for
   // this purpose.
   router.subscribe((x) => {
     if (
       prevLocationRoute &&
       prevLocationRoute === RouteDefinitions.GameHost.route &&
+      x.location.pathname !== RouteDefinitions.GameSettings &&
       !x.matches.some((m) => m.route.path === RouteDefinitions.GameHost.route)
     ) {
-      sendMessage('closeGame', currentUser?.id);
+      sendMessage('quitGame', currentUser?.id);
     }
     prevLocationRoute = x.matches.filter((m) => m.route.path !== RouteDefinitions.Root)[0]?.route?.path || null;
   });

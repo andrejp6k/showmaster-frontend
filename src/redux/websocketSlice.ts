@@ -59,7 +59,7 @@ export const connectToHub = (hubUrl: string) => (dispatch: any) => {
         dispatch(pickQuestion(data));
       });
 
-      hubConnection?.on('CloseGameTeams', (data) => {
+      hubConnection?.on('QuitGameForTeams', (data) => {
         navigateTo(RouteDefinitions.WelcomeTeam);
       });
 
