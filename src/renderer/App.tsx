@@ -8,7 +8,7 @@ import GameHost from './components/GameHost/GameHost';
 import GameTeam from './components/GameTeam/GameTeam';
 import MainAppBar from './components/MainAppBar/MainAppBar';
 import SelectGame from './components/SelectGame/SelectGame';
-import SelectGameMode from './components/SelectGameMode/SelectGameMode';
+import WelcomeHost from './components/WelcomeHost/WelcomeHost';
 import AppSettings from './components/AppSettings/AppSettings';
 import Show from './components/Show/Show';
 import WelcomeTeam from './components/WelcomeTeam/WelcomeTeam';
@@ -19,7 +19,7 @@ import GameSettings from './components/GameSettings/GameSettings';
 export const RouteDefinitions = {
   Root: '/',
   AppSettings: '/app-settings',
-  SelectGameMode: '/select-game-mode',
+  WelcomeHost: '/welcome-host',
   WelcomeTeam: '/welcome-team',
   SelectGame: '/select-game',
   Show: '/show',
@@ -65,8 +65,8 @@ export default function App() {
           element: <AppSettings />,
         },
         {
-          path: RouteDefinitions.SelectGameMode,
-          element: <SelectGameMode />,
+          path: RouteDefinitions.WelcomeHost,
+          element: <WelcomeHost />,
         },
         {
           path: RouteDefinitions.WelcomeTeam,

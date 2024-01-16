@@ -54,7 +54,7 @@ function MainAppBar() {
             onClick={handleNavigateBack}
             className={classNames({
               [styles.hidden]:
-                (currentUser?.role === Role.Team && location.pathname != RouteDefinitions.AppSettings) || location.pathname === RouteDefinitions.SelectGameMode,
+                (currentUser?.role === Role.Team && location.pathname != RouteDefinitions.AppSettings) || location.pathname === RouteDefinitions.WelcomeHost,
             })}
             edge="start"
             color="inherit"
@@ -65,19 +65,17 @@ function MainAppBar() {
           </IconButton>
 
           <div>
-            {currentUser?.role === Role.Host &&
-              location.pathname !== RouteDefinitions.SelectGameMode &&
-              location.pathname !== RouteDefinitions.GameSettings && (
-                <IconButton onClick={handleNavigateHome} edge="start" color="inherit" aria-label="menu">
-                  <Home />
-                </IconButton>
-              )}
+            {currentUser?.role === Role.Host && location.pathname !== RouteDefinitions.WelcomeHost && location.pathname !== RouteDefinitions.GameSettings && (
+              <IconButton onClick={handleNavigateHome} edge="start" color="inherit" aria-label="menu">
+                <Home />
+              </IconButton>
+            )}
             {currentUser?.role === Role.Host && gameHostMatch && (
               <IconButton onClick={handleNavigateToGameSettings} edge="start" color="inherit" aria-label="menu" sx={{ ml: 2 }}>
                 <Tune />
               </IconButton>
             )}
-            {!(location.pathname != RouteDefinitions.WelcomeTeam && location.pathname != RouteDefinitions.SelectGameMode) &&
+            {!(location.pathname != RouteDefinitions.WelcomeTeam && location.pathname != RouteDefinitions.WelcomeHost) &&
               location.pathname != RouteDefinitions.AppSettings && (
                 <IconButton onClick={handleNavigateToAppSettings} edge="start" color="inherit" aria-label="menu">
                   <Settings />

@@ -8,6 +8,7 @@ import { GameHeader, Show } from '../../../types';
 import { useAppDispatch } from '../../hooks/appStore';
 import styles from './SelectGame.scss';
 import { RouteDefinitions } from '../../App';
+import { Paper } from '@mui/material';
 
 function SelectGame() {
   const currentUser = useSelector(selectUser);
@@ -52,15 +53,10 @@ function SelectGame() {
   return (
     <div>
       <div className={styles.title}>Play game</div>
-      <div className={styles.games}>
-        <div>
+      <div className={styles.content}>
+        <div className={styles.list}>
           {games.map((game) => (
-            <button
-              className={styles.gameButton}
-              type="button"
-              key={game?.id}
-              onClick={() => handleGameClick(game.id)}
-            >
+            <button className={styles.gameButton} type="button" key={game?.id} onClick={() => handleGameClick(game.id)}>
               {game.name}
             </button>
           ))}

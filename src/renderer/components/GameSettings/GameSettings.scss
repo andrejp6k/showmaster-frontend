@@ -1,0 +1,38 @@
+.container {
+  min-width: 600px;
+  display: flex;
+  flex-direction: column;
+  gap: 100px;
+  .title {
+    display: flex;
+    align-self: center;
+  }
+
+  .content {
+    .setting {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .label {
+        width: 300px;
+        font-weight: bold;
+      }
+
+      .values {
+        display: flex;
+        width: 100%;
+        gap: 20px;
+        align-items: center;
+      }
+    }
+  }
+
+  .footer {
+    display: flex;
+    justify-content: space-evenly;
+    .submit {
+      background-color: #ef9e56;
+    }
+  }
+}
