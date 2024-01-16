@@ -70,9 +70,10 @@ export interface Question {
   id: string;
   type: QuestionType;
   questionTitle: string;
-  questionText: string;
-  answer: string;
-  hint?: string | null;
+  question: string;
+  solution: string;
+  answers: string[] | [];
+  info?: string | null;
   imageUrl?: string | null;
   finished: boolean;
 }
