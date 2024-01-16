@@ -12,7 +12,8 @@ export const gameSlice = createSlice({
       question: null as Question | null,
       questionPickedByTeam: false,
       teamShouldAnswerQuestion: false,
-    }
+    },
+    teamToAnswerId: null as string | null,
   },
   reducers: {
     setGameUser: (state, action: PayloadAction<User>) => {
@@ -27,8 +28,9 @@ export const gameSlice = createSlice({
       state.currentQuestion = {
         questionPickedByTeam: false,
         teamShouldAnswerQuestion: false,
-        question: state.game.questions.find((x) => x.id === action.payload) || null
-      }
+        question: state.game.questions.find((x) => x.id === action.payload) || null,
+      };
+      state.teamToAnswerId = null;
     },
     pickQuestion: (state, action: PayloadAction<string | null>) => {
       if (!state.user) return;
@@ -36,18 +38,24 @@ export const gameSlice = createSlice({
       state.currentQuestion = {
         ...state.currentQuestion,
         questionPickedByTeam: true,
-        teamShouldAnswerQuestion: state.user.id === action.payload
-      }
+        teamShouldAnswerQuestion: state.user.id === action.payload,
+      };
+
+      state.teamToAnswerId = action.payload;
+    },
+    setTeamToAnswerId: (state, action: PayloadAction<string | null>) => {
+      state.teamToAnswerId = action.payload;
     },
   },
   selectors: {
     selectGame: (state) => state.game,
     selectQuestionsCount: (state) => state.game?.questions?.length || 0,
-    selectCurrentQuestion: (state) => state.currentQuestion
+    selectCurrentQuestion: (state) => state.currentQuestion,
+    selectTeamToAnswerId: (state) => state.teamToAnswerId,
   },
 });
 
-export const { setGame, changeCurrentQuestion, pickQuestion, setGameUser } = gameSlice.actions;
-export const { selectGame, selectQuestionsCount, selectCurrentQuestion } = gameSlice.selectors;
+export const { setGame, changeCurrentQuestion, pickQuestion, setGameUser, setTeamToAnswerId } = gameSlice.actions;
+export const { selectGame, selectQuestionsCount, selectCurrentQuestion, selectTeamToAnswerId } = gameSlice.selectors;
 
 export default gameSlice.reducer;
