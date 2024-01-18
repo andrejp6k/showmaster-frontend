@@ -73,9 +73,9 @@ function GameHost() {
       </div>
       <div className={styles.questionSection}>
         <span>{question?.questionTitle}</span>
-        <div className={styles.question}>Q: {question?.question}</div>
+        <div className={styles.question}>Q: {question?.questionText}</div>
         <span>
-          <b>A:</b> {question?.solution}
+          <b>A:</b> {question?.correctAnswer}
         </span>
         <span>
           <b>Hint:</b> {question?.info}

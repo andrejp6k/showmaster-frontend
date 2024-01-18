@@ -20,7 +20,7 @@ function GameTeam() {
       <div className={styles.content}>
         {questionPickedByTeam && teamShouldAnswerQuestion && <div>You clicked a buzzer, answer the question now!</div>}
         {questionPickedByTeam && !teamShouldAnswerQuestion && <div>Opponent buzzered first!</div>}
-        {question ? <span>{question.question}</span> : <span> Get ready for the question ...</span>}
+        {question ? <span></span> : <span> Get ready for the question ...</span>}
       </div>
       <div className={styles.footer}>
         {question && !questionPickedByTeam && (
