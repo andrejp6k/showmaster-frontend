@@ -71,8 +71,9 @@ export interface Question {
   type: QuestionType;
   questionTitle: string;
   questionText: string;
-  answer: string;
-  hint?: string | null;
+  correctAnswer: string;
+  answerOptions: string[] | [];
+  info?: string | null;
   imageUrl?: string | null;
   finished: boolean;
 }

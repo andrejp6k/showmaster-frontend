@@ -100,10 +100,10 @@ function GameHost() {
         <span>{question?.questionTitle}</span>
         <div className={styles.question}>Q: {question?.questionText}</div>
         <span>
-          <b>A:</b> {question?.answer}
+          <b>A:</b> {question?.correctAnswer}
         </span>
         <span>
-          <b>Hint:</b> {question?.hint}
+          <b>Hint:</b> {question?.info}
         </span>
       </div>
       <footer className={styles.navigation}>
