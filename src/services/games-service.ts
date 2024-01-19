@@ -3,6 +3,6 @@ import client from './client';
 
 export default class GamesService {
   public list() {
-    return client.get('games');
+    return client.get('games/headers');
   }
 }
