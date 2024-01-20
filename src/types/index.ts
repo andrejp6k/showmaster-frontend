@@ -41,6 +41,12 @@ export interface UpsertScorePointRequest {
   scoredByAnsweringCorrectly: boolean;
 }
 
+export interface UpdateShowGameRequest {
+  showId: string;
+  gameId: string;
+  scoreToWin: number;
+}
+
 export interface GameHeader {
   id: string;
   name: string;
@@ -60,6 +66,7 @@ export interface ShowGame {
   score: string;
   winnerTeamName: string;
   finished: boolean;
+  scoreToWin: number;
   teamScores: Score[];
 }
 

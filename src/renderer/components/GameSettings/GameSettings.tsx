@@ -1,13 +1,39 @@
 import { Slider } from '@mui/material';
 import styles from './GameSettings.scss';
-import React, { useState } from 'react';
+import { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { selectGame } from '../../../redux/gameSlice';
+import { useAppDispatch, useAppSelector } from '../../hooks/appStore';
+import { selectShow, selectShowGame, setShow } from '../../../redux/showSlice';
+import { useNavigate } from 'react-router-dom';
+import { services } from '../../../services';
 
 function GameSettings() {
-  const defaultWinningScore = 30;
-  const [winningScore, setWinningScore] = useState(defaultWinningScore);
+  const game = useSelector(selectGame);
+  const show = useSelector(selectShow);
+  const showGame = useAppSelector((state) => selectShowGame(state, game?.id));
+  const [winningScore, setWinningScore] = useState(showGame?.scoreToWin || 0);
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   function handleWinningScoreChange(event: any) {
     setWinningScore(event.target.value);
+  }
+
+  async function handleSaveClick(): Promise<void> {
+    const updateRequest = {
+      showId: show?.id!,
+      gameId: showGame?.gameId!,
+      scoreToWin: winningScore,
+    };
+
+    try {
+      const response = await services.shows.updateShowGame(updateRequest);
+      if (response.data) {
+        dispatch(setShow(response.data));
+      }
+    } catch (error) {}
+    navigate(-1);
   }
 
   return (
@@ -17,22 +43,24 @@ function GameSettings() {
         <span className={styles.setting}>
           <span className={styles.label}>Winning score</span>
           <span className={styles.values}>
-            <span>{winningScore}</span>
+            <span className={styles.value}>{winningScore}</span>
             <Slider
               onChange={handleWinningScoreChange}
+              value={winningScore}
               aria-label="Winning score"
-              defaultValue={defaultWinningScore}
               valueLabelDisplay="off"
-              step={10}
+              step={1}
               marks
-              min={10}
-              max={110}
+              min={1}
+              max={30}
             />
           </span>
         </span>
       </div>
       <div className={styles.footer}>
-        <button className={styles.submit}>Save</button>
+        <button className={styles.submit} onClick={handleSaveClick}>
+          Save
+        </button>
       </div>
     </div>
   );
