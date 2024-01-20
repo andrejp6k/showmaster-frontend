@@ -161,12 +161,10 @@ function GameHost() {
         >
           Previous question
         </button>
-        {nextQuestionId ? (
+        {nextQuestionId && (
           <button className={styles.navButton} onClick={() => handleNavigate(nextQuestionId)}>
             Next question
           </button>
-        ) : (
-          <button className={styles.navButton}>Finish game</button>
         )}
       </footer>
     </div>
