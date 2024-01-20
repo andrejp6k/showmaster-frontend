@@ -24,8 +24,8 @@ export const RouteDefinitions = {
   SelectGame: '/select-game',
   Show: '/show',
   GameHost: {
-    route: '/game-host/:questionIndex',
-    enterParams: (number: number) => getRouteWithParam(RouteDefinitions.GameHost.route, 'questionIndex', number.toString()),
+    route: '/game-host/:questionId',
+    enterParams: (questionId: string) => RouteDefinitions.GameHost.route.replace(':questionId', questionId),
   },
   GameTeam: '/game-team',
   GameSettings: '/game-settings',

@@ -33,6 +33,14 @@ export interface CreateShowRequest {
   studioId: string;
 }
 
+export interface UpsertScorePointRequest {
+  showId: string;
+  gameId: string;
+  questionId: string;
+  teamUserId: string;
+  scoredByAnsweringCorrectly: boolean;
+}
+
 export interface GameHeader {
   id: string;
   name: string;

@@ -3,26 +3,33 @@ import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { selectGame, selectQuestionsCount, selectTeamToAnswerId, setTeamToAnswerId } from '../../../redux/gameSlice';
-import { selectShowGame } from '../../../redux/showSlice';
+import { selectShow, selectShowGame, setShow } from '../../../redux/showSlice';
 import { selectConnectedTeams, selectUser } from '../../../redux/userSlice';
 import { sendMessage } from '../../../redux/websocketSlice';
 import { RouteDefinitions } from '../../App';
 import { useAppDispatch, useAppSelector } from '../../hooks/appStore';
 import styles from './GameHost.scss';
-import { User } from '../../../types';
+import { UpsertScorePointRequest, User } from '../../../types';
+import { services } from '../../../services';
+import QuestionNavigationService from '../../../services/question-navigation-service';
 
 function GameHost() {
   const game = useSelector(selectGame);
+  const show = useSelector(selectShow);
   const showGame = useAppSelector((state) => selectShowGame(state, game?.id));
   const currentUser = useSelector(selectUser);
   const connectedTeams = useSelector(selectConnectedTeams);
   const params = useParams();
-  const questionIndex = parseInt(params.questionIndex || '0');
-  const questionsCount = useSelector(selectQuestionsCount);
-  const question = game?.questions[questionIndex];
+  const currentQuestionId = params.questionId!;
+  const question = game?.questions.find((x) => x.id === currentQuestionId);
   const navigate = useNavigate();
   const teamToAnswearId = useSelector(selectTeamToAnswerId);
   const dispatch = useAppDispatch();
+
+  const questionNavigationService = QuestionNavigationService.getInstance();
+
+  const nextQuestionId = questionNavigationService.nextQuestion(currentQuestionId);
+  const prevQuestionId = questionNavigationService.previousQuestion(currentQuestionId);
 
   const [isQuestionActive, setIsQuestionActive] = useState(false);
 
@@ -40,15 +47,50 @@ function GameHost() {
     dispatch(setTeamToAnswerId(null));
   }
 
-  function answer(correct: boolean, questionId: string) {
-    // send event to server with: showId, gameId, teamId, correct -> update score
-    // mutate game state, find question by questionId and mark it as finished,
-    //    rerender of next question should happens automatically because of state 'question'
+  async function handleCorrectAnswer() {
+    const correctAnswerRequest = {
+      showId: show?.id,
+      gameId: showGame?.gameId,
+      questionId: currentQuestionId,
+      scoredByAnsweringCorrectly: true,
+      teamUserId: teamToAnswearId,
+    } as UpsertScorePointRequest;
+
+    await answer(correctAnswerRequest);
   }
 
-  function handleNavigate(index: number) {
-    if (index >= 0 && index < questionsCount) {
-      navigate(RouteDefinitions.GameHost.enterParams(index), { replace: true });
+  async function handleWrongAnswer() {
+    const wrongAnswerRequest = {
+      showId: show?.id,
+      gameId: showGame?.gameId,
+      questionId: currentQuestionId,
+      scoredByAnsweringCorrectly: false,
+      teamUserId: connectedTeams?.filter((x) => x.id !== teamToAnswearId)[0].id,
+    } as UpsertScorePointRequest;
+
+    await answer(wrongAnswerRequest);
+  }
+
+  async function answer(request: UpsertScorePointRequest) {
+    try {
+      const response = await services.shows.upsertScorePoint(request);
+      if (response.data) {
+        dispatch(setShow(response.data));
+        questionNavigationService.markAsAnswered(currentQuestionId);
+        if (nextQuestionId) {
+          handleNavigate(nextQuestionId);
+        } else if (prevQuestionId) {
+          handleNavigate(prevQuestionId);
+        } else {
+          // finish game
+        }
+      }
+    } catch (e) {}
+  }
+
+  function handleNavigate(targetQuestionId: string | null) {
+    if (targetQuestionId) {
+      navigate(RouteDefinitions.GameHost.enterParams(targetQuestionId), { replace: true });
       dispatch(setTeamToAnswerId(null));
       setIsQuestionActive(false);
       deactivate();
@@ -91,8 +133,12 @@ function GameHost() {
         )}
         {teamToAnswearId && (
           <>
-            <button className={styles.button}>Correct answer</button>
-            <button className={styles.button}>Wrong answer</button>
+            <button className={styles.button} onClick={handleCorrectAnswer}>
+              Correct answer
+            </button>
+            <button className={styles.button} onClick={handleWrongAnswer}>
+              Wrong answer
+            </button>
           </>
         )}
       </div>
@@ -108,15 +154,15 @@ function GameHost() {
       </div>
       <footer className={styles.navigation}>
         <button
-          onClick={() => handleNavigate(questionIndex - 1)}
+          onClick={() => handleNavigate(prevQuestionId)}
           className={classNames(styles.navButton, {
-            [styles.hidden]: questionIndex === 0,
+            [styles.hidden]: !prevQuestionId,
           })}
         >
           Previous question
         </button>
-        {questionIndex < questionsCount - 1 ? (
-          <button className={styles.navButton} onClick={() => handleNavigate(questionIndex + 1)}>
+        {nextQuestionId ? (
+          <button className={styles.navButton} onClick={() => handleNavigate(nextQuestionId)}>
             Next question
           </button>
         ) : (
