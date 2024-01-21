@@ -65,6 +65,10 @@ export const connectToHub = (hubUrl: string) => (dispatch: any) => {
         navigateTo(RouteDefinitions.WelcomeTeam);
       });
 
+      hubConnection?.on('FinishGameForTeam', (data) => {
+        navigateTo(RouteDefinitions.Congratulations);
+      });
+
       return null;
     })
     .catch((error: any) => {

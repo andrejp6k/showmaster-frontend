@@ -10,6 +10,8 @@ import { UpdateShowGameRequest } from '../../../types';
 import { services } from '../../../services';
 import { RouteDefinitions } from '../../App';
 import classNames from 'classnames';
+import { selectUser } from '../../../redux/userSlice';
+import { sendMessage } from '../../../redux/websocketSlice';
 
 function FinishGameDialog() {
   const isOpen = useSelector(selectFinishGameDialogOpen);
@@ -18,6 +20,7 @@ function FinishGameDialog() {
   const showGame = useAppSelector((state) => selectShowGame(state, game?.id));
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const currentUser = useSelector(selectUser);
 
   const isTargetScoreToWinReached = showGame?.teamScores?.some((x) => x.value >= showGame.scoreToWin);
   const isDraw = showGame?.teamScores?.every((x) => x.value === showGame?.teamScores[0].value);
@@ -38,6 +41,7 @@ function FinishGameDialog() {
       if (response.data) {
         console.log('finished', response.data);
         dispatch(setShow(response.data));
+        sendMessage('FinishGame', currentUser?.studioId);
       }
     } catch (error) {}
 

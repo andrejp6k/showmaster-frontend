@@ -17,6 +17,7 @@ import QuitGameDialog from './components/QuitGameDialog/QuitGameDialog';
 import GameSettings from './components/GameSettings/GameSettings';
 import GameFinished from './components/GameFinished/GameFinished';
 import FinishGameDialog from './components/FinishGameDialog/FinishGameDialog';
+import Congratulations from './components/Congratulations/Congratulations';
 
 export const RouteDefinitions = {
   Root: '/',
@@ -32,6 +33,7 @@ export const RouteDefinitions = {
   GameTeam: '/game-team',
   GameSettings: '/game-settings',
   GameFinished: '/game-finished',
+  Congratulations: '/congratulations',
 };
 
 function getRouteWithParam(route: string, paramName: string, value: string): string {
@@ -100,6 +102,10 @@ export default function App() {
           path: RouteDefinitions.GameFinished,
           element: <GameFinished />,
         },
+        {
+          path: RouteDefinitions.Congratulations,
+          element: <Congratulations />,
+        },
       ],
     },
   ]);
@@ -110,14 +116,22 @@ export default function App() {
   // game (back button or home button), team users should be navigated to their home screen too. The 'quitGame' message is send to them for
   // this purpose.
   router.subscribe((x) => {
+    // case when you exit game-host screen without finishing game
     if (
       prevLocationRoute &&
       prevLocationRoute === RouteDefinitions.GameHost.route &&
       x.location.pathname !== RouteDefinitions.GameSettings &&
+      x.location.pathname !== RouteDefinitions.GameFinished &&
       !x.matches.some((m) => m.route.path === RouteDefinitions.GameHost.route)
     ) {
       sendMessage('quitGame', currentUser?.id);
     }
+
+    // case when you finish game and exit GameFinished screen
+    if (prevLocationRoute && prevLocationRoute === RouteDefinitions.GameFinished) {
+      sendMessage('quitGame', currentUser?.id);
+    }
+
     prevLocationRoute = x.matches.filter((m) => m.route.path !== RouteDefinitions.Root)[0]?.route?.path || null;
   });
 
