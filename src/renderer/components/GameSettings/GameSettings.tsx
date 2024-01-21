@@ -53,7 +53,7 @@ function GameSettings() {
               step={1}
               marks
               min={1}
-              max={30}
+              max={Math.min(30, game?.questions?.length || 30)}
             />
           </span>
         </span>
