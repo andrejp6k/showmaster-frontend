@@ -114,7 +114,6 @@ export default function App() {
       prevLocationRoute &&
       prevLocationRoute === RouteDefinitions.GameHost.route &&
       x.location.pathname !== RouteDefinitions.GameSettings &&
-      x.location.pathname !== RouteDefinitions.FinishGame &&
       !x.matches.some((m) => m.route.path === RouteDefinitions.GameHost.route)
     ) {
       sendMessage('quitGame', currentUser?.id);

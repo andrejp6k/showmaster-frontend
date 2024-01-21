@@ -4,15 +4,15 @@ import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { selectGame, selectTeamToAnswerId, setTeamToAnswerId } from '../../../redux/gameSlice';
 import { selectShow, selectShowGame, setShow } from '../../../redux/showSlice';
+import { setFinishGameDialogOpen } from '../../../redux/uiSlice';
 import { selectConnectedTeams, selectUser } from '../../../redux/userSlice';
 import { sendMessage } from '../../../redux/websocketSlice';
+import { services } from '../../../services';
+import QuestionNavigationService from '../../../services/question-navigation-service';
+import { UpsertScorePointRequest, User } from '../../../types';
 import { RouteDefinitions } from '../../App';
 import { useAppDispatch, useAppSelector } from '../../hooks/appStore';
 import styles from './GameHost.scss';
-import { UpdateShowGameRequest, UpsertScorePointRequest, User } from '../../../types';
-import { services } from '../../../services';
-import QuestionNavigationService from '../../../services/question-navigation-service';
-import { setFinishGameDialogOpen } from '../../../redux/uiSlice';
 
 function GameHost() {
   const game = useSelector(selectGame);
@@ -35,7 +35,7 @@ function GameHost() {
   const [isQuestionActive, setIsQuestionActive] = useState(false);
 
   useEffect(() => {
-    if (showGame?.teamScores.some((x) => x.value >= showGame.scoreToWin)) {
+    if (showGame?.teamScores.some((x) => x.value >= showGame.scoreToWin) && !showGame.finished) {
       console.log('we have a winner!');
       dispatch(setFinishGameDialogOpen(true));
     }
@@ -90,7 +90,7 @@ function GameHost() {
         } else if (prevQuestionId) {
           handleNavigate(prevQuestionId);
         } else {
-          // finish game
+          handleNavigate('undefined');
         }
       }
     } catch (e) {}
@@ -135,7 +135,12 @@ function GameHost() {
       </div>
       <div className={styles.actionButtons}>
         {!teamToAnswearId && (
-          <button className={styles.button} type="button" onClick={() => (isQuestionActive ? deactivate() : activate())}>
+          <button
+            className={classNames(styles.button, { [styles.disabled]: !question })}
+            type="button"
+            onClick={() => (isQuestionActive ? deactivate() : activate())}
+            disabled={!question}
+          >
             {isQuestionActive ? 'Deactivate' : 'Activate'}
           </button>
         )}
@@ -151,14 +156,20 @@ function GameHost() {
         )}
       </div>
       <div className={styles.questionSection}>
-        <span>{question?.questionTitle}</span>
-        <div className={styles.question}>Q: {question?.questionText}</div>
-        <span>
-          <b>A:</b> {question?.correctAnswer}
-        </span>
-        <span>
-          <b>Hint:</b> {question?.info}
-        </span>
+        {question ? (
+          <>
+            <span>{question?.questionTitle}</span>
+            <div className={styles.question}>Q: {question?.questionText}</div>
+            <span>
+              <b>A:</b> {question?.correctAnswer}
+            </span>
+            <span>
+              <b>Hint:</b> {question?.info}
+            </span>
+          </>
+        ) : (
+          <h3>There is no more questions.</h3>
+        )}
       </div>
       <div className={styles.navigation}>
         <button
