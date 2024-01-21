@@ -36,6 +36,7 @@ function GameHost() {
   useEffect(() => {
     if (showGame?.teamScores.some((x) => x.value >= showGame.scoreToWin)) {
       console.log('we have a winner!');
+      handleFinishGame();
     }
   }, [show]);
 
@@ -103,6 +104,24 @@ function GameHost() {
     }
   }
 
+  async function handleFinishGame() {
+    const updateRequest = {
+      showId: show?.id!,
+      gameId: showGame?.gameId!,
+      finished: true,
+    } as UpdateShowGameRequest;
+
+    try {
+      const response = await services.shows.updateShowGame(updateRequest);
+      if (response.data) {
+        console.log('finished', response.data);
+        dispatch(setShow(response.data));
+      }
+    } catch (error) {}
+
+    navigate(RouteDefinitions.FinishGame, { replace: true });
+  }
+
   function getBuzzerLabelText(team: User): string {
     if (isQuestionActive && !teamToAnswearId) {
       return 'Active';
@@ -158,7 +177,7 @@ function GameHost() {
           <b>Hint:</b> {question?.info}
         </span>
       </div>
-      <footer className={styles.navigation}>
+      <div className={styles.navigation}>
         <button
           onClick={() => handleNavigate(prevQuestionId)}
           className={classNames(styles.navButton, {
@@ -172,28 +191,10 @@ function GameHost() {
             Next question
           </button>
         )}
-      </footer>
-      <button
-        onClick={async () => {
-          const updateRequest = {
-            showId: show?.id!,
-            gameId: showGame?.gameId!,
-            finished: true,
-          } as UpdateShowGameRequest;
-
-          try {
-            const response = await services.shows.updateShowGame(updateRequest);
-            if (response.data) {
-              console.log('finished', response.data);
-              dispatch(setShow(response.data));
-            }
-          } catch (error) {}
-
-          navigate(RouteDefinitions.FinishGame, { replace: true });
-        }}
-      >
-        Finish
-      </button>
+      </div>
+      <div className={styles.footer}>
+        <button onClick={handleFinishGame}>Finish game</button>
+      </div>
     </div>
   );
 }
