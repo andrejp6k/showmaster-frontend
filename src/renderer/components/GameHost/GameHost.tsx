@@ -33,6 +33,8 @@ function GameHost() {
   const prevQuestionId = questionNavigationService.previousQuestion(currentQuestionId);
 
   const [isQuestionActive, setIsQuestionActive] = useState(false);
+  const [isAnswered, setIsAnswered] = useState(false);
+  const [currentScoringTeam, setCurrentScoringTeam] = useState<string | null>(null);
 
   useEffect(() => {
     if (showGame?.teamScores.some((x) => x.value >= showGame.scoreToWin) && !showGame.finished) {
@@ -85,13 +87,8 @@ function GameHost() {
       if (response.data) {
         dispatch(setShow(response.data));
         questionNavigationService.markAsAnswered(currentQuestionId);
-        if (nextQuestionId) {
-          handleNavigate(nextQuestionId);
-        } else if (prevQuestionId) {
-          handleNavigate(prevQuestionId);
-        } else {
-          handleNavigate('undefined');
-        }
+        setIsAnswered(true);
+        setCurrentScoringTeam(request.teamUserId);
       }
     } catch (e) {}
   }
@@ -102,6 +99,8 @@ function GameHost() {
       dispatch(setTeamToAnswerId(null));
       setIsQuestionActive(false);
       deactivate();
+      setIsAnswered(false);
+      setCurrentScoringTeam(null);
     }
   }
 
@@ -121,7 +120,9 @@ function GameHost() {
         {connectedTeams?.map((team) => (
           <div key={team.id.toString()} className={styles.team}>
             <h2>{team.name}</h2>
-            <div className={styles.score}>{showGame?.teamScores?.find((x) => x.userId === team.id)?.value || 0}</div>
+            <div className={classNames(styles.score, { [styles.scoring]: currentScoringTeam === team.id })}>
+              {showGame?.teamScores?.find((x) => x.userId === team.id)?.value || 0}
+            </div>
             <span
               className={classNames(
                 styles.buzzer,
@@ -134,7 +135,7 @@ function GameHost() {
         ))}
       </div>
       <div className={styles.actionButtons}>
-        {!teamToAnswearId && (
+        {!teamToAnswearId && !isAnswered && (
           <button
             className={classNames(styles.button, { [styles.disabled]: !question })}
             type="button"
@@ -144,7 +145,7 @@ function GameHost() {
             {isQuestionActive ? 'Deactivate' : 'Activate'}
           </button>
         )}
-        {teamToAnswearId && (
+        {teamToAnswearId && !isAnswered && (
           <>
             <button className={styles.button} onClick={handleCorrectAnswer}>
               Correct answer
@@ -154,9 +155,10 @@ function GameHost() {
             </button>
           </>
         )}
+        {isAnswered && <h3>Point assigned!</h3>}
       </div>
       <div className={styles.questionSection}>
-        {question ? (
+        {question && (
           <>
             <span>{question?.questionTitle}</span>
             <div className={styles.question}>Q: {question?.questionText}</div>
@@ -167,8 +169,6 @@ function GameHost() {
               <b>Hint:</b> {question?.info}
             </span>
           </>
-        ) : (
-          <h3>There is no more questions.</h3>
         )}
       </div>
       <div className={styles.navigation}>

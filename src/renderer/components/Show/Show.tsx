@@ -4,14 +4,18 @@ import { selectConnectedTeams, selectUser } from '../../../redux/userSlice';
 import { sendMessage } from '../../../redux/websocketSlice';
 import { ShowGame } from '../../../types';
 import styles from './Show.scss';
+import { useAppDispatch } from '../../hooks/appStore';
+import { setTeamToAnswerId } from '../../../redux/gameSlice';
 
 function Show() {
   const show = useSelector(selectShow);
   const user = useSelector(selectUser);
   const connectedTeams = useSelector(selectConnectedTeams);
+  const dispatch = useAppDispatch();
 
   function handlePlayClick(gameId: string) {
     if (user) {
+      dispatch(setTeamToAnswerId(null));
       sendMessage('loadGame', gameId, user.id);
     }
   }

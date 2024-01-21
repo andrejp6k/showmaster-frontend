@@ -17,6 +17,10 @@
       .score {
         font-size: 2em;
         margin: 5px 0;
+
+        &.scoring {
+          color: red;
+        }
       }
 
       .buzzer {
@@ -45,6 +49,7 @@
   .actionButtons {
     display: flex;
     justify-content: space-evenly;
+    height: 100px;
 
     .button {
       cursor: pointer;
