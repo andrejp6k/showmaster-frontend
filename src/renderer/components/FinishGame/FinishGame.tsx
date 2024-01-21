@@ -5,6 +5,8 @@ import { useAppSelector } from '../../hooks/appStore';
 import { selectShowGame } from '../../../redux/showSlice';
 import { selectGame } from '../../../redux/gameSlice';
 import { useNavigate } from 'react-router-dom';
+import { EmojiEvents } from '@mui/icons-material';
+import { yellow } from '@mui/material/colors';
 
 function FinishGame() {
   const navigate = useNavigate();
@@ -24,7 +26,12 @@ function FinishGame() {
           <div key={team.id.toString()} className={styles.team}>
             <h2>{team.name}</h2>
             <div className={styles.score}>{showGame?.teamScores?.find((x) => x.userId === team.id)?.value || 0}</div>
-            {team.id === winnerTeam?.userId && <span>winner</span>}
+            {team.id === winnerTeam?.userId && (
+              <>
+                <EmojiEvents sx={{ color: yellow[500], fontSize: 40 }} />
+                <span>Winner</span>
+              </>
+            )}
           </div>
         ))}
       </div>

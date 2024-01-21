@@ -49,13 +49,12 @@ export const gameSlice = createSlice({
   },
   selectors: {
     selectGame: (state) => state.game,
-    selectQuestionsCount: (state) => state.game?.questions?.length || 0,
     selectCurrentQuestion: (state) => state.currentQuestion,
     selectTeamToAnswerId: (state) => state.teamToAnswerId,
   },
 });
 
 export const { setGame, changeCurrentQuestion, pickQuestion, setGameUser, setTeamToAnswerId } = gameSlice.actions;
-export const { selectGame, selectQuestionsCount, selectCurrentQuestion, selectTeamToAnswerId } = gameSlice.selectors;
+export const { selectGame, selectCurrentQuestion, selectTeamToAnswerId } = gameSlice.selectors;
 
 export default gameSlice.reducer;

@@ -2,7 +2,7 @@ import classNames from 'classnames';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
-import { selectGame, selectQuestionsCount, selectTeamToAnswerId, setTeamToAnswerId } from '../../../redux/gameSlice';
+import { selectGame, selectTeamToAnswerId, setTeamToAnswerId } from '../../../redux/gameSlice';
 import { selectShow, selectShowGame, setShow } from '../../../redux/showSlice';
 import { selectConnectedTeams, selectUser } from '../../../redux/userSlice';
 import { sendMessage } from '../../../redux/websocketSlice';
