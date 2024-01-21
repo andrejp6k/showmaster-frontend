@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux';
-import { selectIsQuitGameDialogOpen, selectQuitGameActionType, setIsQuitGameDialogOpen } from '../../../redux/uiSlice';
+import { selectQuitGameDialogOpen, selectQuitGameActionType, setQuitGameDialogOpen } from '../../../redux/uiSlice';
 import { Dialog } from '@mui/material';
 
 import styles from './QuitGameDialog.scss';
@@ -9,18 +9,18 @@ import { useNavigate } from 'react-router-dom';
 import { RouteDefinitions } from '../../App';
 
 function QuitGameDialog() {
-  const isQuitGameDialogOpen = useSelector(selectIsQuitGameDialogOpen);
-  const quitGameActionType = useSelector(selectQuitGameActionType);
+  const isOpen = useSelector(selectQuitGameDialogOpen);
+  const actionType = useSelector(selectQuitGameActionType);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   function handleCancelClick() {
-    dispatch(setIsQuitGameDialogOpen(false));
+    dispatch(setQuitGameDialogOpen(false));
   }
 
   function handleSubmitClick() {
-    dispatch(setIsQuitGameDialogOpen(false));
-    switch (quitGameActionType) {
+    dispatch(setQuitGameDialogOpen(false));
+    switch (actionType) {
       case 'back':
         navigate(-1);
         break;
@@ -33,7 +33,7 @@ function QuitGameDialog() {
   }
 
   return (
-    <Dialog open={isQuitGameDialogOpen}>
+    <Dialog open={isOpen}>
       <div className={styles.container}>
         <h3>Are you sure you want to quit game?</h3>
         <div className={styles.buttons}>

@@ -16,6 +16,7 @@ import { sendMessage } from '../redux/websocketSlice';
 import QuitGameDialog from './components/QuitGameDialog/QuitGameDialog';
 import GameSettings from './components/GameSettings/GameSettings';
 import FinishGame from './components/FinishGame/FinishGame';
+import FinishGameDialog from './components/FinishGameDialog/FinishGameDialog';
 
 export const RouteDefinitions = {
   Root: '/',
@@ -55,6 +56,7 @@ export default function App() {
             <Outlet />
           </div>
           <QuitGameDialog />
+          <FinishGameDialog />
         </>
       ),
       children: [

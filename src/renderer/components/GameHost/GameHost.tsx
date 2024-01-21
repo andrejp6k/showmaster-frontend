@@ -12,6 +12,7 @@ import styles from './GameHost.scss';
 import { UpdateShowGameRequest, UpsertScorePointRequest, User } from '../../../types';
 import { services } from '../../../services';
 import QuestionNavigationService from '../../../services/question-navigation-service';
+import { setFinishGameDialogOpen } from '../../../redux/uiSlice';
 
 function GameHost() {
   const game = useSelector(selectGame);
@@ -193,7 +194,13 @@ function GameHost() {
         )}
       </div>
       <div className={styles.footer}>
-        <button onClick={handleFinishGame}>Finish game</button>
+        <button
+          onClick={() => {
+            dispatch(setFinishGameDialogOpen(true));
+          }}
+        >
+          Finish game
+        </button>
       </div>
     </div>
   );
