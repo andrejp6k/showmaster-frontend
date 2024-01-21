@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { selectGame, selectTeamToAnswerId, setTeamToAnswerId } from '../../../redux/gameSlice';
@@ -32,6 +32,12 @@ function GameHost() {
   const prevQuestionId = questionNavigationService.previousQuestion(currentQuestionId);
 
   const [isQuestionActive, setIsQuestionActive] = useState(false);
+
+  useEffect(() => {
+    if (showGame?.teamScores.some((x) => x.value >= showGame.scoreToWin)) {
+      console.log('we have a winner!');
+    }
+  }, [show]);
 
   function activate() {
     // send event to server to activate buzzers for teams.
