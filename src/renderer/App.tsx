@@ -15,7 +15,7 @@ import WelcomeTeam from './components/WelcomeTeam/WelcomeTeam';
 import { sendMessage } from '../redux/websocketSlice';
 import QuitGameDialog from './components/QuitGameDialog/QuitGameDialog';
 import GameSettings from './components/GameSettings/GameSettings';
-import FinishGame from './components/FinishGame/FinishGame';
+import GameFinished from './components/GameFinished/GameFinished';
 import FinishGameDialog from './components/FinishGameDialog/FinishGameDialog';
 
 export const RouteDefinitions = {
@@ -31,7 +31,7 @@ export const RouteDefinitions = {
   },
   GameTeam: '/game-team',
   GameSettings: '/game-settings',
-  FinishGame: '/finish-game',
+  GameFinished: '/game-finished',
 };
 
 function getRouteWithParam(route: string, paramName: string, value: string): string {
@@ -97,8 +97,8 @@ export default function App() {
           element: <GameSettings />,
         },
         {
-          path: RouteDefinitions.FinishGame,
-          element: <FinishGame />,
+          path: RouteDefinitions.GameFinished,
+          element: <GameFinished />,
         },
       ],
     },

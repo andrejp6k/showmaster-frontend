@@ -42,7 +42,7 @@ function FinishGameDialog() {
     } catch (error) {}
 
     dispatch(setFinishGameDialogOpen(false));
-    navigate(RouteDefinitions.FinishGame, { replace: true });
+    navigate(RouteDefinitions.GameFinished, { replace: true });
   }
 
   return (

@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux';
-import styles from './FinishGame.scss';
+import styles from './GameFinished.scss';
 import { selectConnectedTeams } from '../../../redux/userSlice';
 import { useAppSelector } from '../../hooks/appStore';
 import { selectShowGame } from '../../../redux/showSlice';
@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { EmojiEvents } from '@mui/icons-material';
 import { yellow } from '@mui/material/colors';
 
-function FinishGame() {
+function GameFinished() {
   const navigate = useNavigate();
   const connectedTeams = useSelector(selectConnectedTeams);
   const game = useSelector(selectGame);
@@ -21,6 +21,9 @@ function FinishGame() {
 
   return (
     <div className={styles.container}>
+      <div className={styles.header}>
+        <h3>Game finished!</h3>
+      </div>
       <div className={styles.scoreBoard}>
         {connectedTeams?.map((team) => (
           <div key={team.id.toString()} className={styles.team}>
@@ -42,11 +45,11 @@ function FinishGame() {
             navigate(-1);
           }}
         >
-          Finish game
+          Back to show overview
         </button>
       </div>
     </div>
   );
 }
 
-export default FinishGame;
+export default GameFinished;
