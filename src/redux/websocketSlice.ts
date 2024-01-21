@@ -2,7 +2,7 @@ import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
 import { createSlice } from '@reduxjs/toolkit';
 import { RouteDefinitions } from '../renderer/App';
 import { navigateTo } from '../services/navigation-service';
-import { changeCurrentQuestion, pickQuestion, setGame } from './gameSlice';
+import { changeCurrentQuestion, pickQuestion, setGame, setWinnerTeam } from './gameSlice';
 import { setConnectedTeams } from './userSlice';
 import QuestionNavigationService from '../services/question-navigation-service';
 
@@ -46,6 +46,7 @@ export const connectToHub = (hubUrl: string) => (dispatch: any) => {
       hubConnection?.on('PlayGameTeam', (data) => {
         dispatch(setGame(data));
         dispatch(changeCurrentQuestion(null));
+        dispatch(setWinnerTeam(null));
         navigateTo(RouteDefinitions.GameTeam);
       });
 
@@ -66,6 +67,7 @@ export const connectToHub = (hubUrl: string) => (dispatch: any) => {
       });
 
       hubConnection?.on('FinishGameForTeam', (data) => {
+        dispatch(setWinnerTeam(data));
         navigateTo(RouteDefinitions.Congratulations);
       });
 

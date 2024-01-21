@@ -1,17 +1,16 @@
 import { Dialog } from '@mui/material';
-import { selectFinishGameDialogOpen, setFinishGameDialogOpen } from '../../../redux/uiSlice';
-import { useSelector } from 'react-redux';
-import styles from './FinishGameDialog.scss';
-import { selectGame } from '../../../redux/gameSlice';
-import { useAppDispatch, useAppSelector } from '../../hooks/appStore';
-import { selectShow, selectShowGame, setShow } from '../../../redux/showSlice';
-import { useNavigate } from 'react-router-dom';
-import { UpdateShowGameRequest } from '../../../types';
-import { services } from '../../../services';
-import { RouteDefinitions } from '../../App';
 import classNames from 'classnames';
-import { selectUser } from '../../../redux/userSlice';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { selectGame } from '../../../redux/gameSlice';
+import { selectShow, selectShowGame, setShow } from '../../../redux/showSlice';
+import { selectFinishGameDialogOpen, setFinishGameDialogOpen } from '../../../redux/uiSlice';
 import { sendMessage } from '../../../redux/websocketSlice';
+import { services } from '../../../services';
+import { UpdateShowGameRequest } from '../../../types';
+import { RouteDefinitions } from '../../App';
+import { useAppDispatch, useAppSelector } from '../../hooks/appStore';
+import styles from './FinishGameDialog.scss';
 
 function FinishGameDialog() {
   const isOpen = useSelector(selectFinishGameDialogOpen);
@@ -20,7 +19,12 @@ function FinishGameDialog() {
   const showGame = useAppSelector((state) => selectShowGame(state, game?.id));
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const currentUser = useSelector(selectUser);
+
+  const winnerScore = showGame?.teamScores.reduce((max, current) => {
+    return Math.max(max, current.value);
+  }, -Infinity);
+
+  const winnerTeam = showGame?.teamScores.find((x) => x.value === winnerScore);
 
   const isTargetScoreToWinReached = showGame?.teamScores?.some((x) => x.value >= showGame.scoreToWin);
   const isDraw = showGame?.teamScores?.every((x) => x.value === showGame?.teamScores[0].value);
@@ -41,7 +45,7 @@ function FinishGameDialog() {
       if (response.data) {
         console.log('finished', response.data);
         dispatch(setShow(response.data));
-        sendMessage('FinishGame', currentUser?.studioId);
+        sendMessage('FinishGame', winnerTeam?.userId);
       }
     } catch (error) {}
 
