@@ -37,7 +37,7 @@ function GameHost() {
   useEffect(() => {
     if (showGame?.teamScores.some((x) => x.value >= showGame.scoreToWin)) {
       console.log('we have a winner!');
-      handleFinishGame();
+      dispatch(setFinishGameDialogOpen(true));
     }
   }, [show]);
 
@@ -103,24 +103,6 @@ function GameHost() {
       setIsQuestionActive(false);
       deactivate();
     }
-  }
-
-  async function handleFinishGame() {
-    const updateRequest = {
-      showId: show?.id!,
-      gameId: showGame?.gameId!,
-      finished: true,
-    } as UpdateShowGameRequest;
-
-    try {
-      const response = await services.shows.updateShowGame(updateRequest);
-      if (response.data) {
-        console.log('finished', response.data);
-        dispatch(setShow(response.data));
-      }
-    } catch (error) {}
-
-    navigate(RouteDefinitions.FinishGame, { replace: true });
   }
 
   function getBuzzerLabelText(team: User): string {

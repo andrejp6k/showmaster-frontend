@@ -16,8 +16,7 @@ export const showSlice = createSlice({
     selectShowGame: createSelector(
       (state) => state.show?.games,
       (_, gameId) => gameId,
-      (games: ShowGame[], gameId) =>
-        games.find((game) => game.gameId === gameId),
+      (games: ShowGame[], gameId) => games?.find((game) => game.gameId === gameId),
     ),
   },
 });
