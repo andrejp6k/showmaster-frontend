@@ -35,12 +35,11 @@ function Show() {
               <td>{game.score}</td>
               <td>{game.winnerTeamName}</td>
               <td>
-                <button
-                  type="button"
-                  onClick={() => handlePlayClick(game.gameId)}
-                >
-                  Play
-                </button>
+                {!game.finished && (
+                  <button type="button" onClick={() => handlePlayClick(game.gameId)}>
+                    Play
+                  </button>
+                )}
               </td>
             </tr>
           ))}

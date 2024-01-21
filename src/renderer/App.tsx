@@ -15,6 +15,7 @@ import WelcomeTeam from './components/WelcomeTeam/WelcomeTeam';
 import { sendMessage } from '../redux/websocketSlice';
 import QuitGameDialog from './components/QuitGameDialog/QuitGameDialog';
 import GameSettings from './components/GameSettings/GameSettings';
+import FinishGame from './components/FinishGame/FinishGame';
 
 export const RouteDefinitions = {
   Root: '/',
@@ -29,6 +30,7 @@ export const RouteDefinitions = {
   },
   GameTeam: '/game-team',
   GameSettings: '/game-settings',
+  FinishGame: '/finish-game',
 };
 
 function getRouteWithParam(route: string, paramName: string, value: string): string {
@@ -92,6 +94,10 @@ export default function App() {
           path: RouteDefinitions.GameSettings,
           element: <GameSettings />,
         },
+        {
+          path: RouteDefinitions.FinishGame,
+          element: <FinishGame />,
+        },
       ],
     },
   ]);
@@ -106,6 +112,7 @@ export default function App() {
       prevLocationRoute &&
       prevLocationRoute === RouteDefinitions.GameHost.route &&
       x.location.pathname !== RouteDefinitions.GameSettings &&
+      x.location.pathname !== RouteDefinitions.FinishGame &&
       !x.matches.some((m) => m.route.path === RouteDefinitions.GameHost.route)
     ) {
       sendMessage('quitGame', currentUser?.id);

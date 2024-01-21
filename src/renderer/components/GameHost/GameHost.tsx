@@ -9,7 +9,7 @@ import { sendMessage } from '../../../redux/websocketSlice';
 import { RouteDefinitions } from '../../App';
 import { useAppDispatch, useAppSelector } from '../../hooks/appStore';
 import styles from './GameHost.scss';
-import { UpsertScorePointRequest, User } from '../../../types';
+import { UpdateShowGameRequest, UpsertScorePointRequest, User } from '../../../types';
 import { services } from '../../../services';
 import QuestionNavigationService from '../../../services/question-navigation-service';
 
@@ -167,6 +167,27 @@ function GameHost() {
           </button>
         )}
       </footer>
+      <button
+        onClick={async () => {
+          const updateRequest = {
+            showId: show?.id!,
+            gameId: showGame?.gameId!,
+            finished: true,
+          } as UpdateShowGameRequest;
+
+          try {
+            const response = await services.shows.updateShowGame(updateRequest);
+            if (response.data) {
+              console.log('finished', response.data);
+              dispatch(setShow(response.data));
+            }
+          } catch (error) {}
+
+          navigate(RouteDefinitions.FinishGame, { replace: true });
+        }}
+      >
+        Finish
+      </button>
     </div>
   );
 }

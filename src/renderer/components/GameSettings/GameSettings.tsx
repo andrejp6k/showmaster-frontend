@@ -7,6 +7,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks/appStore';
 import { selectShow, selectShowGame, setShow } from '../../../redux/showSlice';
 import { useNavigate } from 'react-router-dom';
 import { services } from '../../../services';
+import { UpdateShowGameRequest } from '../../../types';
 
 function GameSettings() {
   const game = useSelector(selectGame);
@@ -25,7 +26,7 @@ function GameSettings() {
       showId: show?.id!,
       gameId: showGame?.gameId!,
       scoreToWin: winningScore,
-    };
+    } as UpdateShowGameRequest;
 
     try {
       const response = await services.shows.updateShowGame(updateRequest);
