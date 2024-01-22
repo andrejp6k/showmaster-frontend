@@ -33,9 +33,7 @@ export interface CreateShowRequest {
   studioId: string;
 }
 
-export interface UpsertScorePointRequest {
-  showId: string;
-  gameId: string;
+export interface AddScorePointRequest {
   questionId: string;
   teamUserId: string;
   scoredByAnsweringCorrectly: boolean;

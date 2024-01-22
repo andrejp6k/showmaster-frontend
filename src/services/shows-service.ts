@@ -1,5 +1,5 @@
 /* eslint-disable class-methods-use-this */
-import { CreateShowRequest, UpdateShowGameRequest, UpsertScorePointRequest } from '../types';
+import { CreateShowRequest, UpdateShowGameRequest, AddScorePointRequest } from '../types';
 import client from './client';
 
 export default class ShowsService {
@@ -11,8 +11,8 @@ export default class ShowsService {
     });
   }
 
-  public upsertScorePoint(data: UpsertScorePointRequest) {
-    return client.post('shows/scorePoint', data, {
+  public addScorePoint(showId: string, gameId: string, data: AddScorePointRequest) {
+    return client.post(`shows/${showId}/games/${gameId}/scorePoints`, data, {
       headers: {
         'Content-Type': 'application/json',
       },

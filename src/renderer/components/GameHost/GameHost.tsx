@@ -9,7 +9,7 @@ import { selectConnectedTeams, selectUser } from '../../../redux/userSlice';
 import { sendMessage } from '../../../redux/websocketSlice';
 import { services } from '../../../services';
 import QuestionNavigationService from '../../../services/question-navigation-service';
-import { UpsertScorePointRequest, User } from '../../../types';
+import { AddScorePointRequest, User } from '../../../types';
 import { RouteDefinitions } from '../../App';
 import { useAppDispatch, useAppSelector } from '../../hooks/appStore';
 import styles from './GameHost.scss';
@@ -59,31 +59,31 @@ function GameHost() {
 
   async function handleCorrectAnswer() {
     const correctAnswerRequest = {
-      showId: show?.id,
-      gameId: showGame?.gameId,
       questionId: currentQuestionId,
       scoredByAnsweringCorrectly: true,
       teamUserId: teamToAnswearId,
-    } as UpsertScorePointRequest;
+    } as AddScorePointRequest;
 
     await answer(correctAnswerRequest);
   }
 
   async function handleWrongAnswer() {
     const wrongAnswerRequest = {
-      showId: show?.id,
-      gameId: showGame?.gameId,
       questionId: currentQuestionId,
       scoredByAnsweringCorrectly: false,
       teamUserId: connectedTeams?.filter((x) => x.id !== teamToAnswearId)[0].id,
-    } as UpsertScorePointRequest;
+    } as AddScorePointRequest;
 
     await answer(wrongAnswerRequest);
   }
 
-  async function answer(request: UpsertScorePointRequest) {
+  async function answer(request: AddScorePointRequest) {
     try {
-      const response = await services.shows.upsertScorePoint(request);
+      if (!show || !showGame) {
+        throw new Error('Show or showGame was undefined!');
+      }
+
+      const response = await services.shows.addScorePoint(show?.id, showGame?.gameId, request);
       if (response.data) {
         dispatch(setShow(response.data));
         questionNavigationService.markAsAnswered(currentQuestionId);
