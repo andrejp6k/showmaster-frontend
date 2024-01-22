@@ -97,3 +97,8 @@ export enum QuestionType {
   Picture,
   Year,
 }
+
+export interface UpdateScorePointsPayload {
+  gameId: string;
+  teamScores: Score[];
+}

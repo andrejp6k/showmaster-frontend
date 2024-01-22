@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { selectGame, selectTeamToAnswerId, setTeamToAnswerId } from '../../../redux/gameSlice';
-import { selectShow, selectShowGame, setShow } from '../../../redux/showSlice';
+import { selectShow, selectShowGame, setShow, setTeamScores } from '../../../redux/showSlice';
 import { setFinishGameDialogOpen } from '../../../redux/uiSlice';
 import { selectConnectedTeams, selectUser } from '../../../redux/userSlice';
 import { sendMessage } from '../../../redux/websocketSlice';
@@ -85,7 +85,7 @@ function GameHost() {
 
       const response = await services.shows.addScorePoint(show?.id, showGame?.gameId, request);
       if (response.data) {
-        dispatch(setShow(response.data));
+        dispatch(setTeamScores({ gameId: showGame.gameId, teamScores: response.data }));
         questionNavigationService.markAsAnswered(currentQuestionId);
         setIsAnswered(true);
         setCurrentScoringTeam(request.teamUserId);

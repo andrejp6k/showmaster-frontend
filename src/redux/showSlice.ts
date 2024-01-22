@@ -1,5 +1,5 @@
 import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Show, ShowGame } from '../types';
+import { Show, ShowGame, UpdateScorePointsPayload } from '../types';
 
 export const showSlice = createSlice({
   name: 'show',
@@ -9,6 +9,12 @@ export const showSlice = createSlice({
   reducers: {
     setShow: (state, action: PayloadAction<any>) => {
       state.show = action.payload;
+    },
+    setTeamScores: (state, action: PayloadAction<UpdateScorePointsPayload>) => {
+      const showGame = state.show?.games.find((x) => x.gameId === action.payload.gameId);
+      if (showGame) {
+        showGame.teamScores = action.payload.teamScores;
+      }
     },
   },
   selectors: {
@@ -21,7 +27,7 @@ export const showSlice = createSlice({
   },
 });
 
-export const { setShow } = showSlice.actions;
+export const { setShow, setTeamScores } = showSlice.actions;
 export const { selectShow, selectShowGame } = showSlice.selectors;
 
 export default showSlice.reducer;
