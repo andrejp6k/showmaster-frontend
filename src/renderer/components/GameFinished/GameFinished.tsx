@@ -1,12 +1,12 @@
-import { useSelector } from 'react-redux';
-import styles from './GameFinished.scss';
-import { selectConnectedTeams } from '../../../redux/userSlice';
-import { useAppSelector } from '../../hooks/appStore';
-import { selectShowGame } from '../../../redux/showSlice';
-import { selectGame } from '../../../redux/gameSlice';
-import { useNavigate } from 'react-router-dom';
 import { EmojiEvents } from '@mui/icons-material';
 import { yellow } from '@mui/material/colors';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { selectGame } from '../../../redux/gameSlice';
+import { selectShowGame } from '../../../redux/showSlice';
+import { selectConnectedTeams } from '../../../redux/userSlice';
+import { useAppSelector } from '../../hooks/appStore';
+import styles from './GameFinished.scss';
 
 function GameFinished() {
   const navigate = useNavigate();

@@ -3,15 +3,15 @@ import classNames from 'classnames';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { selectGame } from '../../../redux/gameSlice';
-import { selectShow, selectShowGame, setFinished, setShow } from '../../../redux/showSlice';
+import { selectShow, selectShowGame, setFinished } from '../../../redux/showSlice';
 import { selectFinishGameDialogOpen, setFinishGameDialogOpen } from '../../../redux/uiSlice';
 import { sendMessage } from '../../../redux/websocketSlice';
 import { services } from '../../../services';
+import AnswersTracker from '../../../services/answers-tracker';
 import { UpdateShowGameRequest } from '../../../types';
 import { RouteDefinitions } from '../../App';
 import { useAppDispatch, useAppSelector } from '../../hooks/appStore';
 import styles from './FinishGameDialog.scss';
-import QuestionNavigationService from '../../../services/question-navigation-service';
 
 function FinishGameDialog() {
   const isOpen = useSelector(selectFinishGameDialogOpen);
@@ -36,7 +36,7 @@ function FinishGameDialog() {
 
   async function handleFinishGame() {
     const gameQuestionIds = game?.questions.map((x) => x.id);
-    const answeredQuestionIds = QuestionNavigationService.getInstance().answeredQuestionIds;
+    const answeredQuestionIds = AnswersTracker.getInstance().answeredQuestionIds;
 
     const skippedQuestionIds = gameQuestionIds?.filter((x) => !answeredQuestionIds.includes(x));
 

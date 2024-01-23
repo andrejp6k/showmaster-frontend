@@ -9,6 +9,8 @@ import { Role } from '../../../types';
 import { RouteDefinitions } from '../../App';
 import { useAppDispatch } from '../../hooks/appStore';
 import styles from './MainAppBar.scss';
+import { sendMessage } from '../../../redux/websocketSlice';
+import { setTeamToAnswerId } from '../../../redux/gameSlice';
 
 function MainAppBar() {
   const dispatch = useAppDispatch();
@@ -32,6 +34,8 @@ function MainAppBar() {
 
   const handleNavigateToGameSettings = () => {
     navigate(RouteDefinitions.GameSettings);
+    sendMessage('deactivateQuestion', currentUser?.id);
+    dispatch(setTeamToAnswerId(null));
   };
 
   const handleNavigateBack = () => {

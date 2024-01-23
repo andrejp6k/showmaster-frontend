@@ -4,7 +4,7 @@ import { RouteDefinitions } from '../renderer/App';
 import { navigateTo } from '../services/navigation-service';
 import { changeCurrentQuestion, pickQuestion, setGame, setWinnerTeam } from './gameSlice';
 import { setConnectedTeams } from './userSlice';
-import QuestionNavigationService from '../services/question-navigation-service';
+import AnswersTracker from '../services/answers-tracker';
 
 let hubConnection: HubConnection | null;
 
@@ -39,7 +39,7 @@ export const connectToHub = (hubUrl: string) => (dispatch: any) => {
       hubConnection?.on('PlayGameHost', (data) => {
         console.log('Received game with all questions', data);
         dispatch(setGame(data));
-        QuestionNavigationService.getInstance().init(data.questions);
+        AnswersTracker.getInstance().init(data.questions);
         navigateTo(RouteDefinitions.GameHost.enterParams(data.questions[0].id));
       });
 

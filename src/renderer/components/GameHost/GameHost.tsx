@@ -8,7 +8,7 @@ import { setFinishGameDialogOpen } from '../../../redux/uiSlice';
 import { selectConnectedTeams, selectUser } from '../../../redux/userSlice';
 import { sendMessage } from '../../../redux/websocketSlice';
 import { services } from '../../../services';
-import QuestionNavigationService from '../../../services/question-navigation-service';
+import AnswersTracker from '../../../services/answers-tracker';
 import { AddScorePointRequest, User } from '../../../types';
 import { RouteDefinitions } from '../../App';
 import { useAppDispatch, useAppSelector } from '../../hooks/appStore';
@@ -27,13 +27,13 @@ function GameHost() {
   const teamToAnswearId = useSelector(selectTeamToAnswerId);
   const dispatch = useAppDispatch();
 
-  const questionNavigationService = QuestionNavigationService.getInstance();
+  const answersTracker = AnswersTracker.getInstance();
 
-  const nextQuestionId = questionNavigationService.nextQuestion(currentQuestionId);
-  const prevQuestionId = questionNavigationService.previousQuestion(currentQuestionId);
+  const nextQuestionId = answersTracker.nextQuestion(currentQuestionId);
+  const prevQuestionId = answersTracker.previousQuestion(currentQuestionId);
 
   const [isQuestionActive, setIsQuestionActive] = useState(false);
-  const [isAnswered, setIsAnswered] = useState(false);
+  const [isAnswered, setIsAnswered] = useState(answersTracker.isAnswered(question?.id || ''));
   const [currentScoringTeam, setCurrentScoringTeam] = useState<string | null>(null);
 
   useEffect(() => {
@@ -85,7 +85,7 @@ function GameHost() {
       const response = await services.shows.addScorePoint(show?.id, showGame?.gameId, request);
       if (response.data) {
         dispatch(setTeamScores({ gameId: showGame.gameId, teamScores: response.data }));
-        questionNavigationService.markAsAnswered(currentQuestionId);
+        answersTracker.markAsAnswered(currentQuestionId);
         setIsAnswered(true);
         setCurrentScoringTeam(request.teamUserId);
       }

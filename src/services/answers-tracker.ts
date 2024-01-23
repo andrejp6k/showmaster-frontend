@@ -1,7 +1,7 @@
 import { Question } from '../types';
 
-class QuestionNavigationService {
-  private static instance: QuestionNavigationService;
+class AnswersTracker {
+  private static instance: AnswersTracker;
 
   private _answeredQuestions: Map<string, boolean> = new Map();
 
@@ -13,12 +13,12 @@ class QuestionNavigationService {
 
   private constructor() {}
 
-  public static getInstance(): QuestionNavigationService {
-    if (!QuestionNavigationService.instance) {
-      QuestionNavigationService.instance = new QuestionNavigationService();
+  public static getInstance(): AnswersTracker {
+    if (!AnswersTracker.instance) {
+      AnswersTracker.instance = new AnswersTracker();
     }
 
-    return QuestionNavigationService.instance;
+    return AnswersTracker.instance;
   }
 
   public init(questions: Question[]) {
@@ -27,6 +27,10 @@ class QuestionNavigationService {
 
   public markAsAnswered(questionId: string) {
     this._answeredQuestions.set(questionId, true);
+  }
+
+  public isAnswered(questionId: string): boolean {
+    return this._answeredQuestions.get(questionId) || false;
   }
 
   public isAllAnswered(): boolean {
@@ -83,4 +87,4 @@ class QuestionNavigationService {
   }
 }
 
-export default QuestionNavigationService;
+export default AnswersTracker;
