@@ -34,22 +34,11 @@ function Show() {
         </thead>
         <tbody>
           {show?.games.map((game: ShowGame) => {
-            const winningScore = game?.teamScores.reduce((max, current) => {
-              return Math.max(max, current.value);
-            }, -Infinity);
-
-            const winnerTeam = winningScore > 0 ? game.teamScores.find((x) => x.value === winningScore) : null;
-
             return (
               <tr key={game.gameId}>
                 <td>{game.name}</td>
-                <td>
-                  {game.teamScores
-                    .map((x) => x.value)
-                    .sort((a, b) => b - a)
-                    .join(':')}
-                </td>
-                <td>{connectedTeams?.find((x) => x.id === winnerTeam?.userId)?.name || '-'}</td>
+                <td>{game.score}</td>
+                <td>{game.winnerTeamName}</td>
                 <td>
                   {!game.finished && (
                     <button type="button" onClick={() => handlePlayClick(game.gameId)}>

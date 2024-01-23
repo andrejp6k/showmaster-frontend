@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { selectGame } from '../../../redux/gameSlice';
-import { selectShow, selectShowGame, setFinished } from '../../../redux/showSlice';
+import { selectShow, selectShowGame, setShowGame } from '../../../redux/showSlice';
 import { selectFinishGameDialogOpen, setFinishGameDialogOpen } from '../../../redux/uiSlice';
 import { sendMessage } from '../../../redux/websocketSlice';
 import { services } from '../../../services';
@@ -43,15 +43,15 @@ function FinishGameDialog() {
     const updateRequest = { finished: true, skippedQuestionIds } as UpdateShowGameRequest;
 
     try {
-      await services.shows.updateShowGame(show?.id!, showGame?.gameId!, updateRequest);
-      dispatch(setFinished({ gameId: game?.id!, finished: true }));
+      const response = await services.shows.updateShowGame(show?.id!, showGame?.gameId!, updateRequest);
+      dispatch(setShowGame(response.data));
       sendMessage('FinishGame', winnerTeam?.userId);
+
+      dispatch(setFinishGameDialogOpen(false));
+      navigate(RouteDefinitions.GameFinished, { replace: true });
     } catch (error) {
       // TODO: handle this
     }
-
-    dispatch(setFinishGameDialogOpen(false));
-    navigate(RouteDefinitions.GameFinished, { replace: true });
   }
 
   return (

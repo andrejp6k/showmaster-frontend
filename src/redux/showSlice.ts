@@ -16,16 +16,14 @@ export const showSlice = createSlice({
         showGame.teamScores = action.payload.teamScores;
       }
     },
-    setFinished: (state, action: PayloadAction<{ gameId: string; finished: boolean }>) => {
-      const showGame = state.show?.games.find((x) => x.gameId === action.payload.gameId);
-      if (showGame) {
-        showGame.finished = action.payload.finished;
-      }
-    },
-    setScoreToWin: (state, action: PayloadAction<{ gameId: string; scoreToWin: number }>) => {
-      const showGame = state.show?.games.find((x) => x.gameId === action.payload.gameId);
-      if (showGame) {
-        showGame.scoreToWin = action.payload.scoreToWin;
+    setShowGame: (state, action: PayloadAction<ShowGame>) => {
+      const gameIndex = state.show?.games.findIndex((x) => x.gameId === action.payload.gameId);
+
+      if (state.show && state.show.games && state.show.games.length > 0 && gameIndex !== undefined && gameIndex >= 0) {
+        const showGames = state.show?.games as ShowGame[];
+        showGames[gameIndex] = action.payload;
+        state.show = { ...state.show, games: showGames } as Show;
+        console.log('showGame replaced', state.show);
       }
     },
   },
@@ -39,7 +37,7 @@ export const showSlice = createSlice({
   },
 });
 
-export const { setShow, setTeamScores, setFinished, setScoreToWin } = showSlice.actions;
+export const { setShow, setTeamScores, setShowGame } = showSlice.actions;
 export const { selectShow, selectShowGame } = showSlice.selectors;
 
 export default showSlice.reducer;
