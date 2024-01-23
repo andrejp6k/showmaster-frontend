@@ -42,6 +42,7 @@ export interface AddScorePointRequest {
 export interface UpdateShowGameRequest {
   scoreToWin?: number;
   finished?: boolean;
+  skippedQuestionIds?: string[];
 }
 
 export interface GameHeader {

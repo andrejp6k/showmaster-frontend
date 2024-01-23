@@ -3,7 +3,13 @@ import { Question } from '../types';
 class QuestionNavigationService {
   private static instance: QuestionNavigationService;
 
-  private answeredQuestions: Map<string, boolean> = new Map();
+  private _answeredQuestions: Map<string, boolean> = new Map();
+
+  public get answeredQuestionIds() {
+    return Array.from(this._answeredQuestions)
+      .filter(([_, isAnswered]) => isAnswered)
+      .map(([questionId, _]) => questionId);
+  }
 
   private constructor() {}
 
@@ -16,15 +22,15 @@ class QuestionNavigationService {
   }
 
   public init(questions: Question[]) {
-    this.answeredQuestions = new Map(questions.map((q) => [q.id, false]));
+    this._answeredQuestions = new Map(questions.map((q) => [q.id, false]));
   }
 
   public markAsAnswered(questionId: string) {
-    this.answeredQuestions.set(questionId, true);
+    this._answeredQuestions.set(questionId, true);
   }
 
   public isAllAnswered(): boolean {
-    return Array.from(this.answeredQuestions.values()).every((x) => x);
+    return Array.from(this._answeredQuestions.values()).every((x) => x);
   }
 
   public nextQuestion(questionId: string): string | null {
@@ -37,12 +43,12 @@ class QuestionNavigationService {
 
   private findNearestUnansweredQuestion(questionId: string, direction: 'forward' | 'backward'): string | null {
     // Check if the key is in the map
-    if (!this.answeredQuestions.has(questionId)) {
+    if (!this._answeredQuestions.has(questionId)) {
       return null; // Key not found in the map
     }
 
     // Get the iterator for the map
-    const iterator = this.answeredQuestions.entries();
+    const iterator = this._answeredQuestions.entries();
 
     // Iterate over the map to find the nearest element with value set to false
     let nearestFalseKeyForward: string | null = null;

@@ -11,6 +11,7 @@ import { UpdateShowGameRequest } from '../../../types';
 import { RouteDefinitions } from '../../App';
 import { useAppDispatch, useAppSelector } from '../../hooks/appStore';
 import styles from './FinishGameDialog.scss';
+import QuestionNavigationService from '../../../services/question-navigation-service';
 
 function FinishGameDialog() {
   const isOpen = useSelector(selectFinishGameDialogOpen);
@@ -34,7 +35,12 @@ function FinishGameDialog() {
   }
 
   async function handleFinishGame() {
-    const updateRequest = { finished: true } as UpdateShowGameRequest;
+    const gameQuestionIds = game?.questions.map((x) => x.id);
+    const answeredQuestionIds = QuestionNavigationService.getInstance().answeredQuestionIds;
+
+    const skippedQuestionIds = gameQuestionIds?.filter((x) => !answeredQuestionIds.includes(x));
+
+    const updateRequest = { finished: true, skippedQuestionIds } as UpdateShowGameRequest;
 
     try {
       await services.shows.updateShowGame(show?.id!, showGame?.gameId!, updateRequest);
