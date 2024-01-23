@@ -40,10 +40,8 @@ export interface AddScorePointRequest {
 }
 
 export interface UpdateShowGameRequest {
-  showId: string;
-  gameId: string;
-  scoreToWin: number;
-  finished: boolean;
+  scoreToWin?: number;
+  finished?: boolean;
 }
 
 export interface GameHeader {

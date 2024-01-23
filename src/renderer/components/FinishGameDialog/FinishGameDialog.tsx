@@ -34,20 +34,17 @@ function FinishGameDialog() {
   }
 
   async function handleFinishGame() {
-    const updateRequest = {
-      showId: show?.id!,
-      gameId: showGame?.gameId!,
-      finished: true,
-    } as UpdateShowGameRequest;
+    const updateRequest = { finished: true } as UpdateShowGameRequest;
 
     try {
-      const response = await services.shows.updateShowGame(updateRequest);
+      const response = await services.shows.updateShowGame(show?.id!, showGame?.gameId!, updateRequest);
       if (response.data) {
-        console.log('finished', response.data);
         dispatch(setShow(response.data));
         sendMessage('FinishGame', winnerTeam?.userId);
       }
-    } catch (error) {}
+    } catch (error) {
+      // TODO: handle this
+    }
 
     dispatch(setFinishGameDialogOpen(false));
     navigate(RouteDefinitions.GameFinished, { replace: true });

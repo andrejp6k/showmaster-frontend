@@ -19,8 +19,8 @@ export default class ShowsService {
     });
   }
 
-  public updateShowGame(data: UpdateShowGameRequest) {
-    return client.put('shows/showGame', data, {
+  public updateShowGame(showId: string, gameId: string, data: UpdateShowGameRequest) {
+    return client.patch(`shows/${showId}/games/${gameId}`, data, {
       headers: {
         'Content-Type': 'application/json',
       },

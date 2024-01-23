@@ -9,6 +9,8 @@ import { useNavigate } from 'react-router-dom';
 import { services } from '../../../services';
 import { UpdateShowGameRequest } from '../../../types';
 
+const DEFAULT_MAX_SCORE_TO_WIN = 30;
+
 function GameSettings() {
   const game = useSelector(selectGame);
   const show = useSelector(selectShow);
@@ -22,18 +24,16 @@ function GameSettings() {
   }
 
   async function handleSaveClick(): Promise<void> {
-    const updateRequest = {
-      showId: show?.id!,
-      gameId: showGame?.gameId!,
-      scoreToWin: winningScore,
-    } as UpdateShowGameRequest;
+    const updateRequest = { scoreToWin: winningScore } as UpdateShowGameRequest;
 
     try {
-      const response = await services.shows.updateShowGame(updateRequest);
+      const response = await services.shows.updateShowGame(show?.id!, showGame?.gameId!, updateRequest);
       if (response.data) {
         dispatch(setShow(response.data));
       }
-    } catch (error) {}
+    } catch (error) {
+      // TODO: handle this
+    }
     navigate(-1);
   }
 
@@ -53,7 +53,7 @@ function GameSettings() {
               step={1}
               marks
               min={1}
-              max={Math.min(30, game?.questions?.length || 30)}
+              max={Math.min(DEFAULT_MAX_SCORE_TO_WIN, game?.questions?.length || DEFAULT_MAX_SCORE_TO_WIN)}
             />
           </span>
         </span>

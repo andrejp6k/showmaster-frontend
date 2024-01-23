@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { selectGame, selectTeamToAnswerId, setTeamToAnswerId } from '../../../redux/gameSlice';
-import { selectShow, selectShowGame, setShow, setTeamScores } from '../../../redux/showSlice';
+import { selectShow, selectShowGame, setTeamScores } from '../../../redux/showSlice';
 import { setFinishGameDialogOpen } from '../../../redux/uiSlice';
 import { selectConnectedTeams, selectUser } from '../../../redux/userSlice';
 import { sendMessage } from '../../../redux/websocketSlice';
@@ -38,7 +38,6 @@ function GameHost() {
 
   useEffect(() => {
     if (showGame?.teamScores.some((x) => x.value >= showGame.scoreToWin) && !showGame.finished) {
-      console.log('we have a winner!');
       dispatch(setFinishGameDialogOpen(true));
     }
   }, [show]);
@@ -90,7 +89,9 @@ function GameHost() {
         setIsAnswered(true);
         setCurrentScoringTeam(request.teamUserId);
       }
-    } catch (e) {}
+    } catch (e) {
+      // TODO: handle this
+    }
   }
 
   function handleNavigate(targetQuestionId: string | null) {
