@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectGame } from '../../../redux/gameSlice';
 import { useAppDispatch, useAppSelector } from '../../hooks/appStore';
-import { selectShow, selectShowGame, setShow } from '../../../redux/showSlice';
+import { selectShow, selectShowGame, setScoreToWin } from '../../../redux/showSlice';
 import { useNavigate } from 'react-router-dom';
 import { services } from '../../../services';
 import { UpdateShowGameRequest } from '../../../types';
@@ -27,10 +27,8 @@ function GameSettings() {
     const updateRequest = { scoreToWin: winningScore } as UpdateShowGameRequest;
 
     try {
-      const response = await services.shows.updateShowGame(show?.id!, showGame?.gameId!, updateRequest);
-      if (response.data) {
-        dispatch(setShow(response.data));
-      }
+      await services.shows.updateShowGame(show?.id!, showGame?.gameId!, updateRequest);
+      dispatch(setScoreToWin({ gameId: game?.id!, scoreToWin: winningScore }));
     } catch (error) {
       // TODO: handle this
     }

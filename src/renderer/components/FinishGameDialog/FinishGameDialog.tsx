@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { selectGame } from '../../../redux/gameSlice';
-import { selectShow, selectShowGame, setShow } from '../../../redux/showSlice';
+import { selectShow, selectShowGame, setFinished, setShow } from '../../../redux/showSlice';
 import { selectFinishGameDialogOpen, setFinishGameDialogOpen } from '../../../redux/uiSlice';
 import { sendMessage } from '../../../redux/websocketSlice';
 import { services } from '../../../services';
@@ -37,11 +37,9 @@ function FinishGameDialog() {
     const updateRequest = { finished: true } as UpdateShowGameRequest;
 
     try {
-      const response = await services.shows.updateShowGame(show?.id!, showGame?.gameId!, updateRequest);
-      if (response.data) {
-        dispatch(setShow(response.data));
-        sendMessage('FinishGame', winnerTeam?.userId);
-      }
+      await services.shows.updateShowGame(show?.id!, showGame?.gameId!, updateRequest);
+      dispatch(setFinished({ gameId: game?.id!, finished: true }));
+      sendMessage('FinishGame', winnerTeam?.userId);
     } catch (error) {
       // TODO: handle this
     }
