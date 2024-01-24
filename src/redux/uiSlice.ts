@@ -3,24 +3,29 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 export const uiSlice = createSlice({
   name: 'ui',
   initialState: {
-    isQuitGameDialogOpen: false,
+    quitGameDialogOpen: false,
+    finishGameDialogOpen: false,
     quitGameActionType: null as 'back' | 'home' | null,
   },
   reducers: {
-    setIsQuitGameDialogOpen: (state, action: PayloadAction<boolean>) => {
-      state.isQuitGameDialogOpen = action.payload;
+    setQuitGameDialogOpen: (state, action: PayloadAction<boolean>) => {
+      state.quitGameDialogOpen = action.payload;
+    },
+    setFinishGameDialogOpen: (state, action: PayloadAction<boolean>) => {
+      state.finishGameDialogOpen = action.payload;
     },
     setQuitGameActionType: (state, action: PayloadAction<'back' | 'home' | null>) => {
       state.quitGameActionType = action.payload;
     },
   },
   selectors: {
-    selectIsQuitGameDialogOpen: (state) => state.isQuitGameDialogOpen,
+    selectQuitGameDialogOpen: (state) => state.quitGameDialogOpen,
+    selectFinishGameDialogOpen: (state) => state.finishGameDialogOpen,
     selectQuitGameActionType: (state) => state.quitGameActionType,
   },
 });
 
-export const { setIsQuitGameDialogOpen, setQuitGameActionType } = uiSlice.actions;
-export const { selectIsQuitGameDialogOpen, selectQuitGameActionType } = uiSlice.selectors;
+export const { setQuitGameDialogOpen, setFinishGameDialogOpen, setQuitGameActionType } = uiSlice.actions;
+export const { selectQuitGameDialogOpen, selectFinishGameDialogOpen, selectQuitGameActionType } = uiSlice.selectors;
 
 export default uiSlice.reducer;

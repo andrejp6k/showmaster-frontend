@@ -3,12 +3,14 @@ import { AppBar, IconButton, Toolbar } from '@mui/material';
 import classNames from 'classnames';
 import { useSelector } from 'react-redux';
 import { useLocation, useMatch, useNavigate } from 'react-router-dom';
-import { setIsQuitGameDialogOpen, setQuitGameActionType } from '../../../redux/uiSlice';
+import { setQuitGameDialogOpen, setQuitGameActionType } from '../../../redux/uiSlice';
 import { selectUser } from '../../../redux/userSlice';
 import { Role } from '../../../types';
 import { RouteDefinitions } from '../../App';
 import { useAppDispatch } from '../../hooks/appStore';
 import styles from './MainAppBar.scss';
+import { sendMessage } from '../../../redux/websocketSlice';
+import { setTeamToAnswerId } from '../../../redux/gameSlice';
 
 function MainAppBar() {
   const dispatch = useAppDispatch();
@@ -19,7 +21,7 @@ function MainAppBar() {
 
   const handleNavigateHome = () => {
     if (gameHostMatch) {
-      dispatch(setIsQuitGameDialogOpen(true));
+      dispatch(setQuitGameDialogOpen(true));
       dispatch(setQuitGameActionType('home'));
       return;
     }
@@ -32,12 +34,14 @@ function MainAppBar() {
 
   const handleNavigateToGameSettings = () => {
     navigate(RouteDefinitions.GameSettings);
+    sendMessage('deactivateQuestion', currentUser?.id);
+    dispatch(setTeamToAnswerId(null));
   };
 
   const handleNavigateBack = () => {
     if (location.pathname !== RouteDefinitions.Root) {
       if (gameHostMatch) {
-        dispatch(setIsQuitGameDialogOpen(true));
+        dispatch(setQuitGameDialogOpen(true));
         dispatch(setQuitGameActionType('back'));
 
         return;

@@ -17,6 +17,10 @@
       .score {
         font-size: 2em;
         margin: 5px 0;
+
+        &.scoring {
+          color: red;
+        }
       }
 
       .buzzer {
@@ -45,6 +49,7 @@
   .actionButtons {
     display: flex;
     justify-content: space-evenly;
+    height: 100px;
 
     .button {
       cursor: pointer;
@@ -54,6 +59,16 @@
       display: block;
       width: 200px;
       margin: 30px 0;
+
+      &.disabled {
+        background-color: lightgray;
+        cursor: default;
+
+        &:hover {
+          opacity: 0.9;
+          transform: scale(1);
+        }
+      }
     }
   }
 
@@ -79,11 +94,17 @@
       border: none;
       border-radius: 3px;
       display: block;
-      minwidth: 200px;
+      min-width: 200px;
 
       &.hidden {
         visibility: hidden;
       }
     }
+  }
+
+  .footer {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
   }
 }

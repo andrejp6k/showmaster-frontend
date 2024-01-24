@@ -33,6 +33,18 @@ export interface CreateShowRequest {
   studioId: string;
 }
 
+export interface AddScorePointRequest {
+  questionId: string;
+  teamUserId: string;
+  scoredByAnsweringCorrectly: boolean;
+}
+
+export interface UpdateShowGameRequest {
+  scoreToWin?: number;
+  finished?: boolean;
+  skippedQuestionIds?: string[];
+}
+
 export interface GameHeader {
   id: string;
   name: string;
@@ -52,6 +64,7 @@ export interface ShowGame {
   score: string;
   winnerTeamName: string;
   finished: boolean;
+  scoreToWin: number;
   teamScores: Score[];
 }
 

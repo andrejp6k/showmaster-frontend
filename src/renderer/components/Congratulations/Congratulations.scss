@@ -1,0 +1,15 @@
+.container {
+  .winner {
+    color: green;
+  }
+
+  .loser {
+    color: red;
+  }
+
+  .iconWrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+}
