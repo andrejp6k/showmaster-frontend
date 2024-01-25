@@ -65,6 +65,7 @@ export interface ShowGame {
   winnerTeamName: string;
   finished: boolean;
   scoreToWin: number;
+  timeToAnswer: number;
   teamScores: Score[];
 }
 
