@@ -2,7 +2,7 @@ import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
 import { createSlice } from '@reduxjs/toolkit';
 import { RouteDefinitions } from '../renderer/App';
 import { navigateTo } from '../services/navigation-service';
-import { changeCurrentQuestion, pickQuestion, setGame, setWinnerTeam } from './gameSlice';
+import { changeCurrentQuestion, pickQuestion, setGame, setTeamScoredId, setWinnerTeam } from './gameSlice';
 import { setConnectedTeams } from './userSlice';
 import AnswersTracker from '../services/answers-tracker';
 
@@ -60,6 +60,10 @@ export const connectToHub = (hubUrl: string) => (dispatch: any) => {
 
       hubConnection?.on('BuzzerClickedByTeam', (data) => {
         dispatch(pickQuestion(data));
+      });
+
+      hubConnection?.on('TeamScored', (data) => {
+        dispatch(setTeamScoredId(data));
       });
 
       hubConnection?.on('QuitGameForTeams', (data) => {

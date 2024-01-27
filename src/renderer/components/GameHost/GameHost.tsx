@@ -91,6 +91,7 @@ function GameHost() {
         answersTracker.markAsAnswered(currentQuestionId);
         setIsAnswered(true);
         setCurrentScoringTeam(request.teamUserId);
+        sendMessage('TeamScored', request.teamUserId);
       }
     } catch (e) {
       // TODO: handle this
@@ -120,7 +121,7 @@ function GameHost() {
 
   return (
     <div className={styles.buzzQuiz}>
-      <Timer initialSeconds={showGame.timeToAnswer}></Timer>
+      <Timer initialSeconds={showGame?.timeToAnswer || 7} isAnswered={isAnswered} />
       <div className={styles.scoreBoard}>
         {connectedTeams?.map((team) => (
           <div key={team.id.toString()} className={styles.team}>
