@@ -93,11 +93,22 @@
       background-color: rgb(239, 158, 86);
       border: none;
       border-radius: 3px;
-      display: block;
-      min-width: 200px;
+      display: flex;
+      min-width: 120px;
+      align-items: center;
+      font-size: 14px;
+      padding: 0;
 
       &.hidden {
         visibility: hidden;
+      }
+
+      &.left {
+        padding-right: 15px;
+      }
+
+      &.right {
+        padding-left: 15px;
       }
     }
   }

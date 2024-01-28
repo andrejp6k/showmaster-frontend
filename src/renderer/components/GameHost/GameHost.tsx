@@ -14,6 +14,7 @@ import { RouteDefinitions } from '../../App';
 import { useAppDispatch, useAppSelector } from '../../hooks/appStore';
 import styles from './GameHost.scss';
 import Timer from '../Timer/Timer';
+import { ArrowLeftOutlined, ArrowRightOutlined } from '@mui/icons-material';
 
 function GameHost() {
   const game = useSelector(selectGame);
@@ -180,15 +181,17 @@ function GameHost() {
       <div className={styles.navigation}>
         <button
           onClick={() => handleNavigate(prevQuestionId)}
-          className={classNames(styles.navButton, {
+          className={classNames(styles.navButton, styles.left, {
             [styles.hidden]: !prevQuestionId,
           })}
         >
+          <ArrowLeftOutlined sx={{ fontSize: 40 }} />
           Previous question
         </button>
         {nextQuestionId && (
-          <button className={styles.navButton} onClick={() => handleNavigate(nextQuestionId)}>
+          <button className={classNames(styles.navButton, styles.right)} onClick={() => handleNavigate(nextQuestionId)}>
             Next question
+            <ArrowRightOutlined sx={{ fontSize: 40 }} />
           </button>
         )}
       </div>
