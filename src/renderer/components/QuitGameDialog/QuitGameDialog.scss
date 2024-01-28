@@ -15,7 +15,8 @@
       min-width: 100px;
 
       &.submit {
-        background-color: colors.$Primary;
+        background-color: colors.$PrimaryBackground;
+        color: colors.$PrimaryForeground;
       }
     }
   }

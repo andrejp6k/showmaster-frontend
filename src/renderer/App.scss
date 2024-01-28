@@ -20,7 +20,8 @@ body {
 }
 
 button {
-  background-color: colors.$Secondary;
+  background-color: colors.$SecondaryBackground;
+  color: colors.$SecondaryForeground;
   padding: 10px 20px;
   border-radius: 10px;
   border: none;

@@ -22,7 +22,8 @@
       min-width: 100px;
 
       &.primary {
-        background-color: colors.$Primary;
+        background-color: colors.$PrimaryBackground;
+        color: colors.$PrimaryForeground;
       }
     }
   }

@@ -38,7 +38,8 @@
     display: flex;
     justify-content: space-evenly;
     .submit {
-      background-color: colors.$Primary;
+      background-color: colors.$PrimaryBackground;
+      color: colors.$PrimaryForeground;
     }
   }
 }

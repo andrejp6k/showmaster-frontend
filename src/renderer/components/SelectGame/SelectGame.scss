@@ -23,7 +23,8 @@
       margin: 5px;
       padding: 10px;
       display: block;
-      background-color: colors.$Primary;
+      background-color: colors.$PrimaryBackground;
+      color: colors.$PrimaryForeground;
       min-width: 250px;
       margin-bottom: 20px;
     }

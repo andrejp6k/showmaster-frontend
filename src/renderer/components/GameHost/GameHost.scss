@@ -55,7 +55,7 @@
 
     .button {
       cursor: pointer;
-      background-color: colors.$PrimaryStrong;
+      background-color: colors.$PrimaryBackgroundStrong;
       border: none;
       border-radius: 3px;
       display: block;
@@ -92,7 +92,8 @@
 
     .navButton {
       cursor: pointer;
-      background-color: colors.$Primary;
+      background-color: colors.$PrimaryBackground;
+      color: colors.$PrimaryForeground;
       border: none;
       border-radius: 3px;
       display: flex;

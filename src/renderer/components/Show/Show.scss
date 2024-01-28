@@ -1,3 +1,5 @@
+@use '../../colors';
+
 .container {
   display: flex;
   flex-direction: column;
@@ -16,11 +18,11 @@
 
   .tableOfGames button {
     cursor: pointer;
-    background-color: rgb(239, 158, 86);
-    color: white;
+    background-color: colors.$PrimaryBackground;
+    color: colors.$PrimaryForeground;
     border: none;
     border-radius: 3px;
     display: block;
-    minwidth: 100px;
+    min-width: 100px;
   }
 }

@@ -17,7 +17,8 @@
     gap: 20px;
 
     .button {
-      background-color: colors.$Primary;
+      background-color: colors.$PrimaryBackground;
+      color: colors.$PrimaryForeground;
       width: 250px;
     }
   }

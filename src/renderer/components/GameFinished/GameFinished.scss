@@ -33,7 +33,8 @@
     justify-content: center;
 
     .finishBtn {
-      background-color: colors.$Primary;
+      background-color: colors.$PrimaryBackground;
+      color: colors.$PrimaryForeground;
     }
   }
 }
