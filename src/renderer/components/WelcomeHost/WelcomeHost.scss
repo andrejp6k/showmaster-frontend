@@ -1,3 +1,5 @@
+@use '../../colors';
+
 .container {
   display: flex;
   flex-direction: column;
@@ -15,7 +17,7 @@
     gap: 20px;
 
     .button {
-      background-color: rgb(239, 158, 86);
+      background-color: colors.$Primary;
       width: 250px;
     }
   }

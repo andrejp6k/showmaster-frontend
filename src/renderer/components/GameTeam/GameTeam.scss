@@ -1,3 +1,5 @@
+@use '../../colors';
+
 .container {
   height: 100%;
   display: flex;
@@ -15,7 +17,7 @@
       border-radius: 50%;
       width: 100px;
       height: 100px;
-      background-color: red;
+      background-color: colors.$Active;
 
       &.disabled {
         background-color: transparent;

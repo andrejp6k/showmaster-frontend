@@ -1,12 +1,13 @@
+@use './colors';
 /*
  * @NOTE: Prepend a `~` to css file paths that are in your node_modules
  *        See https://github.com/webpack-contrib/sass-loader#imports
  */
 body {
   position: relative;
-  color: #000;
+  color: colors.$Black;
   height: 100vh;
-  background-color: #fff;
+  background-color: colors.$Background;
   font-family: sans-serif;
   overflow-y: hidden;
 }
@@ -19,7 +20,7 @@ body {
 }
 
 button {
-  background-color: white;
+  background-color: colors.$Secondary;
   padding: 10px 20px;
   border-radius: 10px;
   border: none;

@@ -1,3 +1,5 @@
+@use '../../colors';
+
 .container {
   margin: 20px;
   min-width: 400px;
@@ -13,7 +15,7 @@
       min-width: 100px;
 
       &.submit {
-        background-color: #ef9e56;
+        background-color: colors.$Primary;
       }
     }
   }

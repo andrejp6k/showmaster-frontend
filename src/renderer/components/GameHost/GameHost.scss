@@ -1,3 +1,5 @@
+@use '../../colors';
+
 .buzzQuiz {
   font-family: Arial, sans-serif;
   width: 700px;
@@ -19,7 +21,7 @@
         margin: 5px 0;
 
         &.scoring {
-          color: red;
+          color: colors.$Success;
         }
       }
 
@@ -28,15 +30,15 @@
         display: flex;
         width: 50px;
         height: 50px;
-        background-color: lightgray;
+        background-color: colors.$NonActive;
         border-radius: 50%;
 
         &.active {
-          background-color: #ff5900;
+          background-color: colors.$Active;
         }
 
         &.activated {
-          background-color: green;
+          background-color: colors.$Activated;
         }
       }
 
@@ -53,7 +55,7 @@
 
     .button {
       cursor: pointer;
-      background-color: #ff5900;
+      background-color: colors.$PrimaryStrong;
       border: none;
       border-radius: 3px;
       display: block;
@@ -61,7 +63,7 @@
       margin: 30px 0;
 
       &.disabled {
-        background-color: lightgray;
+        background-color: colors.$Disabled;
         cursor: default;
 
         &:hover {
@@ -90,7 +92,7 @@
 
     .navButton {
       cursor: pointer;
-      background-color: rgb(239, 158, 86);
+      background-color: colors.$Primary;
       border: none;
       border-radius: 3px;
       display: flex;

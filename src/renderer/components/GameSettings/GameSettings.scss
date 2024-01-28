@@ -1,3 +1,5 @@
+@use '../../colors';
+
 .container {
   min-width: 600px;
   display: flex;
@@ -36,7 +38,7 @@
     display: flex;
     justify-content: space-evenly;
     .submit {
-      background-color: #ef9e56;
+      background-color: colors.$Primary;
     }
   }
 }

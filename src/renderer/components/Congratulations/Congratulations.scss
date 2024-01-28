@@ -1,10 +1,12 @@
+@use '../../colors';
+
 .container {
   .winner {
-    color: green;
+    color: colors.$Success;
   }
 
   .loser {
-    color: red;
+    color: colors.$Error;
   }
 
   .iconWrapper {
