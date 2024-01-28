@@ -14,6 +14,7 @@ export const gameSlice = createSlice({
       teamShouldAnswerQuestion: false,
     },
     teamToAnswerId: null as string | null,
+    teamScoredId: null as string | null,
     winnerTeam: null as string | null,
   },
   reducers: {
@@ -35,6 +36,7 @@ export const gameSlice = createSlice({
         question: state.game.questions.find((x) => x.id === action.payload) || null,
       };
       state.teamToAnswerId = null;
+      state.teamScoredId = null;
     },
     pickQuestion: (state, action: PayloadAction<string | null>) => {
       if (!state.user) return;
@@ -50,16 +52,20 @@ export const gameSlice = createSlice({
     setTeamToAnswerId: (state, action: PayloadAction<string | null>) => {
       state.teamToAnswerId = action.payload;
     },
+    setTeamScoredId: (state, action: PayloadAction<string | null>) => {
+      state.teamScoredId = action.payload;
+    },
   },
   selectors: {
     selectGame: (state) => state.game,
     selectCurrentQuestion: (state) => state.currentQuestion,
     selectTeamToAnswerId: (state) => state.teamToAnswerId,
+    selectTeamScoredId: (state) => state.teamScoredId,
     selectWinnerTeam: (state) => state.winnerTeam,
   },
 });
 
-export const { setGame, changeCurrentQuestion, pickQuestion, setGameUser, setTeamToAnswerId, setWinnerTeam } = gameSlice.actions;
-export const { selectGame, selectCurrentQuestion, selectTeamToAnswerId, selectWinnerTeam } = gameSlice.selectors;
+export const { setGame, changeCurrentQuestion, pickQuestion, setGameUser, setTeamToAnswerId, setWinnerTeam, setTeamScoredId } = gameSlice.actions;
+export const { selectGame, selectCurrentQuestion, selectTeamToAnswerId, selectWinnerTeam, selectTeamScoredId } = gameSlice.selectors;
 
 export default gameSlice.reducer;

@@ -13,6 +13,7 @@ import { AddScorePointRequest, User } from '../../../types';
 import { RouteDefinitions } from '../../App';
 import { useAppDispatch, useAppSelector } from '../../hooks/appStore';
 import styles from './GameHost.scss';
+import Timer from '../Timer/Timer';
 
 function GameHost() {
   const game = useSelector(selectGame);
@@ -24,7 +25,9 @@ function GameHost() {
   const currentQuestionId = params.questionId!;
   const question = game?.questions.find((x) => x.id === currentQuestionId);
   const navigate = useNavigate();
-  const teamToAnswearId = useSelector(selectTeamToAnswerId);
+  // TODO: refactor teamToAnswerId. Currently a lot of logic is bind to this field and it hard to read.
+  // Create new selector based on selectTeamToAnswerId, like questionAnswered => selectTeamToAnswerId != null.
+  const teamToAnswerId = useSelector(selectTeamToAnswerId);
   const dispatch = useAppDispatch();
 
   const answersTracker = AnswersTracker.getInstance();
@@ -60,7 +63,7 @@ function GameHost() {
     const correctAnswerRequest = {
       questionId: currentQuestionId,
       scoredByAnsweringCorrectly: true,
-      teamUserId: teamToAnswearId,
+      teamUserId: teamToAnswerId,
     } as AddScorePointRequest;
 
     await answer(correctAnswerRequest);
@@ -70,7 +73,7 @@ function GameHost() {
     const wrongAnswerRequest = {
       questionId: currentQuestionId,
       scoredByAnsweringCorrectly: false,
-      teamUserId: connectedTeams?.filter((x) => x.id !== teamToAnswearId)[0].id,
+      teamUserId: connectedTeams?.filter((x) => x.id !== teamToAnswerId)[0].id,
     } as AddScorePointRequest;
 
     await answer(wrongAnswerRequest);
@@ -88,6 +91,7 @@ function GameHost() {
         answersTracker.markAsAnswered(currentQuestionId);
         setIsAnswered(true);
         setCurrentScoringTeam(request.teamUserId);
+        sendMessage('TeamScored', request.teamUserId);
       }
     } catch (e) {
       // TODO: handle this
@@ -106,10 +110,10 @@ function GameHost() {
   }
 
   function getBuzzerLabelText(team: User): string {
-    if (isQuestionActive && !teamToAnswearId) {
+    if (isQuestionActive && !teamToAnswerId) {
       return 'Active';
     }
-    if (teamToAnswearId === team.id) {
+    if (teamToAnswerId === team.id) {
       return 'Your turn!';
     }
     return 'Inactive';
@@ -117,6 +121,7 @@ function GameHost() {
 
   return (
     <div className={styles.buzzQuiz}>
+      <Timer initialSeconds={showGame?.timeToAnswer || 7} isAnswered={isAnswered} />
       <div className={styles.scoreBoard}>
         {connectedTeams?.map((team) => (
           <div key={team.id.toString()} className={styles.team}>
@@ -127,8 +132,8 @@ function GameHost() {
             <span
               className={classNames(
                 styles.buzzer,
-                { [styles.active]: isQuestionActive && !teamToAnswearId },
-                { [styles.activated]: teamToAnswearId === team.id },
+                { [styles.active]: isQuestionActive && !teamToAnswerId },
+                { [styles.activated]: teamToAnswerId === team.id },
               )}
             ></span>
             <span className={styles.buzzerLabel}>{getBuzzerLabelText(team)}</span>
@@ -136,7 +141,7 @@ function GameHost() {
         ))}
       </div>
       <div className={styles.actionButtons}>
-        {!teamToAnswearId && !isAnswered && (
+        {!teamToAnswerId && !isAnswered && (
           <button
             className={classNames(styles.button, { [styles.disabled]: !question })}
             type="button"
@@ -146,7 +151,7 @@ function GameHost() {
             {isQuestionActive ? 'Deactivate' : 'Activate'}
           </button>
         )}
-        {teamToAnswearId && !isAnswered && (
+        {teamToAnswerId && !isAnswered && (
           <>
             <button className={styles.button} onClick={handleCorrectAnswer}>
               Correct answer
