@@ -1,0 +1,55 @@
+@use './colors';
+
+@mixin btn {
+  background-color: colors.$SecondaryBackground;
+  color: colors.$SecondaryForeground;
+  padding: 10px 20px;
+  border-radius: 10px;
+  border: none;
+  appearance: none;
+  font-size: 1.3rem;
+  box-shadow:
+    0px 8px 28px -6px rgba(24, 39, 75, 0.12),
+    0px 18px 88px -4px rgba(24, 39, 75, 0.14);
+  transition: all ease-in 0.1s;
+  cursor: pointer;
+  opacity: 0.9;
+
+  &:hover {
+    transform: scale(1.05);
+    opacity: 1;
+  }
+}
+
+@mixin btnPrimary($width: 250px) {
+  @include btn;
+
+  width: $width;
+  background-color: colors.$PrimaryBackground;
+  color: colors.$PrimaryForeground;
+
+  &:disabled {
+    background-color: colors.$Disabled;
+    cursor: default;
+
+    &:hover {
+      opacity: 0.9;
+      transform: scale(1);
+    }
+  }
+}
+
+@mixin toggleBtn($selected: false) {
+  @include btn;
+
+  margin: 5px;
+  padding: 10px;
+  display: block;
+  min-width: 150px;
+  margin-bottom: 20px;
+  color: colors.$PrimaryForeground;
+
+  @if $selected {
+    border: solid 1px colors.$PrimaryBackground;
+  }
+}

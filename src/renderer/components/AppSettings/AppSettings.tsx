@@ -120,9 +120,7 @@ function AppSettings() {
                 type="button"
                 key={`${studio.id} + ${index}`}
                 onClick={() => handleStudioClick(studio)}
-                className={classNames(styles.sectionButton, {
-                  [styles.selected]: selectedStudio === studio,
-                })}
+                className={classNames(styles.sectionButton, { [styles.selected]: selectedStudio === studio })}
               >
                 {studio.name}
               </button>
