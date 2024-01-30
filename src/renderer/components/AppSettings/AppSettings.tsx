@@ -11,6 +11,7 @@ import config from '../../../config';
 import styles from './AppSettings.scss';
 import classNames from 'classnames';
 import { TextField } from '@mui/material';
+import Button from '../Button/Button';
 
 function AppSettings() {
   const [studios, setStudios] = useState<Studio[]>([]);
@@ -145,9 +146,9 @@ function AppSettings() {
         </div>
 
         <div className={styles.footer}>
-          <button type="button" onClick={handleConfirmClick} className={styles.submitButton}>
+          <Button onClick={handleConfirmClick} color="primary">
             Assign device
-          </button>
+          </Button>
         </div>
       </>
     );
@@ -165,9 +166,9 @@ function AppSettings() {
           onChange={(event) => setPasswordInput(event.target.value)}
         />
         {error && <span style={{ color: 'red' }}>{error}</span>}
-        <button className={styles.submitPasswordBtn} onClick={handlePasswordSubmit}>
+        <Button color="primary" onClick={handlePasswordSubmit}>
           Submit
-        </button>
+        </Button>
       </>
     );
   };

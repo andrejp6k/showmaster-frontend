@@ -70,7 +70,7 @@
   }
 }
 
-@mixin toggleBtn($selected: false) {
+@mixin btnSelect($selected: false) {
   @include btn;
 
   margin: 5px;
@@ -83,4 +83,13 @@
   @if $selected {
     border: solid 1px colors.$PrimaryBackground;
   }
+}
+
+@mixin buzzer() {
+  @include btn;
+
+  border-radius: 50%;
+  width: 100px;
+  height: 100px;
+  background-color: colors.$Active;
 }

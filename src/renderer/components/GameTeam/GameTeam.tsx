@@ -4,6 +4,7 @@ import styles from './GameTeam.scss';
 import { sendMessage } from '../../../redux/websocketSlice';
 import { selectUser } from '../../../redux/userSlice';
 import Timer from '../Timer/Timer';
+import Buzzer from '../Buzzer/Buzzer';
 
 function GameTeam() {
   const { question, questionPickedByTeam, teamShouldAnswerQuestion } = useSelector(selectCurrentQuestion);
@@ -44,13 +45,7 @@ function GameTeam() {
             {questionPickedByTeam && !teamShouldAnswerQuestion && <div>Opponent buzzered first!</div>}
             {question ? <span></span> : <span> Get ready for the question ...</span>}
           </div>
-          <div className={styles.footer}>
-            {question && !questionPickedByTeam && (
-              <button onClick={handleBuzzerClick} className={styles.buzzer}>
-                Hit me to answer!
-              </button>
-            )}
-          </div>
+          <div className={styles.footer}>{question && !questionPickedByTeam && <Buzzer onClick={handleBuzzerClick}>Hit to answer!</Buzzer>}</div>
         </>
       )}
     </div>

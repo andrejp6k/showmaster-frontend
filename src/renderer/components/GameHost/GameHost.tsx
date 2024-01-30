@@ -150,10 +150,10 @@ function GameHost() {
         )}
         {teamToAnswerId && !isAnswered && (
           <>
-            <Button color="primary" onClick={handleCorrectAnswer} sx={{ width: '200px' }}>
+            <Button color="primary" onClick={handleCorrectAnswer}>
               Correct answer
             </Button>
-            <Button color="primary" onClick={handleWrongAnswer} sx={{ width: '200px' }}>
+            <Button color="primary" onClick={handleWrongAnswer}>
               Wrong answer
             </Button>
           </>

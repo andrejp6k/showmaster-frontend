@@ -1,0 +1,5 @@
+@use '../../buttons';
+
+.buzzer {
+  @include buttons.buzzer;
+}
