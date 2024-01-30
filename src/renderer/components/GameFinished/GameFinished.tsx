@@ -7,6 +7,7 @@ import { selectShowGame } from '../../../redux/showSlice';
 import { selectConnectedTeams } from '../../../redux/userSlice';
 import { useAppSelector } from '../../hooks/appStore';
 import styles from './GameFinished.scss';
+import Button from '../Button/Button';
 
 function GameFinished() {
   const navigate = useNavigate();
@@ -39,14 +40,14 @@ function GameFinished() {
         ))}
       </div>
       <div className={styles.footer}>
-        <button
-          className={styles.finishBtn}
+        <Button
+          color="secondary"
           onClick={() => {
             navigate(-1);
           }}
         >
           Back to show overview
-        </button>
+        </Button>
       </div>
     </div>
   );

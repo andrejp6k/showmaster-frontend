@@ -1,6 +1,6 @@
 @use './colors';
 
-@mixin btn {
+@mixin btn($hidden: false) {
   background-color: colors.$SecondaryBackground;
   color: colors.$SecondaryForeground;
   padding: 10px 20px;
@@ -14,28 +14,59 @@
   transition: all ease-in 0.1s;
   cursor: pointer;
   opacity: 0.9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   &:hover {
     transform: scale(1.05);
     opacity: 1;
   }
-}
 
-@mixin btnPrimary($width: 250px) {
-  @include btn;
-
-  width: $width;
-  background-color: colors.$PrimaryBackground;
-  color: colors.$PrimaryForeground;
+  @if $hidden {
+    visibility: hidden;
+  }
 
   &:disabled {
-    background-color: colors.$Disabled;
     cursor: default;
 
     &:hover {
       opacity: 0.9;
       transform: scale(1);
     }
+  }
+}
+
+@mixin primary($hidden: false) {
+  @include btn($hidden);
+
+  background-color: colors.$PrimaryBackground;
+  color: colors.$PrimaryForeground;
+
+  &:disabled {
+    background-color: colors.$Disabled;
+  }
+}
+
+@mixin secondary($hidden: false) {
+  @include btn($hidden);
+
+  background-color: colors.$SecondaryBackground;
+  color: colors.$SecondaryForeground;
+
+  &:disabled {
+    background-color: colors.$Disabled;
+  }
+}
+
+@mixin tertiary($hidden: false) {
+  @include btn($hidden);
+
+  background-color: colors.$TertiaryBackground;
+  color: colors.$TertiaryForeground;
+
+  &:disabled {
+    background-color: colors.$Disabled;
   }
 }
 

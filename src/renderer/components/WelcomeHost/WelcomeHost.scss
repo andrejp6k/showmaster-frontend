@@ -1,6 +1,3 @@
-@use '../../colors';
-@use '../../buttons';
-
 .container {
   display: flex;
   flex-direction: column;
@@ -16,9 +13,5 @@
     display: flex;
     flex-direction: column;
     gap: 20px;
-
-    .button {
-      @include buttons.btnPrimary(250px);
-    }
   }
 }

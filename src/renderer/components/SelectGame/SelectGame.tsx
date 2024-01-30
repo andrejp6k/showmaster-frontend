@@ -9,6 +9,7 @@ import { useAppDispatch } from '../../hooks/appStore';
 import styles from './SelectGame.scss';
 import { RouteDefinitions } from '../../App';
 import { Paper } from '@mui/material';
+import Button from '../Button/Button';
 
 function SelectGame() {
   const currentUser = useSelector(selectUser);
@@ -56,9 +57,9 @@ function SelectGame() {
       <div className={styles.content}>
         <div className={styles.list}>
           {games.map((game) => (
-            <button className={styles.gameButton} type="button" key={game?.id} onClick={() => handleGameClick(game.id)}>
+            <Button key={game?.id} onClick={() => handleGameClick(game.id)} sx={{ width: '250px' }}>
               {game.name}
-            </button>
+            </Button>
           ))}
         </div>
       </div>

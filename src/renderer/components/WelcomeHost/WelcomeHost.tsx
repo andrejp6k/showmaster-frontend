@@ -1,7 +1,7 @@
-import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './WelcomeHost.scss';
 import { RouteDefinitions } from '../../App';
+import Button from '../Button/Button';
 
 function WelcomeHost() {
   const navigate = useNavigate();
@@ -37,9 +37,9 @@ function WelcomeHost() {
             </button>
           </>
         )}
-        <button type="button" onClick={handlePlayGame} className={styles.button}>
+        <Button onClick={handlePlayGame} sx={{ width: '250px' }}>
           Play game
-        </button>
+        </Button>
       </div>
     </div>
   );

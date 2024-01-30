@@ -52,7 +52,7 @@
     margin-top: 50px;
 
     .submitButton {
-      @include buttons.btnPrimary;
+      @include buttons.primary;
     }
   }
 }

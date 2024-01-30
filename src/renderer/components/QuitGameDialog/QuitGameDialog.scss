@@ -10,14 +10,5 @@
   .buttons {
     display: flex;
     justify-content: space-evenly;
-
-    .button {
-      min-width: 100px;
-
-      &.submit {
-        background-color: colors.$PrimaryBackground;
-        color: colors.$PrimaryForeground;
-      }
-    }
   }
 }
