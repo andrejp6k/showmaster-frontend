@@ -1,3 +1,6 @@
+@use '../../colors';
+@use '../../buttons';
+
 .buzzQuiz {
   font-family: Arial, sans-serif;
   width: 700px;
@@ -19,7 +22,7 @@
         margin: 5px 0;
 
         &.scoring {
-          color: red;
+          color: colors.$Success;
         }
       }
 
@@ -28,15 +31,15 @@
         display: flex;
         width: 50px;
         height: 50px;
-        background-color: lightgray;
+        background-color: colors.$NonActive;
         border-radius: 50%;
 
         &.active {
-          background-color: #ff5900;
+          background-color: colors.$Active;
         }
 
         &.activated {
-          background-color: green;
+          background-color: colors.$Activated;
         }
       }
 
@@ -49,27 +52,7 @@
   .actionButtons {
     display: flex;
     justify-content: space-evenly;
-    height: 100px;
-
-    .button {
-      cursor: pointer;
-      background-color: #ff5900;
-      border: none;
-      border-radius: 3px;
-      display: block;
-      width: 200px;
-      margin: 30px 0;
-
-      &.disabled {
-        background-color: lightgray;
-        cursor: default;
-
-        &:hover {
-          opacity: 0.9;
-          transform: scale(1);
-        }
-      }
-    }
+    margin-top: 30px;
   }
 
   .questionSection {
@@ -87,19 +70,6 @@
   .navigation {
     display: flex;
     justify-content: space-between;
-
-    .navButton {
-      cursor: pointer;
-      background-color: rgb(239, 158, 86);
-      border: none;
-      border-radius: 3px;
-      display: block;
-      min-width: 200px;
-
-      &.hidden {
-        visibility: hidden;
-      }
-    }
   }
 
   .footer {

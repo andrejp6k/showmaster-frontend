@@ -1,0 +1,40 @@
+@use '../../buttons';
+
+.primary {
+  @include buttons.primary;
+
+  &.hidden {
+    @include buttons.primary($hidden: true);
+  }
+
+  &.small {
+    font-size: 14px;
+    padding: 0;
+  }
+}
+
+.secondary {
+  @include buttons.secondary;
+
+  &.hidden {
+    @include buttons.secondary($hidden: true);
+  }
+
+  &.small {
+    font-size: 14px;
+    padding: 0;
+  }
+}
+
+.tertiary {
+  @include buttons.tertiary;
+
+  &.hidden {
+    @include buttons.tertiary($hidden: true);
+  }
+
+  &.small {
+    font-size: 14px;
+    padding: 0;
+  }
+}

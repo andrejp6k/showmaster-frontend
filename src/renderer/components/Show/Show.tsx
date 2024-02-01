@@ -6,6 +6,7 @@ import { ShowGame } from '../../../types';
 import styles from './Show.scss';
 import { useAppDispatch } from '../../hooks/appStore';
 import { setTeamToAnswerId } from '../../../redux/gameSlice';
+import Button from '../Button/Button';
 
 function Show() {
   const show = useSelector(selectShow);
@@ -41,9 +42,9 @@ function Show() {
                 <td>{game.winnerTeamName}</td>
                 <td>
                   {!game.finished && (
-                    <button type="button" onClick={() => handlePlayClick(game.gameId)}>
+                    <Button onClick={() => handlePlayClick(game.gameId)} sx={{ width: '100px' }}>
                       Play
-                    </button>
+                    </Button>
                   )}
                 </td>
               </tr>

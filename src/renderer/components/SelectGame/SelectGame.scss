@@ -1,3 +1,5 @@
+@use '../../colors';
+
 .title {
   display: flex;
   justify-content: center;
@@ -21,7 +23,8 @@
       margin: 5px;
       padding: 10px;
       display: block;
-      background-color: rgb(239, 158, 86);
+      background-color: colors.$PrimaryBackground;
+      color: colors.$PrimaryForeground;
       min-width: 250px;
       margin-bottom: 20px;
     }

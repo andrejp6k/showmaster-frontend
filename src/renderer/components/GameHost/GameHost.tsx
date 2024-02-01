@@ -14,6 +14,8 @@ import { RouteDefinitions } from '../../App';
 import { useAppDispatch, useAppSelector } from '../../hooks/appStore';
 import styles from './GameHost.scss';
 import Timer from '../Timer/Timer';
+import { ArrowLeftOutlined, ArrowRightOutlined } from '@mui/icons-material';
+import Button from '../Button/Button';
 
 function GameHost() {
   const game = useSelector(selectGame);
@@ -142,23 +144,18 @@ function GameHost() {
       </div>
       <div className={styles.actionButtons}>
         {!teamToAnswerId && !isAnswered && (
-          <button
-            className={classNames(styles.button, { [styles.disabled]: !question })}
-            type="button"
-            onClick={() => (isQuestionActive ? deactivate() : activate())}
-            disabled={!question}
-          >
+          <Button color="tertiary" onClick={() => (isQuestionActive ? deactivate() : activate())} disabled={!question} sx={{ width: '150px' }}>
             {isQuestionActive ? 'Deactivate' : 'Activate'}
-          </button>
+          </Button>
         )}
         {teamToAnswerId && !isAnswered && (
           <>
-            <button className={styles.button} onClick={handleCorrectAnswer}>
+            <Button color="primary" onClick={handleCorrectAnswer}>
               Correct answer
-            </button>
-            <button className={styles.button} onClick={handleWrongAnswer}>
+            </Button>
+            <Button color="primary" onClick={handleWrongAnswer}>
               Wrong answer
-            </button>
+            </Button>
           </>
         )}
         {isAnswered && <h3>Point assigned!</h3>}
@@ -178,28 +175,31 @@ function GameHost() {
         )}
       </div>
       <div className={styles.navigation}>
-        <button
-          onClick={() => handleNavigate(prevQuestionId)}
-          className={classNames(styles.navButton, {
-            [styles.hidden]: !prevQuestionId,
-          })}
-        >
-          Previous question
-        </button>
+        <Button onClick={() => handleNavigate(prevQuestionId)} hidden={!prevQuestionId} size="small" sx={{ paddingRight: '15px' }}>
+          <>
+            <ArrowLeftOutlined sx={{ fontSize: 40 }} />
+            <span>Previous question</span>
+          </>
+        </Button>
         {nextQuestionId && (
-          <button className={styles.navButton} onClick={() => handleNavigate(nextQuestionId)}>
-            Next question
-          </button>
+          <Button onClick={() => handleNavigate(nextQuestionId)} size="small" sx={{ paddingLeft: '15px' }}>
+            <>
+              <span>Next question</span>
+              <ArrowRightOutlined sx={{ fontSize: 40 }} />
+            </>
+          </Button>
         )}
       </div>
       <div className={styles.footer}>
-        <button
+        <Button
+          color="secondary"
           onClick={() => {
             dispatch(setFinishGameDialogOpen(true));
           }}
+          sx={{ width: '160px' }}
         >
           Finish game
-        </button>
+        </Button>
       </div>
     </div>
   );

@@ -1,3 +1,5 @@
+@use '../../colors';
+
 .container {
   min-width: 500px;
   margin: 20px;
@@ -7,7 +9,7 @@
     flex-direction: column;
     gap: 20px;
     .danger {
-      color: red;
+      color: colors.$Error;
     }
   }
 
@@ -15,13 +17,5 @@
     display: flex;
     justify-content: space-evenly;
     margin-top: 20px;
-
-    .button {
-      min-width: 100px;
-
-      &.primary {
-        background-color: #ef9e56;
-      }
-    }
   }
 }

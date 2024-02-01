@@ -3,10 +3,10 @@ import { selectQuitGameDialogOpen, selectQuitGameActionType, setQuitGameDialogOp
 import { Dialog } from '@mui/material';
 
 import styles from './QuitGameDialog.scss';
-import classNames from 'classnames';
 import { useAppDispatch } from '../../hooks/appStore';
 import { useNavigate } from 'react-router-dom';
 import { RouteDefinitions } from '../../App';
+import Button from '../Button/Button';
 
 function QuitGameDialog() {
   const isOpen = useSelector(selectQuitGameDialogOpen);
@@ -37,12 +37,12 @@ function QuitGameDialog() {
       <div className={styles.container}>
         <h3>Are you sure you want to quit game?</h3>
         <div className={styles.buttons}>
-          <button className={styles.button} onClick={handleCancelClick}>
+          <Button onClick={handleCancelClick} color="secondary" sx={{ width: '100px' }}>
             Cancel
-          </button>
-          <button className={classNames(styles.button, styles.submit)} onClick={handleSubmitClick}>
+          </Button>
+          <Button onClick={handleSubmitClick} color="primary" sx={{ width: '100px' }}>
             Yes
-          </button>
+          </Button>
         </div>
       </div>
     </Dialog>

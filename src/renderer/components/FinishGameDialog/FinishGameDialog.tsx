@@ -12,6 +12,7 @@ import { UpdateShowGameRequest } from '../../../types';
 import { RouteDefinitions } from '../../App';
 import { useAppDispatch, useAppSelector } from '../../hooks/appStore';
 import styles from './FinishGameDialog.scss';
+import Button from '../Button/Button';
 
 function FinishGameDialog() {
   const isOpen = useSelector(selectFinishGameDialogOpen);
@@ -66,14 +67,14 @@ function FinishGameDialog() {
         </div>
 
         <div className={styles.footer}>
-          <button onClick={handleCancelClick} className={styles.button}>
+          <Button onClick={handleCancelClick} color="secondary">
             {isDraw ? 'Ok' : 'Cancel'}
-          </button>
+          </Button>
 
           {!isDraw && (
-            <button className={classNames(styles.button, styles.primary)} onClick={handleFinishGame}>
+            <Button onClick={handleFinishGame} color="primary">
               Finish game
-            </button>
+            </Button>
           )}
         </div>
       </div>
