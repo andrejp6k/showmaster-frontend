@@ -163,14 +163,19 @@ function GameHost() {
       <div className={styles.questionSection}>
         {question && (
           <>
-            <span>{question?.questionTitle}</span>
-            <div className={styles.question}>Q: {question?.questionText}</div>
-            <span>
-              <b>A:</b> {question?.correctAnswer}
-            </span>
-            <span>
-              <b>Hint:</b> {question?.info}
-            </span>
+            <div className={styles.questionContent}>
+              <span>{question?.questionTitle}</span>
+              <div className={styles.question}>Q: {question?.questionText}</div>
+              <span>
+                <b>A:</b> {question?.correctAnswer}
+              </span>
+              <span>
+                <b>Hint:</b> {question?.info}
+              </span>
+            </div>
+            <div className={styles.questionImage}>
+              <img src={question.imageUrl!}></img>
+            </div>
           </>
         )}
       </div>

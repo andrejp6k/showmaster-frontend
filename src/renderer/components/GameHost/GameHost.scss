@@ -57,15 +57,33 @@
 
   .questionSection {
     padding: 15px;
-    margin-bottom: 20px;
+    margin: 20px 0;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     gap: 10px;
 
-    .question {
-      font-weight: bold;
+    .questionContent {
+      display: flex;
+      flex-direction: column;
+
+      span {
+        margin-bottom: 25px;
+      }
+
+      .question {
+        margin-bottom: 25px;
+        font-weight: bold;
+      }
+    }
+
+    .questionImage {
+      margin-left: 25px;
+      img {
+        max-height: 150px;
+      }
     }
   }
+
 
   .navigation {
     display: flex;
