@@ -1,12 +1,13 @@
-import styles from './TextBuzzer.scss';
+import styles from './BuzzerQuestion.scss';
 import Timer from '../../Timer/Timer';
 import { useSelector } from 'react-redux';
 import { selectCurrentQuestion, selectTeamScoredId } from '../../../../redux/gameSlice';
 import { sendMessage } from '../../../../redux/websocketSlice';
 import { selectUser } from '../../../../redux/userSlice';
 import { QuestionType } from '../../../../types';
+import Buzzer from '../../Buzzer/Buzzer';
 
-function TextBuzzer() {
+function BuzzerQuestion() {
   const { question, questionPickedByTeam, teamShouldAnswerQuestion } = useSelector(selectCurrentQuestion);
   const teamScoredId = useSelector(selectTeamScoredId);
   const currentUser = useSelector(selectUser);
@@ -43,14 +44,11 @@ function TextBuzzer() {
         )}
       </div>
       <div className={styles.footer}>
-        {question && !questionPickedByTeam && (
-          <button onClick={handleBuzzerClick} className={styles.buzzer}>
-            Hit me to answer!
-          </button>
-        )}
+        {question && !questionPickedByTeam &&
+          <Buzzer onClick={handleBuzzerClick}>Hit to answer!</Buzzer>}
       </div>
     </div>
   );
 }
 
-export default TextBuzzer;
+export default BuzzerQuestion;

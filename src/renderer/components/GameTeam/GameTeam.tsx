@@ -3,7 +3,7 @@ import { selectCurrentQuestion, selectTeamScoredId } from '../../../redux/gameSl
 import styles from './GameTeam.scss';
 import { selectUser } from '../../../redux/userSlice';
 import { QuestionType } from '../../../types';
-import TextBuzzer from '../Questions/TextBuzzer/TextBuzzer';
+import BuzzerQuestion from '../Questions/TextBuzzer/BuzzerQuestion';
 
 function GameTeam() {
   const { question } = useSelector(selectCurrentQuestion);
@@ -17,7 +17,7 @@ function GameTeam() {
     switch (question?.type) {
       case QuestionType.TextBuzzer:
       case QuestionType.PictureBuzzer:
-        return <TextBuzzer />;
+        return <BuzzerQuestion />;
       case QuestionType.GuessYear:
         return <></>;
       case QuestionType.TwoAnswers:
