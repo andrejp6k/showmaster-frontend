@@ -1,4 +1,4 @@
-import styles from './BuzzerQuestion.scss';
+import styles from './PictureQuestion.scss';
 import Timer from '../../Timer/Timer';
 import { useSelector } from 'react-redux';
 import { selectCurrentQuestion, selectTeamScoredId } from '../../../../redux/gameSlice';
@@ -7,7 +7,7 @@ import { selectUser } from '../../../../redux/userSlice';
 import { QuestionType } from '../../../../types';
 import Buzzer from '../../Buzzer/Buzzer';
 
-function BuzzerQuestion() {
+function TextQuestion() {
   const { question, questionPickedByTeam, teamShouldAnswerQuestion } = useSelector(selectCurrentQuestion);
   const teamScoredId = useSelector(selectTeamScoredId);
   const currentUser = useSelector(selectUser);
@@ -36,12 +36,10 @@ function BuzzerQuestion() {
           </div>
         )}
         {questionPickedByTeam && !teamShouldAnswerQuestion && <div>Opponent buzzered first!</div>}
-        {!questionPickedByTeam && question && question.type === QuestionType.PictureBuzzer && (
-          <div className={styles.questionContent}>
-            <span>{question.questionText}</span>
-            <img src={question.imageUrl!}></img>
-          </div>
-        )}
+        <div className={`${styles.questionContent} ${!questionPickedByTeam && question ? styles.displayContent : ''}`}>
+          <span>{question.questionText}</span>
+          <img src={question.imageUrl!}></img>
+        </div>
       </div>
       <div className={styles.footer}>
         {question && !questionPickedByTeam &&
@@ -51,4 +49,4 @@ function BuzzerQuestion() {
   );
 }
 
-export default BuzzerQuestion;
+export default TextQuestion;
