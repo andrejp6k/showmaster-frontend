@@ -5,6 +5,7 @@ import { selectUser } from '../../../redux/userSlice';
 import { QuestionType } from '../../../types';
 import TextQuestion from '../Questions/TextQuestion/TextQuestion';
 import PictureQuestion from '../Questions/PictureQuestion/PictureQuestion';
+import GuessYearQuestion from '../Questions/QuessYearQuestion/GuessYearQuestion';
 
 function GameTeam() {
   const { question } = useSelector(selectCurrentQuestion);
@@ -13,7 +14,7 @@ function GameTeam() {
   const didIScore = teamScoredId === currentUser?.id;
   const didOpponentScore = teamScoredId !== null && !didIScore;
 
-
+  console.log(question, 'question')
   const questionContent = () => {
     switch (question?.type) {
       case QuestionType.TextBuzzer:
@@ -21,7 +22,7 @@ function GameTeam() {
       case QuestionType.PictureBuzzer:
         return <PictureQuestion />
       case QuestionType.GuessYear:
-        return <></>; // GuessYearQuestion
+        return <GuessYearQuestion />
       case QuestionType.TwoAnswers:
         return <></>; // TwoOptionsQuestion
       default:

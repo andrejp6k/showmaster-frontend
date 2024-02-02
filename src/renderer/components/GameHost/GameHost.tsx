@@ -9,13 +9,15 @@ import { selectConnectedTeams, selectUser } from '../../../redux/userSlice';
 import { sendMessage } from '../../../redux/websocketSlice';
 import { services } from '../../../services';
 import AnswersTracker from '../../../services/answers-tracker';
-import { AddScorePointRequest, User } from '../../../types';
+import { AddScorePointRequest, QuestionType, User } from '../../../types';
 import { RouteDefinitions } from '../../App';
 import { useAppDispatch, useAppSelector } from '../../hooks/appStore';
 import styles from './GameHost.scss';
 import Timer from '../Timer/Timer';
 import { ArrowLeftOutlined, ArrowRightOutlined } from '@mui/icons-material';
 import Button from '../Button/Button';
+import ActionButtonsInBuzzerQuestion from '../ActionButtons/ActionButtonsInBuzzerQuestion/ActionButtonsInBuzzerQuestion';
+import ActionButtonsInGuessYearQuestion from '../ActionButtons/ActionButtonsInGuessYearQuestion/ActionButtonsInGuessYearQuestion';
 
 function GameHost() {
   const game = useSelector(selectGame);
@@ -41,11 +43,47 @@ function GameHost() {
   const [isAnswered, setIsAnswered] = useState(answersTracker.isAnswered(question?.id || ''));
   const [currentScoringTeam, setCurrentScoringTeam] = useState<string | null>(null);
 
+  const isQuestionWithBuzzer = question.type == QuestionType.PictureBuzzer || question.type == QuestionType.TextBuzzer;
+
   useEffect(() => {
     if (showGame?.teamScores.some((x) => x.value >= showGame.scoreToWin) && !showGame.finished) {
       dispatch(setFinishGameDialogOpen(true));
     }
   }, [show]);
+
+  const actionButtons = () => {
+    switch (question?.type) {
+      case QuestionType.TextBuzzer:
+      case QuestionType.PictureBuzzer:
+        return (
+          <ActionButtonsInBuzzerQuestion
+            question={question}
+            isQuestionActive={isQuestionActive}
+            isAnswered={isAnswered}
+            activate={activate}
+            deactivate={deactivate}
+            handleCorrectAnswer={handleCorrectAnswer}
+            handleWrongAnswer={handleWrongAnswer}
+          />
+        );
+      case QuestionType.GuessYear:
+        return (
+          <ActionButtonsInGuessYearQuestion
+            question={question}
+            isQuestionActive={isQuestionActive}
+            isAnswered={isAnswered}
+            activate={activate}
+            deactivate={deactivate}
+            handleCorrectAnswer={handleCorrectAnswer}
+            handleWrongAnswer={handleWrongAnswer}
+          />
+        );
+      case QuestionType.TwoAnswers:
+        return <></>; // TwoOptionsQuestion
+      default:
+        return <span>Get ready for the question ...</span>;
+    }
+  };
 
   function activate() {
     // send event to server to activate buzzers for teams.
@@ -123,7 +161,7 @@ function GameHost() {
 
   return (
     <div className={styles.buzzQuiz}>
-      <Timer initialSeconds={showGame?.timeToAnswer || 7} isAnswered={isAnswered} />
+      {isQuestionWithBuzzer && <Timer initialSeconds={showGame?.timeToAnswer || 7} isAnswered={isAnswered} />}
       <div className={styles.scoreBoard}>
         {connectedTeams?.map((team) => (
           <div key={team.id.toString()} className={styles.team}>
@@ -142,24 +180,7 @@ function GameHost() {
           </div>
         ))}
       </div>
-      <div className={styles.actionButtons}>
-        {!teamToAnswerId && !isAnswered && (
-          <Button color="tertiary" onClick={() => (isQuestionActive ? deactivate() : activate())} disabled={!question} sx={{ width: '150px' }}>
-            {isQuestionActive ? 'Deactivate' : 'Activate'}
-          </Button>
-        )}
-        {teamToAnswerId && !isAnswered && (
-          <>
-            <Button color="primary" onClick={handleCorrectAnswer}>
-              Correct answer
-            </Button>
-            <Button color="primary" onClick={handleWrongAnswer}>
-              Wrong answer
-            </Button>
-          </>
-        )}
-        {isAnswered && <h3>Point assigned!</h3>}
-      </div>
+      {actionButtons()}
       <div className={styles.questionSection}>
         {question && (
           <>
