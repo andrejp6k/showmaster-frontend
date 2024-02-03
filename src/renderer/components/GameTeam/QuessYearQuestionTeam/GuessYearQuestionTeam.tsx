@@ -1,14 +1,12 @@
-import styles from './GuessYearQuestion.scss';
+import styles from './GuessYearQuestionTeam.scss';
 import { useSelector } from 'react-redux';
 import { selectCurrentQuestion, selectTeamScoredId } from '../../../../redux/gameSlice';
-import { selectUser } from '../../../../redux/userSlice';
 
 import Button from '../../Button/Button';
-import React, { useState } from 'react';
+import React from 'react';
 
-function GuessYearQuestion() {
+function GuessYearQuestionTeam() {
   const { question } = useSelector(selectCurrentQuestion);
-  const currentUser = useSelector(selectUser);
 
   function handleSubmit() {
     // sendMessage('', currentUser?.id, selectedYear);
@@ -34,4 +32,4 @@ function GuessYearQuestion() {
   );
 }
 
-export default GuessYearQuestion;
+export default GuessYearQuestionTeam;

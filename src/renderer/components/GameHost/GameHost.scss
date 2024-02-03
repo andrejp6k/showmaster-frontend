@@ -7,54 +7,6 @@
   margin: auto;
   padding: 10px;
 
-  .scoreBoard {
-    display: flex;
-    justify-content: space-around;
-    text-align: center;
-
-    .team {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-
-      .score {
-        font-size: 2em;
-        margin: 5px 0;
-
-        &.scoring {
-          color: colors.$Success;
-        }
-      }
-
-      .buzzer {
-        margin-top: 40px;
-        display: flex;
-        width: 50px;
-        height: 50px;
-        background-color: colors.$NonActive;
-        border-radius: 50%;
-
-        &.active {
-          background-color: colors.$Active;
-        }
-
-        &.activated {
-          background-color: colors.$Activated;
-        }
-      }
-
-      .buzzerLabel {
-        margin-top: 10px;
-      }
-    }
-  }
-
-  .actionButtons {
-    display: flex;
-    justify-content: space-evenly;
-    margin-top: 30px;
-  }
-
   .questionSection {
     padding: 15px;
     margin: 20px 0;

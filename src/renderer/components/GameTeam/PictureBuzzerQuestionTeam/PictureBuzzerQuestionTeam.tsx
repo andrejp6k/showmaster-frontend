@@ -1,4 +1,4 @@
-import styles from './TextQuestion.scss';
+import styles from './PictureBuzzerQuestionTeam.scss';
 import Timer from '../../Timer/Timer';
 import { useSelector } from 'react-redux';
 import { selectCurrentQuestion, selectTeamScoredId } from '../../../../redux/gameSlice';
@@ -6,7 +6,7 @@ import { sendMessage } from '../../../../redux/websocketSlice';
 import { selectUser } from '../../../../redux/userSlice';
 import Buzzer from '../../Buzzer/Buzzer';
 
-function TextQuestion() {
+function PictureBuzzerQuestionTeam() {
   const { question, questionPickedByTeam, teamShouldAnswerQuestion } = useSelector(selectCurrentQuestion);
   const teamScoredId = useSelector(selectTeamScoredId);
   const currentUser = useSelector(selectUser);
@@ -35,6 +35,10 @@ function TextQuestion() {
           </div>
         )}
         {questionPickedByTeam && !teamShouldAnswerQuestion && <div>Opponent buzzered first!</div>}
+        <div className={`${styles.questionContent} ${!questionPickedByTeam && question ? styles.displayContent : ''}`}>
+          <span>{question.questionText}</span>
+          <img src={question.imageUrl!}></img>
+        </div>
       </div>
       <div className={styles.footer}>
         {question && !questionPickedByTeam &&
@@ -44,4 +48,4 @@ function TextQuestion() {
   );
 }
 
-export default TextQuestion;
+export default PictureBuzzerQuestionTeam;
