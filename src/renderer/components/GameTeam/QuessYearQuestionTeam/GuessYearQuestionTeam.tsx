@@ -3,10 +3,16 @@ import { useSelector } from 'react-redux';
 import { selectCurrentQuestion, selectTeamScoredId } from '../../../../redux/gameSlice';
 
 import Button from '../../Button/Button';
-import React from 'react';
+import React, { useState } from 'react';
+import { Slider } from '@mui/material';
 
 function GuessYearQuestionTeam() {
+  const [winningScore, setWinningScore] = useState(1950);
   const { question } = useSelector(selectCurrentQuestion);
+
+  function handleWinningScoreChange(event: any) {
+    setWinningScore(event.target.value);
+  }
 
   function handleSubmit(selectedYear: number) {
     // sendMessage('SaveSelectedYearInGuessYearGame', selectedYear, currentUser?.id);
@@ -27,7 +33,21 @@ function GuessYearQuestionTeam() {
         <div className={`${styles.questionContent} ${question ? styles.displayContent : ''}`}>
           <span>{question.questionText}</span>
           <img src={question.imageUrl!}></img>
+          <span>Select the year</span>
         </div>
+        <span className={styles.values}>
+          <span className={styles.value}>{winningScore}</span>
+          <Slider
+            onChange={handleWinningScoreChange}
+            value={winningScore}
+            aria-label="Winning score"
+            valueLabelDisplay="off"
+            step={1}
+            marks
+            min={1900}
+            max={2024}
+          />
+        </span>
       </div>
       <div className={styles.footer}>
         {question && (

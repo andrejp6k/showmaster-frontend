@@ -28,6 +28,7 @@ const GuessYearQuestionHost: React.FC<GuessYearQuestionHostProps> = ({ question,
   const showGame = useAppSelector((state) => selectShowGame(state, game?.id));
 
   const [actionButtonType, setActionButtonType] = useState<ActionButtonType>(ActionButtonType.ShowQuestion);
+  const [showSolutionButtonDisabled, setShowSolutionButtonDisabled] = useState(false);
 
   function handleShowQuestion() {
     sendMessage('activateQuestion', question?.id, currentUser.id);
@@ -52,6 +53,7 @@ const GuessYearQuestionHost: React.FC<GuessYearQuestionHostProps> = ({ question,
     //  Create new WS event handler 'SendSolutionToTeamsInGuessYearGame(year)' on client (websocket slice)
     //  Handler should show solution in year bar on teams screen (Team1 1980, Solution 1989, Team2 1992)
     //  disable 'ShowSolution' button for host (only next question is clickable)
+    setShowSolutionButtonDisabled(true);
   }
 
   const actionButton = () => {
@@ -72,7 +74,7 @@ const GuessYearQuestionHost: React.FC<GuessYearQuestionHostProps> = ({ question,
         );
       case ActionButtonType.ShowSolution:
         return (
-          <Button color="primary" onClick={handleShowSolution}>
+          <Button color="primary" onClick={handleShowSolution} disabled={showSolutionButtonDisabled}>
             Show solution
           </Button>
         );
@@ -100,10 +102,10 @@ const GuessYearQuestionHost: React.FC<GuessYearQuestionHostProps> = ({ question,
       case ActionButtonType.ShowQuestion:
         return;
       case ActionButtonType.ShowAnswers:
-        return styles.green; // TODO: return 'styles.red' if Team clicked "Submit" button
+        return styles.red; // TODO: return 'styles.red' if Team clicked "Submit" button
                              // TODO: return '' (nothing) if Team not clicked "Submit" button
       case ActionButtonType.ShowSolution:
-        return styles.red; // TODO: return 'styles.green' text if Team answered correct
+        return styles.green; // TODO: return 'styles.green' text if Team answered correct
                            // TODO: return 'styles.red' if Team answered wrong
       default:
         return <></>;

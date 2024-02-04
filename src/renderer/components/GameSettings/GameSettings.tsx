@@ -8,6 +8,7 @@ import { selectShow, selectShowGame, setShowGame } from '../../../redux/showSlic
 import { useNavigate } from 'react-router-dom';
 import { services } from '../../../services';
 import { UpdateShowGameRequest } from '../../../types';
+import Button from '../Button/Button';
 
 const DEFAULT_MAX_SCORE_TO_WIN = 30;
 
@@ -57,9 +58,9 @@ function GameSettings() {
         </span>
       </div>
       <div className={styles.footer}>
-        <button className={styles.submit} onClick={handleSaveClick}>
+        <Button className={styles.submit} onClick={handleSaveClick}>
           Save
-        </button>
+        </Button>
       </div>
     </div>
   );

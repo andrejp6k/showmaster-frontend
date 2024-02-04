@@ -9,6 +9,7 @@
   }
 
   .content {
+
     .questionContent{
       display: none;
       flex-direction: column;
@@ -20,29 +21,28 @@
 
       img {
         max-height: 300px;
+        margin-bottom: 20px;
       }
 
       &.displayContent {
         display: flex;
       }
     }
-  }
-  .footer {
-    .buzzer {
-      margin-bottom: 30px;
-      border-radius: 50%;
-      width: 100px;
-      height: 100px;
-      background-color: red;
 
-      &.disabled {
-        background-color: transparent;
-        cursor: auto;
+    .values {
+      display: flex;
+      width: 100%;
+      gap: 20px;
+      align-items: center;
 
-        &:hover {
-          transform: scale(1);
-        }
+      .value {
+        width: 20px;
+        margin-right: 20px;
       }
     }
+
+  }
+  .footer {
+    margin-bottom: 40px;
   }
 }
