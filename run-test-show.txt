@@ -1,0 +1,10 @@
+# Set environment variables and start npm for each configuration
+
+# Configuration host
+$env:PORT=1212; $env:DEVICE_ID='host'; npm start
+
+# Configuration team1
+$env:PORT=1213; $env:DEVICE_ID='team1'; npm start
+
+# Configuration team2
+$env:PORT=1214; $env:DEVICE_ID='team2'; npm start

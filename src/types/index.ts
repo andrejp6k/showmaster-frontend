@@ -93,7 +93,8 @@ export interface Question {
 }
 
 export enum QuestionType {
-  Text,
-  Picture,
-  Year,
+  TextBuzzer,
+  PictureBuzzer,
+  GuessYear,
+  TwoAnswers
 }

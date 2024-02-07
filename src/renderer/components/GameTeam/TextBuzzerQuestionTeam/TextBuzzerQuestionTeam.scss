@@ -1,0 +1,35 @@
+.container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+
+  .header {
+  }
+
+  .content {
+    .questionContent{
+      display: flex;
+      flex-direction: column;
+    }
+  }
+  .footer {
+    .buzzer {
+      margin-bottom: 30px;
+      border-radius: 50%;
+      width: 100px;
+      height: 100px;
+      background-color: red;
+
+      &.disabled {
+        background-color: transparent;
+        cursor: auto;
+
+        &:hover {
+          transform: scale(1);
+        }
+      }
+    }
+  }
+}
