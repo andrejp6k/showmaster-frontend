@@ -39,6 +39,12 @@ export interface AddScorePointRequest {
   scoredByAnsweringCorrectly: boolean;
 }
 
+export interface SaveTeamAnswerRequest {
+  questionId: string;
+  teamId: string;
+  value: string;
+}
+
 export interface UpdateShowGameRequest {
   scoreToWin?: number;
   finished?: boolean;
@@ -76,6 +82,7 @@ export interface Score {
 
 export interface Game {
   id: string;
+  showId: string;
   name: string;
   questions: Question[];
 }

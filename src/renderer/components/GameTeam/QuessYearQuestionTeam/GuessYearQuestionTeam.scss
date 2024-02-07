@@ -11,7 +11,7 @@
   .content {
 
     .questionContent{
-      display: none;
+      display: flex;
       flex-direction: column;
 
       span {
@@ -22,10 +22,6 @@
       img {
         max-height: 300px;
         margin-bottom: 20px;
-      }
-
-      &.displayContent {
-        display: flex;
       }
     }
 
