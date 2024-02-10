@@ -2,8 +2,6 @@ import { useNavigate } from 'react-router-dom';
 import styles from './WelcomeHost.scss';
 import { RouteDefinitions } from '../../App';
 import Button from '../Button/Button';
-import { Slider } from '@mui/material';
-import MultiSLiderView from '../MultiSliderView/MultiSliderView';
 
 function WelcomeHost() {
   const navigate = useNavigate();
@@ -42,15 +40,9 @@ function WelcomeHost() {
         <Button onClick={handlePlayGame} sx={{ width: '250px' }}>
           Play game
         </Button>
-        <MultiSLiderView
-          min={1800}
-          max={2000}
-          teamValues={[
-            { teamId: '659ad675b270832e08e36deb', value: 1950 },
-            { teamId: '659ad6a7b270832e08e36dec', value: 1850 },
-          ]}
-          correctValue={1900}
-        />
+        <Button onClick={() => navigate('/multi-slider-demo')} sx={{ width: '250px' }}>
+          MultiSliderView Demo
+        </Button>
       </div>
     </div>
   );

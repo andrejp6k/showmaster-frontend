@@ -18,6 +18,7 @@ import GameSettings from './components/GameSettings/GameSettings';
 import GameFinished from './components/GameFinished/GameFinished';
 import FinishGameDialog from './components/FinishGameDialog/FinishGameDialog';
 import Congratulations from './components/Congratulations/Congratulations';
+import MultiSliderViewDemo from './components/MultiSliderView/MultiSliderViewDemo';
 
 export const RouteDefinitions = {
   Root: '/',
@@ -105,6 +106,10 @@ export default function App() {
         {
           path: RouteDefinitions.Congratulations,
           element: <Congratulations />,
+        },
+        {
+          path: 'multi-slider-demo',
+          element: <MultiSliderViewDemo />,
         },
       ],
     },
