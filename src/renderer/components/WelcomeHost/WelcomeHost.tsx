@@ -46,10 +46,10 @@ function WelcomeHost() {
           min={1800}
           max={2000}
           teamValues={[
-            { flag: 'Team1', value: 1902 },
-            { flag: 'Team2', value: 1898 },
+            { teamId: '659ad675b270832e08e36deb', value: 1820 },
+            { teamId: '659ad6a7b270832e08e36dec', value: 1950 },
           ]}
-          correctValue={{ flag: 'Correct', value: 1900 }}
+          correctValue={1900}
         />
       </div>
     </div>

@@ -1,0 +1,10 @@
+@use '../../colors';
+
+.label {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  border-radius: 5px;
+  padding: 2px;
+  opacity: 0.8;
+}
