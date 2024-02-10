@@ -15,14 +15,28 @@ const MultiSLiderView: React.FC<MultiSliderViewProps> = ({ min, max, teamValues,
     const flag = allValues[index]?.flag;
 
     if (flag === 'Team1') {
-      return '60px';
+      return '70px';
     }
 
     if (flag === 'Team2') {
-      return '95px';
+      return '110px';
     }
 
-    return '0px';
+    return '-10px';
+  }
+
+  function getColor(index: number) {
+    const flag = allValues[index]?.flag;
+
+    if (flag === 'Team1') {
+      return 'yellow';
+    }
+
+    if (flag === 'Team2') {
+      return 'orange';
+    }
+
+    return 'green';
   }
 
   return (
@@ -33,7 +47,17 @@ const MultiSLiderView: React.FC<MultiSliderViewProps> = ({ min, max, teamValues,
         valueLabelFormat={(asd, index) => {
           const flag = allValues[index].flag;
           return (
-            <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                flexDirection: 'column',
+                background: getColor(index),
+                borderRadius: '5px',
+                padding: '2px',
+                opacity: 0.8,
+              }}
+            >
               <div>{asd}</div>
               <div>{flag}</div>
             </div>
@@ -48,21 +72,24 @@ const MultiSLiderView: React.FC<MultiSliderViewProps> = ({ min, max, teamValues,
           mt: 3,
           '.MuiSlider-thumb': {
             ['&[data-index="0"]']: {
-              background: 'red',
+              background: getColor(0),
               '& .MuiSlider-valueLabel': {
                 top: calculateTop(0),
+                color: getColor(0),
               },
             },
             ['&[data-index="1"]']: {
-              background: 'green',
+              background: getColor(1),
               '& .MuiSlider-valueLabel': {
                 top: calculateTop(1),
+                color: getColor(1),
               },
             },
             ['&[data-index="2"]']: {
-              background: 'blue',
+              background: getColor(2),
               '& .MuiSlider-valueLabel': {
                 top: calculateTop(2),
+                color: getColor(2),
               },
             },
             '& .MuiSlider-valueLabel': {
