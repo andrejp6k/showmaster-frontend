@@ -1,10 +1,17 @@
 @use '../../colors';
 
-.label {
+.container {
+  margin-top: 35px;
   display: flex;
   align-items: center;
-  flex-direction: column;
-  border-radius: 5px;
-  padding: 2px;
-  opacity: 0.8;
+  gap: 0 20px;
+  min-width: 500px;
+  .label {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    border-radius: 5px;
+    padding: 2px;
+    opacity: 0.8;
+  }
 }

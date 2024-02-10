@@ -2,7 +2,6 @@ import { Slider } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { selectConnectedTeams } from '../../../redux/userSlice';
 import styles from './MultiSliderView.scss';
-import classNames from 'classnames';
 
 interface MultiSliderViewProps {
   min: number;
@@ -60,7 +59,8 @@ const MultiSLiderView: React.FC<MultiSliderViewProps> = ({ min, max, teamValues,
   }
 
   return (
-    <>
+    <div className={styles.container}>
+      <span>{min}</span>
       <Slider
         track={false}
         value={allValues.map((x) => x.value)}
@@ -79,7 +79,6 @@ const MultiSLiderView: React.FC<MultiSliderViewProps> = ({ min, max, teamValues,
         disabled
         valueLabelDisplay="on"
         sx={{
-          mt: 3,
           '.MuiSlider-thumb': {
             ['&[data-index="0"]']: {
               background: getColor(0),
@@ -112,14 +111,14 @@ const MultiSLiderView: React.FC<MultiSliderViewProps> = ({ min, max, teamValues,
                 display: 'none',
               },
               '& *': {
-                background: 'transparent',
                 color: 'black',
               },
             },
           },
         }}
       />
-    </>
+      <span>{max}</span>
+    </div>
   );
 };
 
