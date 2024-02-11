@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Game, Question, User } from '../types';
+import { Game, Question, TeamAnswerResult, User } from '../types';
 
 export const gameSlice = createSlice({
   name: 'game',
@@ -10,7 +10,9 @@ export const gameSlice = createSlice({
       question: null as Question | null,
       questionPickedByTeam: false,
       teamShouldAnswerQuestion: false,
-      answeredTeamIds: [] as string[]
+      answeredTeamIds: [] as string[],
+      teamAnswerResults: [] as TeamAnswerResult[],
+      showSolution: false
     },
     teamToAnswerId: null as string | null,
     teamScoredId: null as string | null,
@@ -56,11 +58,17 @@ export const gameSlice = createSlice({
       state.teamScoredId = action.payload;
     },
     addAnsweredTeamId: (state, action: PayloadAction<string>) => {
-      state.currentQuestion.answeredTeamIds = [...state.currentQuestion.answeredTeamIds, action.payload]
+      state.currentQuestion.answeredTeamIds = [...state.currentQuestion.answeredTeamIds, action.payload];
     },
     resetAnsweredTeamIds: (state) => {
-      state.currentQuestion.answeredTeamIds = []
-    }
+      state.currentQuestion.answeredTeamIds = [];
+    },
+    setTeamAnswerResults: (state, action: PayloadAction<TeamAnswerResult[]>) => {
+      state.currentQuestion.teamAnswerResults = action.payload;
+    },
+    setShowSolution: (state) => {
+      state.currentQuestion.showSolution = true;
+    },
   },
   selectors: {
     selectGame: (state) => state.game,
@@ -71,7 +79,19 @@ export const gameSlice = createSlice({
   },
 });
 
-export const { setGame, changeCurrentQuestion, pickQuestion, setGameUser, setTeamToAnswerId, setWinnerTeam, setTeamScoredId, addAnsweredTeamId, resetAnsweredTeamIds } = gameSlice.actions;
+export const {
+  setGame,
+  changeCurrentQuestion,
+  pickQuestion,
+  setGameUser,
+  setTeamToAnswerId,
+  setWinnerTeam,
+  setTeamScoredId,
+  addAnsweredTeamId,
+  resetAnsweredTeamIds,
+  setTeamAnswerResults,
+  setShowSolution,
+} = gameSlice.actions;
 export const { selectGame, selectCurrentQuestion, selectTeamToAnswerId, selectWinnerTeam, selectTeamScoredId } = gameSlice.selectors;
 
 export default gameSlice.reducer;

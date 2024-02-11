@@ -8,14 +8,16 @@ import { Slider } from '@mui/material';
 import { selectCurrentGameId, selectCurrentShowId, selectUser } from '../../../../redux/userSlice';
 import { SaveTeamAnswerRequest } from '../../../../types';
 import { sendMessage } from '../../../../redux/websocketSlice';
+import MultiSliderView from '../../MultiSliderView/MultiSliderView';
 
 function GuessYearQuestionTeam() {
-  const { question } = useSelector(selectCurrentQuestion);
+  const { question, teamAnswerResults, showSolution } = useSelector(selectCurrentQuestion);
   const currentShowId = useSelector(selectCurrentShowId);
   const currentGameId = useSelector(selectCurrentGameId);
   const currentUser = useSelector(selectUser);
 
   const [winningScore, setWinningScore] = useState(1950);
+  const [submitted, setSubmitted] = useState(false);
 
   function handleWinningScoreChange(event: any) {
     setWinningScore(event.target.value);
@@ -29,6 +31,7 @@ function GuessYearQuestionTeam() {
     } as SaveTeamAnswerRequest;
 
     sendMessage('SaveSelectedTeamAnswer', currentShowId, currentGameId, saveTeamAnswerRequest);
+    setSubmitted(true);
   }
 
   return (
@@ -40,26 +43,38 @@ function GuessYearQuestionTeam() {
         <div className={styles.questionContent}>
           <span>{question.questionText}</span>
           <img src={question.imageUrl!}></img>
-          <span>Select the year</span>
+          {!submitted ? <span>Select the year</span> : <span></span>}
+          {showSolution && <span>Winner: {teamAnswerResults?.find((x) => x.correct)?.teamName}</span>}
         </div>
-        <span className={styles.values}>
-          <span className={styles.value}>{winningScore}</span>
-          <Slider
-            onChange={handleWinningScoreChange}
-            value={winningScore}
-            aria-label="Winning score"
-            valueLabelDisplay="off"
-            step={1}
-            marks
-            min={1900}
-            max={2024}
+        {teamAnswerResults?.length ? (
+          <MultiSliderView
+            min={1800}
+            max={2023}
+            teamValues={teamAnswerResults}
+            correctValue={showSolution ? parseInt(question.correctAnswer, 10) : undefined}
           />
-        </span>
+        ) : (
+          <span className={styles.yearSelector}>
+            <span className={styles.value}>{winningScore}</span>
+            <Slider
+              onChange={handleWinningScoreChange}
+              value={winningScore}
+              aria-label="Winning score"
+              valueLabelDisplay="off"
+              step={1}
+              marks
+              min={1900}
+              max={2024}
+            />
+          </span>
+        )}
       </div>
       <div className={styles.footer}>
-        <Button color="primary" onClick={handleSubmit}>
-          Submit
-        </Button>
+        {!submitted && (
+          <Button color="primary" onClick={handleSubmit}>
+            Submit
+          </Button>
+        )}
       </div>
     </div>
   );

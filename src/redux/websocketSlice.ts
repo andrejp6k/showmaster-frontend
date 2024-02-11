@@ -2,9 +2,19 @@ import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
 import { createSlice } from '@reduxjs/toolkit';
 import { RouteDefinitions } from '../renderer/App';
 import { navigateTo } from '../services/navigation-service';
-import { addAnsweredTeamId, changeCurrentQuestion, pickQuestion, setGame, setTeamScoredId, setWinnerTeam } from './gameSlice';
+import {
+  addAnsweredTeamId,
+  changeCurrentQuestion,
+  pickQuestion,
+  setGame,
+  setShowSolution,
+  setTeamAnswerResults,
+  setTeamScoredId,
+  setWinnerTeam
+} from './gameSlice';
 import { setConnectedTeams, setCurrentGameId, setCurrentShowId } from './userSlice';
 import AnswersTracker from '../services/answers-tracker';
+import { setTeamScores } from './showSlice';
 
 let hubConnection: HubConnection | null;
 
@@ -81,6 +91,19 @@ export const connectToHub = (hubUrl: string) => (dispatch: any) => {
 
       hubConnection?.on('InformHostAboutTeamAnswered', (data) => {
         dispatch(addAnsweredTeamId(data));
+      });
+
+      hubConnection?.on('InformHostAboutTeamAnswerResults', (data) => {
+        dispatch(setTeamScores({ gameId: data.gameId, teamScores: data.teamScores }));
+        dispatch(setTeamAnswerResults(data.teamAnswerResults));
+      });
+
+      hubConnection?.on('InformTeamAboutTeamAnswerResults', (data) => {
+        dispatch(setTeamAnswerResults(data));
+      });
+
+      hubConnection?.on('ShowSolutionForTeams', () => {
+        dispatch(setShowSolution());
       });
 
       return null;

@@ -99,6 +99,20 @@ export interface Question {
   finished: boolean;
 }
 
+export interface TeamAnswerResult {
+  teamId: string;
+  value: number;
+  correct: boolean;
+  teamName: string;
+}
+
+export interface CalculateAndShowAnswersRequest {
+  showId: string;
+  gameId: string;
+  questionId: string;
+  hostId: string;
+}
+
 export enum QuestionType {
   TextBuzzer,
   PictureBuzzer,

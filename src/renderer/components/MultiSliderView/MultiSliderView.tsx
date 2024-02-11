@@ -1,35 +1,28 @@
 import { Slider } from '@mui/material';
-import { useSelector } from 'react-redux';
-import { selectConnectedTeams } from '../../../redux/userSlice';
 import styles from './MultiSliderView.scss';
+import { TeamAnswerResult } from '../../../types';
 
 interface MultiSliderViewProps {
   min: number;
   max: number;
-  teamValues?: { teamId: string; value: number }[];
+  teamValues?: TeamAnswerResult[];
   correctValue?: number;
 }
 
-interface MultisliderValue {
+interface MultiSliderValue {
   flag: string;
   value: number;
 }
 
-const MultiSLiderView: React.FC<MultiSliderViewProps> = ({ min, max, teamValues, correctValue }) => {
+const MultiSliderView: React.FC<MultiSliderViewProps> = ({ min, max, teamValues, correctValue }) => {
   const teamColors = ['yellow', 'orange'];
   const teamLabelStartHeight = 70;
   const teamLabelStep = 40;
   const correctLabelStartHeight = -10;
 
-  const connectedTeams = useSelector(selectConnectedTeams);
-
-  const getTeamName = (teamId: string) => {
-    return connectedTeams?.find((x) => x.id === teamId)?.name;
-  };
-
   let allValues = [
-    ...(teamValues?.map((x) => ({ flag: getTeamName(x.teamId), value: x.value }) as MultisliderValue).filter((x) => x.flag) || []),
-    ...(correctValue !== undefined ? [{ flag: 'Correct', value: correctValue } as MultisliderValue] : []),
+    ...(teamValues?.map((x) => ({ flag: x.teamName, value: x.value }) as MultiSliderValue).filter((x) => x.flag) || []),
+    ...(correctValue !== undefined ? [{ flag: 'Correct', value: correctValue } as MultiSliderValue] : []),
   ];
   allValues = allValues.sort((a, b) => a.value - b.value);
 
@@ -40,7 +33,7 @@ const MultiSLiderView: React.FC<MultiSliderViewProps> = ({ min, max, teamValues,
       return `${correctLabelStartHeight}px`;
     }
 
-    const teamIndex = connectedTeams?.findIndex((t) => t.name === flag) || 0;
+    const teamIndex = teamValues?.findIndex((t) => t.teamName === flag) || 0;
     const offset = teamLabelStep * teamIndex + teamLabelStartHeight;
 
     return `${offset}px`;
@@ -53,7 +46,7 @@ const MultiSLiderView: React.FC<MultiSliderViewProps> = ({ min, max, teamValues,
       return '#21ea5a';
     }
 
-    const teamIndex = connectedTeams?.findIndex((t) => t.name === flag) || 0;
+    const teamIndex = teamValues?.findIndex((t) => t.teamName === flag) || 0;
 
     return teamColors[teamIndex] || 'red';
   }
@@ -122,4 +115,4 @@ const MultiSLiderView: React.FC<MultiSliderViewProps> = ({ min, max, teamValues,
   );
 };
 
-export default MultiSLiderView;
+export default MultiSliderView;
