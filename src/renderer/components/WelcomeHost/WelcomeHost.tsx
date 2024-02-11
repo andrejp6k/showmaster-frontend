@@ -40,6 +40,9 @@ function WelcomeHost() {
         <Button onClick={handlePlayGame} sx={{ width: '250px' }}>
           Play game
         </Button>
+        <Button onClick={() => navigate('/multi-slider-demo')} sx={{ width: '250px' }}>
+          MultiSliderView Demo
+        </Button>
       </div>
     </div>
   );
