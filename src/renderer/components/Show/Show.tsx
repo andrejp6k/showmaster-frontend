@@ -17,7 +17,7 @@ function Show() {
   function handlePlayClick(gameId: string) {
     if (user) {
       dispatch(setTeamToAnswerId(null));
-      sendMessage('loadGame', gameId, user.id);
+      sendMessage('loadGame', show.id, gameId, user.id);
     }
   }
 

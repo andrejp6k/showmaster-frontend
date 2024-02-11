@@ -2,8 +2,8 @@ import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
 import { createSlice } from '@reduxjs/toolkit';
 import { RouteDefinitions } from '../renderer/App';
 import { navigateTo } from '../services/navigation-service';
-import { changeCurrentQuestion, pickQuestion, setGame, setTeamScoredId, setWinnerTeam } from './gameSlice';
-import { setConnectedTeams } from './userSlice';
+import { addAnsweredTeamId, changeCurrentQuestion, pickQuestion, setGame, setTeamScoredId, setWinnerTeam } from './gameSlice';
+import { setConnectedTeams, setCurrentGameId, setCurrentShowId } from './userSlice';
 import AnswersTracker from '../services/answers-tracker';
 
 let hubConnection: HubConnection | null;
@@ -38,12 +38,16 @@ export const connectToHub = (hubUrl: string) => (dispatch: any) => {
     .then(() => {
       hubConnection?.on('PlayGameHost', (data) => {
         console.log('Received game with all questions', data);
+        dispatch(setCurrentShowId(data.showId));
+        dispatch(setCurrentGameId(data.id));
         dispatch(setGame(data));
         AnswersTracker.getInstance().init(data.questions);
         navigateTo(RouteDefinitions.GameHost.enterParams(data.questions[0].id));
       });
 
       hubConnection?.on('PlayGameTeam', (data) => {
+        dispatch(setCurrentShowId(data.showId));
+        dispatch(setCurrentGameId(data.id));
         dispatch(setGame(data));
         dispatch(changeCurrentQuestion(null));
         dispatch(setWinnerTeam(null));
@@ -73,6 +77,10 @@ export const connectToHub = (hubUrl: string) => (dispatch: any) => {
       hubConnection?.on('FinishGameForTeam', (data) => {
         dispatch(setWinnerTeam(data));
         navigateTo(RouteDefinitions.Congratulations);
+      });
+
+      hubConnection?.on('InformHostAboutTeamAnswered', (data) => {
+        dispatch(addAnsweredTeamId(data));
       });
 
       return null;

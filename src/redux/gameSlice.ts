@@ -1,7 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Game, Question, User } from '../types';
-import { useSelector } from 'react-redux';
-import { selectUser } from './userSlice';
 
 export const gameSlice = createSlice({
   name: 'game',
@@ -12,6 +10,7 @@ export const gameSlice = createSlice({
       question: null as Question | null,
       questionPickedByTeam: false,
       teamShouldAnswerQuestion: false,
+      answeredTeamIds: [] as string[]
     },
     teamToAnswerId: null as string | null,
     teamScoredId: null as string | null,
@@ -33,6 +32,7 @@ export const gameSlice = createSlice({
       state.currentQuestion = {
         questionPickedByTeam: false,
         teamShouldAnswerQuestion: false,
+        addAnsweredTeamIds: [],
         question: state.game.questions.find((x) => x.id === action.payload) || null,
       };
       state.teamToAnswerId = null;
@@ -55,6 +55,12 @@ export const gameSlice = createSlice({
     setTeamScoredId: (state, action: PayloadAction<string | null>) => {
       state.teamScoredId = action.payload;
     },
+    addAnsweredTeamId: (state, action: PayloadAction<string>) => {
+      state.currentQuestion.answeredTeamIds = [...state.currentQuestion.answeredTeamIds, action.payload]
+    },
+    resetAnsweredTeamIds: (state) => {
+      state.currentQuestion.answeredTeamIds = []
+    }
   },
   selectors: {
     selectGame: (state) => state.game,
@@ -65,7 +71,7 @@ export const gameSlice = createSlice({
   },
 });
 
-export const { setGame, changeCurrentQuestion, pickQuestion, setGameUser, setTeamToAnswerId, setWinnerTeam, setTeamScoredId } = gameSlice.actions;
+export const { setGame, changeCurrentQuestion, pickQuestion, setGameUser, setTeamToAnswerId, setWinnerTeam, setTeamScoredId, addAnsweredTeamId, resetAnsweredTeamIds } = gameSlice.actions;
 export const { selectGame, selectCurrentQuestion, selectTeamToAnswerId, selectWinnerTeam, selectTeamScoredId } = gameSlice.selectors;
 
 export default gameSlice.reducer;

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
-import { selectGame } from '../../../redux/gameSlice';
+import { resetAnsweredTeamIds, selectGame } from '../../../redux/gameSlice';
 import { selectShow, selectShowGame } from '../../../redux/showSlice';
 import { setFinishGameDialogOpen } from '../../../redux/uiSlice';
 import AnswersTracker from '../../../services/answers-tracker';
@@ -30,6 +30,10 @@ function GameHost() {
   const prevQuestionId = answersTracker.previousQuestion(currentQuestionId);
 
   const [targetQuestionId, setTargetQuestionId] = useState<string>(currentQuestionId);
+
+  useEffect(() => {
+    dispatch(resetAnsweredTeamIds());
+  }, [question]);
 
   useEffect(() => {
     if (showGame?.teamScores.some((x) => x.value >= showGame.scoreToWin) && !showGame.finished) {
