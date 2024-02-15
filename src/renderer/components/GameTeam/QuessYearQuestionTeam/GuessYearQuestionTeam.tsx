@@ -19,6 +19,9 @@ function GuessYearQuestionTeam() {
   const [winningScore, setWinningScore] = useState(1950);
   const [submitted, setSubmitted] = useState(false);
 
+  const minimalYear = 1900;
+  const maximalYear = 2024;
+
   function handleWinningScoreChange(event: any) {
     setWinningScore(event.target.value);
   }
@@ -48,8 +51,8 @@ function GuessYearQuestionTeam() {
         </div>
         {teamAnswerResults?.length ? (
           <MultiSliderView
-            min={1800}
-            max={2023}
+            min={minimalYear}
+            max={maximalYear}
             teamValues={teamAnswerResults}
             correctValue={showSolution ? parseInt(question.correctAnswer, 10) : undefined}
           />
@@ -63,8 +66,8 @@ function GuessYearQuestionTeam() {
               valueLabelDisplay="off"
               step={1}
               marks
-              min={1900}
-              max={2024}
+              min={minimalYear}
+              max={maximalYear}
             />
           </span>
         )}
