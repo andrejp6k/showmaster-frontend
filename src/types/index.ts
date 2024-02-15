@@ -101,7 +101,7 @@ export interface Question {
 
 export interface TeamAnswerResult {
   teamId: string;
-  value: number;
+  value: string;
   correct: boolean;
   teamName: string;
 }
@@ -111,6 +111,7 @@ export interface CalculateAndShowAnswersRequest {
   gameId: string;
   questionId: string;
   hostId: string;
+  questionType: QuestionType;
 }
 
 export enum QuestionType {
@@ -118,4 +119,10 @@ export enum QuestionType {
   PictureBuzzer,
   GuessYear,
   TwoAnswers
+}
+
+export enum ActionButtonType {
+  ShowQuestion,
+  ShowAnswers,
+  ShowSolution,
 }

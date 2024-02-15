@@ -1,0 +1,56 @@
+.container {
+  height: 70%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+
+  .header {
+  }
+
+  .content {
+
+    .questionContent{
+      display: flex;
+      flex-direction: column;
+      margin-top: 20px;
+
+      span {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+
+      img {
+        max-height: 300px;
+        margin-bottom: 20px;
+      }
+    }
+
+    .yearSelector {
+      display: flex;
+      width: 100%;
+      gap: 20px;
+      align-items: center;
+
+      .value {
+        width: 20px;
+        margin-right: 20px;
+      }
+    }
+
+  }
+  .footer {
+    margin-bottom: 40px;
+
+    .answerOptions {
+      display: flex;
+      justify-content: center;
+      width: 100%;
+
+      Button {
+        margin: 0 50px;
+        min-width: 250px;
+      }
+    }
+  }
+}
