@@ -2,13 +2,14 @@ import React, { useState } from 'react';
 import Button from '../../Button/Button';
 import styles from './GuessYearQuestionHost.scss';
 import { useSelector } from 'react-redux';
-import { Question, User } from '../../../../types';
+import { CalculateAndShowAnswersRequest, Question, User } from '../../../../types';
 import { sendMessage } from '../../../../redux/websocketSlice';
-import { selectConnectedTeams, selectUser } from '../../../../redux/userSlice';
+import { selectConnectedTeams, selectCurrentGameId, selectCurrentShowId, selectUser } from '../../../../redux/userSlice';
 import classNames from 'classnames';
 import { selectCurrentQuestion, selectGame } from '../../../../redux/gameSlice';
 import { useAppSelector } from '../../../hooks/appStore';
 import { selectShowGame } from '../../../../redux/showSlice';
+import AnswersTracker from '../../../../services/answers-tracker';
 
 enum ActionButtonType {
   ShowQuestion,
@@ -23,10 +24,14 @@ interface GuessYearQuestionHostProps {
 
 const GuessYearQuestionHost: React.FC<GuessYearQuestionHostProps> = ({ question, handleNavigate }) => {
   const currentUser = useSelector(selectUser);
+  const currentShowId = useSelector(selectCurrentShowId);
+  const currentGameId = useSelector(selectCurrentGameId);
   const connectedTeams = useSelector(selectConnectedTeams);
   const game = useSelector(selectGame);
-  const { answeredTeamIds } = useSelector(selectCurrentQuestion);
+  const { answeredTeamIds, teamAnswerResults } = useSelector(selectCurrentQuestion);
   const showGame = useAppSelector((state) => selectShowGame(state, game?.id));
+
+  const answersTracker = AnswersTracker.getInstance();
 
   const [actionButtonType, setActionButtonType] = useState<ActionButtonType>(ActionButtonType.ShowQuestion);
   const [showSolutionButtonDisabled, setShowSolutionButtonDisabled] = useState(false);
@@ -37,24 +42,21 @@ const GuessYearQuestionHost: React.FC<GuessYearQuestionHostProps> = ({ question,
   }
 
   function handleShowAnswers() {
-    setActionButtonType(ActionButtonType.ShowSolution)
-    // sendMessage('ShowAnswersForTeamsInGuessYearQuestion', selectedYear, currentUser?.id);
-    // TODO: create new WS event handler 'ShowAnswersForTeamsInGuessYearQuestion(currentUser.id)' on server (.net app)
-    //  load on server all teams, send to teams new event ->
-    //  Create new WS event handler 'SendAnswersToTeamsInGuessYearQuestion(Dictionary<teamName, year>)' on client (websocket slice)
-    //  Handler should show answers of both teams in year bar on teams screen (Team1 1980, Team2 1992)
-    //  Create new WS event handler 'SendAnswersToHostInGuessYearQuestion(updated Game object with new score)' on client (websocket slice)
-    //  Handler should update score, indicators color and text (Won - green, Lost - red; Text - selected year by team)
+    setActionButtonType(ActionButtonType.ShowSolution);
+    const updateRequest = {
+      showId: currentShowId,
+      gameId: currentGameId,
+      questionId: question.id,
+      hostId: currentUser.id,
+    } as CalculateAndShowAnswersRequest;
+
+    sendMessage('CalculateAndShowAnswersInGuessYearQuestion', updateRequest);
   }
 
   function handleShowSolution() {
-    // sendMessage('ShowSolutionForTeamsInGuessYearQuestion', selectedYear, currentUser?.id);
-    // TODO: create new WS event handler 'ShowSolutionForTeamsInGuessYearQuestion(currentUser.id)' on server (.net app)
-    //  load on server all teams, send to teams new event ->
-    //  Create new WS event handler 'SendSolutionToTeamsInGuessYearGame(year)' on client (websocket slice)
-    //  Handler should show solution in year bar on teams screen (Team1 1980, Solution 1989, Team2 1992)
-    //  disable 'ShowSolution' button for host (only next question is clickable)
+    sendMessage('TriggerShowSolutionForTeamsAction', currentUser.id);
     setShowSolutionButtonDisabled(true);
+    answersTracker.markAsAnswered(question.id);
   }
 
   const actionButton = () => {
@@ -66,10 +68,8 @@ const GuessYearQuestionHost: React.FC<GuessYearQuestionHostProps> = ({ question,
           </Button>
         );
       case ActionButtonType.ShowAnswers:
-        // TODO: make this button clickable only if both teams has submitted their answer
-        //   to get this info new WS handler should be created, see 'handleSubmit' in GuessYearQuestionTeam.tsx
         return (
-          <Button color="primary" onClick={handleShowAnswers}>
+          <Button color="primary" onClick={handleShowAnswers} disabled={answeredTeamIds?.length < 2}>
             Show answers
           </Button>
         );
@@ -87,15 +87,15 @@ const GuessYearQuestionHost: React.FC<GuessYearQuestionHostProps> = ({ question,
   const getIndicatorLabelText = (team: User) => {
     switch (actionButtonType) {
       case ActionButtonType.ShowQuestion:
-        return "Not submitted";
+        return 'Not submitted';
       case ActionButtonType.ShowAnswers:
-        return answeredTeamIds?.includes(team.id) ? "Submitted" : "Not submitted";
+        return answeredTeamIds?.includes(team.id) ? 'Submitted' : 'Not submitted';
       case ActionButtonType.ShowSolution:
-        return "Selected year"; // TODO: Show year which team selected
+        return teamAnswerResults.find((x) => x.teamId === team.id)?.value;
       default:
         return <></>;
     }
-  }
+  };
 
   const getIndicatorStyle = (team: User) => {
     switch (actionButtonType) {
@@ -104,12 +104,11 @@ const GuessYearQuestionHost: React.FC<GuessYearQuestionHostProps> = ({ question,
       case ActionButtonType.ShowAnswers:
         return answeredTeamIds?.includes(team.id) ? styles.red : '';
       case ActionButtonType.ShowSolution:
-        return styles.green; // TODO: return 'styles.green' text if Team answered correct
-                           // TODO: return 'styles.red' if Team answered wrong
+        return teamAnswerResults.find((x) => x.teamId === team.id)?.correct ? styles.green : styles.red;
       default:
         return <></>;
     }
-  }
+  };
 
   return (
     <div className={styles.guessYearQuestion}>
@@ -117,21 +116,13 @@ const GuessYearQuestionHost: React.FC<GuessYearQuestionHostProps> = ({ question,
         {connectedTeams?.map((team) => (
           <div key={team.id.toString()} className={styles.team}>
             <h2>{team.name}</h2>
-            <div className={classNames(styles.score)}>
-              {showGame?.teamScores?.find((x) => x.userId === team.id)?.value || 0}
-            </div>
-            <span
-              className={classNames(
-                styles.buzzer, getIndicatorStyle(team)
-              )}
-            ></span>
+            <div className={classNames(styles.score)}>{showGame?.teamScores?.find((x) => x.userId === team.id)?.value || 0}</div>
+            <span className={classNames(styles.buzzer, getIndicatorStyle(team))}></span>
             <span className={styles.buzzerLabel}>{getIndicatorLabelText(team)}</span>
           </div>
         ))}
       </div>
-      <div className={styles.actionButtons}>
-        {actionButton()}
-      </div>
+      <div className={styles.actionButtons}>{actionButton()}</div>
     </div>
   );
 };
