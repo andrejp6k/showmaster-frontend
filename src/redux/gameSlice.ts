@@ -66,6 +66,9 @@ export const gameSlice = createSlice({
     setTeamAnswerResults: (state, action: PayloadAction<TeamAnswerResult[]>) => {
       state.currentQuestion.teamAnswerResults = action.payload;
     },
+    resetTeamAnswerResults: (state) => {
+      state.currentQuestion.teamAnswerResults = [];
+    },
     setShowSolution: (state) => {
       state.currentQuestion.showSolution = true;
     },
@@ -90,6 +93,7 @@ export const {
   addAnsweredTeamId,
   resetAnsweredTeamIds,
   setTeamAnswerResults,
+  resetTeamAnswerResults,
   setShowSolution,
 } = gameSlice.actions;
 export const { selectGame, selectCurrentQuestion, selectTeamToAnswerId, selectWinnerTeam, selectTeamScoredId } = gameSlice.selectors;

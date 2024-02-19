@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Button from '../../Button/Button';
 import styles from './GuessYearQuestionHost.scss';
 import { useSelector } from 'react-redux';
@@ -28,6 +28,10 @@ const GuessYearQuestionHost: React.FC<GuessYearQuestionHostProps> = ({ question 
 
   const [actionButtonType, setActionButtonType] = useState<ActionButtonType>(ActionButtonType.ShowQuestion);
   const [showSolutionButtonDisabled, setShowSolutionButtonDisabled] = useState(false);
+
+  useEffect(() => {
+    setActionButtonType(ActionButtonType.ShowQuestion);
+  }, [question]);
 
   function handleShowQuestion() {
     sendMessage('activateQuestion', question?.id, currentUser.id);
