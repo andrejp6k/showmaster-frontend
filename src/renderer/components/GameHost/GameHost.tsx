@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
-import { resetAnsweredTeamIds, selectGame, setTeamToAnswerId } from '../../../redux/gameSlice';
+import { resetAnsweredTeamIds, resetTeamAnswerResults, selectGame, setTeamToAnswerId } from '../../../redux/gameSlice';
 import { selectShow, selectShowGame } from '../../../redux/showSlice';
 import { setFinishGameDialogOpen } from '../../../redux/uiSlice';
 import AnswersTracker from '../../../services/answers-tracker';
@@ -36,12 +36,10 @@ function GameHost() {
   const [targetQuestionId, setTargetQuestionId] = useState<string>(currentQuestionId);
 
   useEffect(() => {
-    dispatch(resetAnsweredTeamIds());
-  }, [question]);
-
-  useEffect(() => {
     sendMessage('deactivateQuestion', currentUser?.id);
     dispatch(setTeamToAnswerId(null));
+    dispatch(resetAnsweredTeamIds());
+    dispatch(resetTeamAnswerResults());
   }, [targetQuestionId]);
 
   useEffect(() => {

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Button from '../../Button/Button';
 import styles from './TwoOptionsQuestionHost.scss';
 import { useSelector } from 'react-redux';
@@ -28,6 +28,10 @@ const TwoOptionsQuestionHost: React.FC<GuessYearQuestionHostProps> = ({ question
 
   const [actionButtonType, setActionButtonType] = useState<ActionButtonType>(ActionButtonType.ShowQuestion);
 
+  useEffect(() => {
+    setActionButtonType(ActionButtonType.ShowQuestion);
+  }, [question]);
+
   function handleShowQuestion() {
     sendMessage('activateQuestion', question?.id, currentUser.id);
     setActionButtonType(ActionButtonType.ShowAnswers);
@@ -40,7 +44,7 @@ const TwoOptionsQuestionHost: React.FC<GuessYearQuestionHostProps> = ({ question
       gameId: currentGameId,
       questionId: question.id,
       hostId: currentUser.id,
-      questionType: question.type
+      questionType: question.type,
     } as CalculateAndShowAnswersRequest;
 
     sendMessage('CalculateAndShowAnswersQuestion', updateRequest);
