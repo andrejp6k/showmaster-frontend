@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
-import { resetAnsweredTeamIds, selectGame } from '../../../redux/gameSlice';
+import { resetAnsweredTeamIds, selectGame, setTeamToAnswerId } from '../../../redux/gameSlice';
 import { selectShow, selectShowGame } from '../../../redux/showSlice';
 import { setFinishGameDialogOpen } from '../../../redux/uiSlice';
 import AnswersTracker from '../../../services/answers-tracker';
@@ -13,8 +13,12 @@ import { ArrowLeftOutlined, ArrowRightOutlined } from '@mui/icons-material';
 import Button from '../Button/Button';
 import BuzzerQuestionHost from './BuzzerQuestionHost/BuzzerQuestionHost';
 import GuessYearQuestionHost from './GuessYearQuestionHost/GuessYearQuestionHost';
+import TwoOptionsQuestionHost from './TwoOptionsQuestionHost/TwoOptionsQuestionHost';
+import { sendMessage } from '../../../redux/websocketSlice';
+import { selectUser } from '../../../redux/userSlice';
 
 function GameHost() {
+  const currentUser = useSelector(selectUser);
   const game = useSelector(selectGame);
   const show = useSelector(selectShow);
   const showGame = useAppSelector((state) => selectShowGame(state, game?.id));
@@ -36,6 +40,11 @@ function GameHost() {
   }, [question]);
 
   useEffect(() => {
+    sendMessage('deactivateQuestion', currentUser?.id);
+    dispatch(setTeamToAnswerId(null));
+  }, [targetQuestionId]);
+
+  useEffect(() => {
     if (showGame?.teamScores.some((x) => x.value >= showGame.scoreToWin) && !showGame.finished) {
       dispatch(setFinishGameDialogOpen(true));
     }
@@ -52,14 +61,9 @@ function GameHost() {
           />
         );
       case QuestionType.GuessYear:
-        return (
-          <GuessYearQuestionHost
-            question={question}
-            targetQuestionId={targetQuestionId}
-          />
-        );
+        return <GuessYearQuestionHost question={question} />;
       case QuestionType.TwoAnswers:
-        return <></>; // TwoAnswersQuestionHost
+        return <TwoOptionsQuestionHost question={question} />;
       default:
         return <span>Get ready for the question ...</span>;
     }

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Button from '../../Button/Button';
-import styles from './GuessYearQuestionHost.scss';
+import styles from './TwoOptionsQuestionHost.scss';
 import { useSelector } from 'react-redux';
 import { ActionButtonType, CalculateAndShowAnswersRequest, Question, User } from '../../../../types';
 import { sendMessage } from '../../../../redux/websocketSlice';
@@ -15,7 +15,7 @@ interface GuessYearQuestionHostProps {
   question: Question;
 }
 
-const GuessYearQuestionHost: React.FC<GuessYearQuestionHostProps> = ({ question }) => {
+const TwoOptionsQuestionHost: React.FC<GuessYearQuestionHostProps> = ({ question }) => {
   const currentUser = useSelector(selectUser);
   const currentShowId = useSelector(selectCurrentShowId);
   const currentGameId = useSelector(selectCurrentGameId);
@@ -27,7 +27,6 @@ const GuessYearQuestionHost: React.FC<GuessYearQuestionHostProps> = ({ question 
   const answersTracker = AnswersTracker.getInstance();
 
   const [actionButtonType, setActionButtonType] = useState<ActionButtonType>(ActionButtonType.ShowQuestion);
-  const [showSolutionButtonDisabled, setShowSolutionButtonDisabled] = useState(false);
 
   function handleShowQuestion() {
     sendMessage('activateQuestion', question?.id, currentUser.id);
@@ -45,11 +44,6 @@ const GuessYearQuestionHost: React.FC<GuessYearQuestionHostProps> = ({ question 
     } as CalculateAndShowAnswersRequest;
 
     sendMessage('CalculateAndShowAnswersQuestion', updateRequest);
-  }
-
-  function handleShowSolution() {
-    sendMessage('TriggerShowSolutionForTeamsAction', currentUser.id);
-    setShowSolutionButtonDisabled(true);
     answersTracker.markAsAnswered(question.id);
   }
 
@@ -68,11 +62,7 @@ const GuessYearQuestionHost: React.FC<GuessYearQuestionHostProps> = ({ question 
           </Button>
         );
       case ActionButtonType.ShowSolution:
-        return (
-          <Button color="primary" onClick={handleShowSolution} disabled={showSolutionButtonDisabled}>
-            Show solution
-          </Button>
-        );
+        return <></>;
       default:
         return <></>;
     }
@@ -121,4 +111,4 @@ const GuessYearQuestionHost: React.FC<GuessYearQuestionHostProps> = ({ question 
   );
 };
 
-export default GuessYearQuestionHost;
+export default TwoOptionsQuestionHost;

@@ -35,9 +35,7 @@ const BuzzerQuestionHost: React.FC<ActionButtonsInBuzzerQuestionProps> = ({ ques
 
   useEffect(() => {
     // set all values to default after question was changed
-    dispatch(setTeamToAnswerId(null));
     setIsQuestionActive(false);
-    deactivate();
     setIsAnswered(false);
     setCurrentScoringTeam(null);
   }, [targetQuestionId]);

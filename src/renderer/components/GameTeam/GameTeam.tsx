@@ -6,6 +6,7 @@ import { QuestionType } from '../../../types';
 import GuessYearQuestionTeam from './QuessYearQuestionTeam/GuessYearQuestionTeam';
 import PictureBuzzerQuestionTeam from './PictureBuzzerQuestionTeam/PictureBuzzerQuestionTeam';
 import TextBuzzerQuestionTeam from './TextBuzzerQuestionTeam/TextBuzzerQuestionTeam';
+import TwoOptionsQuestionTeam from './TwoOptionsQuestionTeam/TwoOptionsQuestionTeam';
 
 function GameTeam() {
   const { question } = useSelector(selectCurrentQuestion);
@@ -23,7 +24,7 @@ function GameTeam() {
       case QuestionType.GuessYear:
         return <GuessYearQuestionTeam />
       case QuestionType.TwoAnswers:
-        return <></>; // TwoAnswersQuestionTeam
+        return <TwoOptionsQuestionTeam />
       default:
         return <span>Get ready for the question ...</span>;
     }
