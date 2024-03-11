@@ -1,4 +1,4 @@
-import { ArrowBack, Home, Settings, Tune } from '@mui/icons-material';
+import { AlignVerticalBottom, ArrowBack, Home, Settings, Tune } from '@mui/icons-material';
 import { AppBar, IconButton, Toolbar } from '@mui/material';
 import classNames from 'classnames';
 import { useSelector } from 'react-redux';
@@ -30,6 +30,10 @@ function MainAppBar() {
 
   const handleNavigateToAppSettings = () => {
     navigate(RouteDefinitions.AppSettings);
+  };
+
+  const handleNavigateToQuestionStatistics = () => {
+    navigate(RouteDefinitions.QuestionStatistics);
   };
 
   const handleNavigateToGameSettings = () => {
@@ -81,9 +85,14 @@ function MainAppBar() {
             )}
             {!(location.pathname != RouteDefinitions.WelcomeTeam && location.pathname != RouteDefinitions.WelcomeHost) &&
               location.pathname != RouteDefinitions.AppSettings && (
-                <IconButton onClick={handleNavigateToAppSettings} edge="start" color="inherit" aria-label="menu">
-                  <Settings />
-                </IconButton>
+                <div style={{ display: 'flex' }}>
+                  <IconButton style={{ marginRight: '15px' }} onClick={handleNavigateToQuestionStatistics} edge="start" color="inherit" aria-label="menu">
+                    <AlignVerticalBottom />
+                  </IconButton>
+                  <IconButton onClick={handleNavigateToAppSettings} edge="start" color="inherit" aria-label="menu">
+                    <Settings />
+                  </IconButton>
+                </div>
               )}
           </div>
         </div>
