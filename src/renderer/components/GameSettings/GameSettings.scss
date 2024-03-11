@@ -32,6 +32,22 @@
         }
       }
     }
+    .score {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      padding-top: 20px;
+
+      .scoreLabel{
+        width: 500px;
+        font-weight: bold;
+      }
+
+      .teamScore {
+        width: 100%;
+      }
+    }
   }
 
   .footer {
