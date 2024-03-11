@@ -49,12 +49,12 @@ const GuessYearQuestionHost: React.FC<GuessYearQuestionHostProps> = ({ question 
     } as CalculateAndShowAnswersRequest;
 
     sendMessage('CalculateAndShowAnswersQuestion', updateRequest);
+    answersTracker.markAsAnswered(question.id);
   }
 
   function handleShowSolution() {
     sendMessage('TriggerShowSolutionForTeamsAction', currentUser.id);
     setShowSolutionButtonDisabled(true);
-    answersTracker.markAsAnswered(question.id);
   }
 
   const actionButton = () => {
