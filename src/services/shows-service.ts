@@ -1,5 +1,5 @@
 /* eslint-disable class-methods-use-this */
-import { CreateShowRequest, UpdateShowGameRequest, AddScorePointRequest } from '../types';
+import { CreateShowRequest, UpdateShowGameRequest, AddScorePointRequest, Score } from '../types';
 import client from './client';
 
 export default class ShowsService {
@@ -21,6 +21,14 @@ export default class ShowsService {
 
   public updateShowGame(showId: string, gameId: string, data: UpdateShowGameRequest) {
     return client.patch(`shows/${showId}/games/${gameId}`, data, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+  }
+
+  public modifyTeamScore(showId: string, gameId: string, data: Score[]) {
+    return client.post(`shows/${showId}/games/${gameId}/modifyTeamScore`, data, {
       headers: {
         'Content-Type': 'application/json',
       },

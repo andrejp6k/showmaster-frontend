@@ -114,6 +114,24 @@ export interface CalculateAndShowAnswersRequest {
   questionType: QuestionType;
 }
 
+export interface QuestionStatisticDto {
+  questionId: string;
+  questionType: QuestionType;
+  questionText: string;
+
+  answeredTimes: number;
+  skipped: number;
+
+  // Buzzer
+  scoredByAnsweringCorrectly: number;
+  scoredByWrongOpponentAnswer: number;
+
+  // TwoOptions, GuessYear
+  bothTeamsAnsweredCorrectly: number;
+  oneTeamAnsweredCorrectly: number;
+  noOneAnsweredCorrectly: number;
+}
+
 export enum QuestionType {
   TextBuzzer,
   PictureBuzzer,

@@ -19,6 +19,7 @@ import GameFinished from './components/GameFinished/GameFinished';
 import FinishGameDialog from './components/FinishGameDialog/FinishGameDialog';
 import Congratulations from './components/Congratulations/Congratulations';
 import MultiSliderViewDemo from './components/MultiSliderView/MultiSliderViewDemo';
+import QuestionStatistics from './components/QuestionStatistics/QuestionStatistics';
 
 export const RouteDefinitions = {
   Root: '/',
@@ -35,6 +36,7 @@ export const RouteDefinitions = {
   GameSettings: '/game-settings',
   GameFinished: '/game-finished',
   Congratulations: '/congratulations',
+  QuestionStatistics: 'question-statistics'
 };
 
 function getRouteWithParam(route: string, paramName: string, value: string): string {
@@ -111,6 +113,10 @@ export default function App() {
           path: 'multi-slider-demo',
           element: <MultiSliderViewDemo />,
         },
+        {
+          path: RouteDefinitions.QuestionStatistics,
+          element: <QuestionStatistics />
+        }
       ],
     },
   ]);
