@@ -12,6 +12,7 @@ import styles from './AppSettings.scss';
 import classNames from 'classnames';
 import { TextField } from '@mui/material';
 import Button from '../Button/Button';
+import { setGameUser } from '../../../redux/gameSlice';
 
 function AppSettings() {
   const [studios, setStudios] = useState<Studio[]>([]);
@@ -78,6 +79,7 @@ function AppSettings() {
     const user = response.data as User;
     if (response.data) {
       dispatch(setUser(user));
+      dispatch(setGameUser(user));
     }
 
     return user;
@@ -94,6 +96,7 @@ function AppSettings() {
     const user = response.data as User;
     if (response.data) {
       dispatch(setUser(user));
+      dispatch(setGameUser(user));
     }
 
     return user;
