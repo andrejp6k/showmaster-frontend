@@ -10,11 +10,12 @@ import {
   setShowSolution,
   setTeamAnswerResults,
   setTeamScoredId,
-  setWinnerTeam
+  setWinnerTeam,
 } from './gameSlice';
 import { setConnectedTeams, setCurrentGameId, setCurrentShowId } from './userSlice';
 import AnswersTracker from '../services/answers-tracker';
 import { setTeamScores } from './showSlice';
+import { setShowSnackbar } from './uiSlice';
 
 let hubConnection: HubConnection | null;
 
@@ -70,6 +71,10 @@ export const connectToHub = (hubUrl: string) => (dispatch: any) => {
 
       hubConnection?.on('ConnectedTeamsUpdated', (data) => {
         dispatch(setConnectedTeams(data));
+      });
+
+      hubConnection?.on('TeamConnectionChange', (data) => {
+        dispatch(setShowSnackbar({ type: 'info', message: data.action === 'connect' ? `${data.team.name} connected.` : `${data.team.name} disconnected.` }));
       });
 
       hubConnection?.on('BuzzerClickedByTeam', (data) => {

@@ -14,8 +14,10 @@ export function getQueryParamValue(paramName: string) {
 
 export function navigateToStartPage(role: Role, navigate: NavigateFunction) {
   if (role == Role.Host) {
+    console.log('navigating to welcome host');
     navigate(RouteDefinitions.WelcomeHost, { replace: true });
   } else {
+    console.log('navigating to welcome host');
     navigate(RouteDefinitions.WelcomeTeam, { replace: true });
   }
 }

@@ -1,4 +1,5 @@
 import { HubConnection, ILogger, LogLevel } from '@microsoft/signalr';
+import { AlertColor } from '@mui/material';
 
 export interface SignaRHubOptions {
   onConnected?: (hub: HubConnection) => void;
@@ -136,11 +137,16 @@ export enum QuestionType {
   TextBuzzer,
   PictureBuzzer,
   GuessYear,
-  TwoAnswers
+  TwoAnswers,
 }
 
 export enum ActionButtonType {
   ShowQuestion,
   ShowAnswers,
   ShowSolution,
+}
+
+export interface SnackbarMessage {
+  type: AlertColor;
+  message: string;
 }
