@@ -17,6 +17,7 @@ import { setShowSnackbar } from '../../../redux/uiSlice';
 import { RouteDefinitions } from '../../App';
 
 function AppSettings() {
+  const [isSubmit, setIsSubmit] = useState(false);
   const [studios, setStudios] = useState<Studio[]>([]);
   const [selectedStudio, setSelectedStudio] = useState<Studio | null>(null);
   const [selectedRole, setSelectedRole] = useState<Role | null>(null);
@@ -42,6 +43,12 @@ function AppSettings() {
     fetchStudios();
   }, []);
 
+  useEffect(() => {
+    if (isSubmit) {
+      navigate(RouteDefinitions.Root, { replace: true });
+    }
+  }, [isSubmit]);
+
   const handleStudioClick = (studio: Studio) => {
     setSelectedStudio(studio);
   };
@@ -50,7 +57,8 @@ function AppSettings() {
     setSelectedRole(role);
   };
 
-  const handleConfirmClick = async () => {
+  const handleConfirmClick = async (e: any) => {
+    e.preventDefault();
     if (selectedStudio && selectedRole != null) {
       try {
         const isUpdate = !!currentUser;
@@ -58,9 +66,8 @@ function AppSettings() {
         if (user?.id) {
           dispatch(connectToHub(`${config.apiUrl}/hub?userId=${user?.id}&studioId=${user?.studioId}`));
           dispatch(setShowSnackbar({ type: 'success', message: isUpdate ? 'User successfully updated!' : 'User successfully created!' }));
+          setIsSubmit(true);
         }
-
-        navigate(RouteDefinitions.Root, { replace: true });
       } catch (error: any) {
         setError(error?.response?.data || 'There was an error');
         console.error('Error confirming:', error);
@@ -128,7 +135,9 @@ function AppSettings() {
               <button
                 type="button"
                 key={`${studio.id} + ${index}`}
-                onClick={() => handleStudioClick(studio)}
+                onClick={() => {
+                  handleStudioClick(studio);
+                }}
                 className={classNames(styles.sectionButton, { [styles.selected]: selectedStudio === studio })}
               >
                 {studio.name}
