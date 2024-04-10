@@ -62,7 +62,9 @@ function MainAppBar() {
             onClick={handleNavigateBack}
             className={classNames({
               [styles.hidden]:
-                (currentUser?.role === Role.Team && location.pathname != RouteDefinitions.AppSettings) || location.pathname === RouteDefinitions.WelcomeHost,
+                (currentUser?.role === Role.Team && location.pathname != RouteDefinitions.AppSettings) ||
+                location.pathname === RouteDefinitions.WelcomeHost ||
+                !currentUser,
             })}
             edge="start"
             color="inherit"

@@ -35,6 +35,11 @@ function AppSettings() {
       try {
         const response = await services.studios.list();
         setStudios(response.data);
+
+        if (currentUser) {
+          setSelectedRole(currentUser.role);
+          setSelectedStudio(response.data.find((x: any) => x.id === currentUser.studioId) || null);
+        }
       } catch (error) {
         console.error('Error fetching studios:', error);
       }
@@ -163,7 +168,7 @@ function AppSettings() {
         </div>
 
         <div className={styles.footer}>
-          <Button onClick={handleConfirmClick} color="primary">
+          <Button onClick={handleConfirmClick} color="primary" disabled={selectedRole == null || selectedStudio == null}>
             Assign device
           </Button>
         </div>
