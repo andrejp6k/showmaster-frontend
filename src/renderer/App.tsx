@@ -18,12 +18,8 @@ import GameSettings from './components/GameSettings/GameSettings';
 import GameFinished from './components/GameFinished/GameFinished';
 import FinishGameDialog from './components/FinishGameDialog/FinishGameDialog';
 import Congratulations from './components/Congratulations/Congratulations';
-import MultiSliderViewDemo from './components/MultiSliderView/MultiSliderViewDemo';
 import QuestionStatistics from './components/QuestionStatistics/QuestionStatistics';
-import { Alert, Snackbar } from '@mui/material';
-import { selectShowSnackbar, setShowSnackbar } from '../redux/uiSlice';
-import { useAppDispatch } from './hooks/appStore';
-import { useEffect } from 'react';
+import CustomSnackbar from './components/CustomSnackbar/CustomSnackbar';
 
 export const RouteDefinitions = {
   Root: '/',
@@ -54,12 +50,6 @@ let prevLocationRoute: string | null = null;
 
 export default function App() {
   const currentUser = useSelector(selectUser);
-  const showSnackbar = useSelector(selectShowSnackbar);
-  const dispatch = useAppDispatch();
-
-  const handleCloseSnackbar = () => {
-    dispatch(setShowSnackbar(null));
-  };
 
   const router = createMemoryRouter([
     {
@@ -69,17 +59,7 @@ export default function App() {
           <MainAppBar />
           <div className={styles.content}>
             <Outlet />
-            <Snackbar
-              open={!!showSnackbar}
-              autoHideDuration={6000}
-              onClose={handleCloseSnackbar}
-              anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
-              sx={{ marginTop: '40px' }}
-            >
-              <Alert onClose={handleCloseSnackbar} severity={showSnackbar?.type} sx={{ width: '100%' }}>
-                {showSnackbar?.message}
-              </Alert>
-            </Snackbar>
+            <CustomSnackbar />
           </div>
           <QuitGameDialog />
           <FinishGameDialog />
@@ -129,10 +109,6 @@ export default function App() {
         {
           path: RouteDefinitions.Congratulations,
           element: <Congratulations />,
-        },
-        {
-          path: 'multi-slider-demo',
-          element: <MultiSliderViewDemo />,
         },
         {
           path: RouteDefinitions.QuestionStatistics,
