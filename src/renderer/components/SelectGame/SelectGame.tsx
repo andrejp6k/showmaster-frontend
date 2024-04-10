@@ -57,7 +57,7 @@ function SelectGame() {
       <div className={styles.content}>
         <div className={styles.list}>
           {games.map((game) => (
-            <Button key={game?.id} onClick={() => handleGameClick(game.id)} sx={{ width: '250px' }}>
+            <Button key={game?.id} onClick={() => handleGameClick(game.id)} sx={{ width: '250px', marginBottom: '20px' }}>
               {game.name}
             </Button>
           ))}
