@@ -32,13 +32,14 @@ function GameSettings() {
 
   async function handleSaveClick(): Promise<void> {
     const updateRequest = { scoreToWin: winningScore } as UpdateShowGameRequest;
-    const numberOfErrors = 0;
+    let numberOfErrors = 0;
 
     try {
       const response = await services.shows.updateShowGame(show?.id!, showGame?.gameId!, updateRequest);
       dispatch(setShowGame(response.data));
     } catch (error) {
       // TODO: handle this
+      numberOfErrors++;
       console.error(error);
       dispatch(setShowSnackbar({ type: 'error', message: 'There was an error' }));
     }
@@ -49,6 +50,7 @@ function GameSettings() {
         dispatch(setTeamScores({ gameId: showGame?.gameId!, teamScores: response.data }));
       } catch (error) {
         // TODO: handle this
+        numberOfErrors++;
         console.error(error);
         dispatch(setShowSnackbar({ type: 'error', message: 'There was an error' }));
       }
