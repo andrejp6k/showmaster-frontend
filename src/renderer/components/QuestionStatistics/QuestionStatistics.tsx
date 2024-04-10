@@ -5,10 +5,13 @@ import { QuestionStatisticDto, QuestionType } from '../../../types';
 import Button from '../Button/Button';
 import ConfirmationDialog from './ConfirmationDialog/ConfirmationDialog';
 import styles from './QuestionStatistics.scss';
+import { useAppDispatch } from '../../hooks/appStore';
+import { setShowSnackbar } from '../../../redux/uiSlice';
 
 function QuestionStatistics() {
   const [isConfirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
   const [questionStatistics, setQuestionStatistics] = useState<QuestionStatisticDto[]>([]);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     const fetchQuestionStatistics = async () => {
@@ -34,15 +37,16 @@ function QuestionStatistics() {
     setConfirmationDialogOpen(false);
   };
 
-  const handleConfirmDelete = () => {
+  const handleConfirmDelete = async () => {
     const deleteQuestionStatistics = async () => {
       const response = await client.delete('questions/statistics');
       return response.status == 204;
     };
 
-    const deleted = deleteQuestionStatistics();
+    const deleted = await deleteQuestionStatistics();
     if (deleted) {
       setQuestionStatistics([]);
+      dispatch(setShowSnackbar({ type: 'success', message: 'Question statistics deleted.' }));
     }
     handleCloseConfirmationDialog();
   };
@@ -51,7 +55,7 @@ function QuestionStatistics() {
     <div className={styles.container}>
       <div>
         <div className={styles.deleteButton}>
-          <Button onClick={handleOpenConfirmationDialog}>
+          <Button onClick={handleOpenConfirmationDialog} disabled={questionStatistics.length === 0}>
             Delete all
           </Button>
         </div>

@@ -86,9 +86,11 @@ function MainAppBar() {
             {!(location.pathname != RouteDefinitions.WelcomeTeam && location.pathname != RouteDefinitions.WelcomeHost) &&
               location.pathname != RouteDefinitions.AppSettings && (
                 <div style={{ display: 'flex' }}>
-                  <IconButton style={{ marginRight: '15px' }} onClick={handleNavigateToQuestionStatistics} edge="start" color="inherit" aria-label="menu">
-                    <AlignVerticalBottom />
-                  </IconButton>
+                  {currentUser?.role === Role.Host && (
+                    <IconButton style={{ marginRight: '15px' }} onClick={handleNavigateToQuestionStatistics} edge="start" color="inherit" aria-label="menu">
+                      <AlignVerticalBottom />
+                    </IconButton>
+                  )}
                   <IconButton onClick={handleNavigateToAppSettings} edge="start" color="inherit" aria-label="menu">
                     <Settings />
                   </IconButton>

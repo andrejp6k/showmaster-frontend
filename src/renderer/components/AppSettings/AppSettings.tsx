@@ -13,6 +13,8 @@ import classNames from 'classnames';
 import { TextField } from '@mui/material';
 import Button from '../Button/Button';
 import { setGameUser } from '../../../redux/gameSlice';
+import { setShowSnackbar } from '../../../redux/uiSlice';
+import { RouteDefinitions } from '../../App';
 
 function AppSettings() {
   const [studios, setStudios] = useState<Studio[]>([]);
@@ -51,11 +53,14 @@ function AppSettings() {
   const handleConfirmClick = async () => {
     if (selectedStudio && selectedRole != null) {
       try {
-        let user = currentUser ? await updateUser(currentUser.id) : await createUser();
+        const isUpdate = !!currentUser;
+        let user = isUpdate ? await updateUser(currentUser.id) : await createUser();
         if (user?.id) {
           dispatch(connectToHub(`${config.apiUrl}/hub?userId=${user?.id}&studioId=${user?.studioId}`));
+          dispatch(setShowSnackbar({ type: 'success', message: isUpdate ? 'User successfully updated!' : 'User successfully created!' }));
         }
-        navigateToStartPage(selectedRole, navigate);
+
+        navigate(RouteDefinitions.Root, { replace: true });
       } catch (error: any) {
         setError(error?.response?.data || 'There was an error');
         console.error('Error confirming:', error);

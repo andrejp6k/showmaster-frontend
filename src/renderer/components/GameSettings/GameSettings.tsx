@@ -10,6 +10,7 @@ import { services } from '../../../services';
 import { Score, UpdateShowGameRequest } from '../../../types';
 import Button from '../Button/Button';
 import TeamScore from './TeamScore/TeamScore';
+import { setShowSnackbar } from '../../../redux/uiSlice';
 
 const DEFAULT_MAX_SCORE_TO_WIN = 30;
 
@@ -21,8 +22,8 @@ function GameSettings() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [teamScoresSettings, setTeamScoresSettings] = React.useState<Score[]>([
-    { userId: showGame?.teamScores[0].userId, value: showGame?.teamScores[0].value },
-    { userId: showGame?.teamScores[1].userId, value: showGame?.teamScores[1].value },
+    { userId: showGame?.teamScores[0]?.userId || '', value: showGame?.teamScores[0]?.value || 0 },
+    { userId: showGame?.teamScores[1]?.userId || '', value: showGame?.teamScores[1]?.value || 0 },
   ]);
 
   function handleWinningScoreChange(event: any) {
@@ -31,28 +32,43 @@ function GameSettings() {
 
   async function handleSaveClick(): Promise<void> {
     const updateRequest = { scoreToWin: winningScore } as UpdateShowGameRequest;
+    let numberOfErrors = 0;
 
     try {
       const response = await services.shows.updateShowGame(show?.id!, showGame?.gameId!, updateRequest);
       dispatch(setShowGame(response.data));
     } catch (error) {
       // TODO: handle this
+      numberOfErrors++;
+      console.error(error);
+      dispatch(setShowSnackbar({ type: 'error', message: 'There was an error' }));
     }
 
     if (teamScoresSettings[0].value != showGame?.teamScores[0].value || teamScoresSettings[1].value != showGame?.teamScores[1].value) {
       try {
         const response = await services.shows.modifyTeamScore(show?.id!, showGame?.gameId!, teamScoresSettings);
-        dispatch(setTeamScores({ gameId: showGame.gameId!, teamScores: response.data }));
+        dispatch(setTeamScores({ gameId: showGame?.gameId!, teamScores: response.data }));
       } catch (error) {
         // TODO: handle this
+        numberOfErrors++;
+        console.error(error);
+        dispatch(setShowSnackbar({ type: 'error', message: 'There was an error' }));
       }
+    }
+
+    if (numberOfErrors === 0) {
+      dispatch(setShowSnackbar({ type: 'success', message: 'Game settings applied.' }));
     }
 
     navigate(-1);
   }
 
   const updateTeamScoreSettings = (userId: string, newScore: number) => {
-    setTeamScoresSettings((prevTeamScores) => prevTeamScores.map((scoreData) => (scoreData.userId === userId ? { ...scoreData, value: newScore } : scoreData)));
+    if (newScore >= 0) {
+      setTeamScoresSettings((prevTeamScores) =>
+        prevTeamScores.map((scoreData) => (scoreData.userId === userId ? { ...scoreData, value: newScore } : scoreData)),
+      );
+    }
   };
 
   return (
@@ -85,9 +101,7 @@ function GameSettings() {
         </div>
       </div>
       <div className={styles.footer}>
-        <Button className={styles.submit} onClick={handleSaveClick}>
-          Save
-        </Button>
+        <Button onClick={handleSaveClick}>Save</Button>
       </div>
     </div>
   );
